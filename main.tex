@@ -1,0 +1,229 @@
+\documentclass[acmsmall,screen,review]{acmart}
+
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+
+\acmJournal{CSUR}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\newcommand{\sysproblem}{state management in parallel and distributed systems\xspace}
+
+\begin{document}
+
+\title{Efficient State Management in Parallel and Distributed Systems}
+
+\author{Shuhao Zhang}
+\orcid{0000-0000-0000-0000}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+\email{shuhaozhang@hust.edu.cn}
+
+\begin{abstract}
+State has become the operational core of modern data systems. Stream processors, transactional streaming engines, edge analytics stacks, approximate execution runtimes, retrieval-augmented generation services, and continual-learning systems all rely on shared, evolving, and performance-critical state. Yet the literature remains fragmented: one body of work studies contention-aware access paths, another focuses on hardware-conscious execution and multi-objective control, and a third examines persistent updates, memory retention, and cross-round reuse for long-running intelligent services. This survey organizes these lines under a unified systems question: how can a parallel or distributed runtime keep state observable, schedulable, efficient, and reusable under complex hardware and dynamic workloads?
+
+We structure the survey around three tightly coupled dimensions of state management. First, we review state access and scheduling, covering online observation, hotspot diagnosis, locality-aware cost modeling, and runtime control for shared state under concurrency. Second, we review state-aware execution optimization, focusing on how hardware topology, energy constraints, latency-service objectives, approximation boundaries, and quality guarantees jointly shape end-to-end gains. Third, we review state evolution and reuse, covering online updates, continual retention, dynamic knowledge maintenance, and memory-centric inference pipelines. Across these dimensions, we highlight a common propagation effect: local mismatches in access, execution, or evolution often amplify into system-level instability.
+
+Beyond summarizing the literature, the survey contributes a unifying conceptual framework, a cross-domain taxonomy, and an agenda for future systems that integrate access governance, execution control, and memory evolution into one runtime loop. We argue that the next generation of stateful infrastructure---especially for intelligent services on heterogeneous hardware---should treat state management not as a storage detail but as the central systems abstraction that links observability, control, and long-horizon service quality.
+\end{abstract}
+
+\keywords{stateful systems, stream processing, distributed systems, runtime optimization, heterogeneous hardware, continual learning, retrieval-augmented generation}
+
+\maketitle
+
+\section{Introduction}
+
+The dominant systems abstractions of the last decade have shifted from stateless throughput engines toward long-running services that continuously interact with state. A transactional stream processor maintains window contents, indexes, queues, and recovery metadata~\cite{zhang2017revisiting,zhang2019briskstream,mao2023morphstream}. An edge analytics pipeline relies on compression dictionaries, approximate intermediate summaries, and quality-aware operator state~\cite{zeng2024cstream,zeng2024pecj}. A modern retrieval-augmented or continual-learning service maintains evolving memory, retriever parameters, retained samples, and update traces across rounds of inference~\cite{wu2023sentistream,zhou2025ferret,li2025global,zhang2026flowrag}. In all of these cases, system behavior depends less on the existence of state than on how that state is accessed, executed upon, updated, retained, and reused.
+
+This evolution has made \sysproblem both more important and more difficult. Traditional decomposition often studies operator placement, memory layout, or model adaptation separately. In practice, these concerns interact. A hotspot in shared state access can change queueing behavior and hide locality opportunities. An optimization that improves kernel speed on one processor may fail to improve service-level latency once energy, data movement, or accuracy constraints are accounted for. A memory update rule that accepts more new information may destabilize retention, retrieval quality, or inference consistency downstream. The systems challenge is therefore not merely to optimize state in one phase, but to manage propagation across the full lifecycle of state.
+
+This survey is motivated by that propagation view. We define state management as the set of mechanisms that govern how shared state is organized, observed, accessed, updated, retained, and reused across execution boundaries. Under this definition, state management spans classic streaming systems, hardware-conscious data processing, and newer AI runtimes. The common question is how to keep stateful execution stable, efficient, and controllable under concurrency, topology, and non-stationary workloads.
+
+Our synthesis is organized around three dimensions:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{State access and scheduling}: how systems expose contention, model access cost, and schedule work around hotspots, topology, and recovery requirements.
+\item \textbf{State-aware execution optimization}: how systems turn state layout and execution coupling into stable end-to-end gains under hardware, energy, latency, and quality constraints.
+\item \textbf{State evolution and reuse}: how systems continuously write, retain, organize, and reuse state for dynamic learning and inference.
+\end{enumerate}
+
+The survey makes three concrete contributions. First, it offers a unified vocabulary that connects streaming, approximate execution, and memory-centric intelligent services. Second, it proposes a taxonomy that separates state problems by \emph{access}, \emph{execution}, and \emph{evolution} while emphasizing their feedback loops. Third, it identifies a research agenda for integrated runtimes that coordinate state observability, scheduling, update control, and reusable memory services on heterogeneous hardware.
+
+\section{Scope and Survey Methodology}
+
+We focus on systems in which state is both shared and performance-critical. This includes stream processing engines, transactional streaming systems, edge and heterogeneous analytics runtimes, approximate execution frameworks with quality constraints, and dynamic AI services such as continual learning and retrieval-augmented generation. We exclude purely static database storage engines, purely model-centric training methods that do not expose runtime state-management mechanisms, and application papers where state is incidental rather than central.
+
+Our source material combines representative systems papers, journal articles, and recent intelligent-service systems papers. The initial seed comes from a coherent line of work on shared-state access, hardware-conscious execution, and evolving memory-centric services~\cite{zhang2024survey,zhang2020hardware,mao2023morphstream,wu2023sentistream,zhang2026flowrag}. We extend outward to include the broader systems context needed to interpret these results, including mainstream stream processors, recovery systems, compression and approximation frameworks, and dynamic retrieval services. The resulting survey should be read as a systems synthesis rather than a bibliometric catalog.
+
+\section{A Unifying View of Stateful Computing Systems}
+
+\subsection{What Counts as State?}
+
+In this survey, \emph{state} includes any persistent or semi-persistent runtime object whose value influences future execution beyond a single operator invocation. Examples include hash tables and windows in streaming operators, shared indexes and queues in multicore runtimes, compression dictionaries, adaptive buffering metadata, coresets for continual learning, retriever memory, and structured knowledge stores used by intelligent services. This definition intentionally spans in-memory, persistent, and hybrid forms of state.
+
+Two properties make state systems-hard. First, state is usually shared across tasks, requests, or time windows, so access conflicts propagate. Second, state is temporally extended: the way a system updates state today changes tomorrow's optimization space. These properties mean that local decisions often have delayed and cross-layer consequences.
+
+\subsection{The Propagation Perspective}
+
+We organize \sysproblem using a propagation perspective. Figure design is left for later revision, but the conceptual pipeline is straightforward. A request first encounters \emph{state access}: it must find, read, or synchronize on shared state. The resulting data path determines \emph{state-aware execution}: work is mapped to cores, sockets, accelerators, or approximate operators subject to latency and quality goals. The outputs then contribute to \emph{state evolution}: some state is updated, some is retained, and some is exposed for future reuse. Failures or mismatches in any stage propagate. Uncontrolled contention in access may destroy locality and distort execution modeling. Mis-modeled execution trade-offs may make update policies unsustainable. Over-aggressive updates may increase access pressure and destabilize future inference.
+
+This view differs from traditional layered designs that isolate storage, scheduling, and adaptation. The literature repeatedly shows that state problems cross those layers. Shared access depends on topology-aware execution~\cite{zhang2019briskstream,zhang2020concurrent}. Quality-aware execution depends on error-aware state evolution~\cite{zeng2024pecj}. Continual memory reuse depends on stable update and retention mechanisms~\cite{zhou2025ferret,li2026streamfp,zhang2026flowrag}. The propagation perspective therefore provides a more faithful abstraction for long-running stateful systems.
+
+\section{Taxonomy of State Management Problems}
+
+Table~\ref{tab:taxonomy} summarizes the taxonomy used throughout the survey.
+
+\begin{table*}[t]
+\caption{Taxonomy of state-management problems.}
+\label{tab:taxonomy}
+\begin{tabularx}{\textwidth}{lXl}
+\toprule
+Dimension & Core question & Representative concerns \\
+\midrule
+Access and scheduling & How is shared state observed and scheduled under concurrency? & hotspot diagnosis, conflict propagation, locality, topology, recovery, migration \\
+
+Execution optimization & How does state interact with hardware and service objectives? & placement, compression, approximation, latency-energy-quality trade-offs, end-to-end control \\
+
+Evolution and reuse & How is state updated, retained, and reused over time? & online updates, memory budgets, sample selection, retriever drift, knowledge maintenance \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The taxonomy is intentionally operational. It does not classify systems by application domain but by the control problem they solve. A stream engine and a RAG service may both belong to the evolution-and-reuse category if the dominant challenge is continuous state updates and future reuse. Likewise, a compression engine and a transactional stream processor may both belong to execution optimization if the central problem is coordinating stateful execution with hardware constraints.
+
+\section{State Access and Scheduling}
+
+\subsection{From Invisible Contention to Observable State Access}
+
+Early multicore stream-processing work showed that poor performance often stemmed not from operator logic itself but from hidden contention in shared access paths. Revisiting stream-processing design on multicore processors demonstrated that shared queues, synchronization patterns, and fine-grained operator interactions could fundamentally limit scalability~\cite{zhang2017revisiting}. In parallel, multi-query optimization for complex event processing showed that sharing sub-computation is only beneficial when execution paths are carefully reorganized; otherwise, shared state can magnify interference rather than reduce work~\cite{zhang2017mqo}.
+
+This line of work established a first principle: state management begins with observability. Systems need path-level metrics that connect hotspots, conflict density, queue growth, and throughput variation. Without such observability, tuning remains heuristic. This insight anticipated later systems that expose state access explicitly rather than burying it inside operator implementations.
+
+\subsection{Cost Modeling Under Locality and Topology}
+
+Once access patterns become observable, the next challenge is modeling their cost. BriskStream demonstrated that state hotspots and NUMA topology must be considered jointly; access-locality decisions that ignore topology can erase the gains of parallelization~\cite{zhang2019briskstream}. Subsequent work on concurrent stateful stream processing further showed that synchronization design, state partitioning, and task assignment must be analyzed together rather than in isolation~\cite{zhang2020concurrent}.
+
+These results connect state management to a broader systems theme: locality is not a static placement problem, but a property created jointly by state layout, scheduling, and workload structure. Similar lessons appear in other stateful systems, including unified migration for distributed streaming~\cite{mao2025spacker} and online interval join systems where shared indexes and ordering constraints interact with runtime concurrency~\cite{zhang2023openmldb}. Across these works, the dominant abstraction is no longer simply a data structure but an access-cost surface shaped by contention and hardware placement.
+
+\subsection{Runtime Control, Recovery, and Stateful Governance}
+
+The mature form of access management is runtime control. MorphStream is representative: it treats transactional stream processing as a scheduling problem over stateful dependencies, allowing the engine to adapt execution plans at runtime rather than rely on fixed static policies~\cite{mao2023morphstream}. Follow-up work on fast parallel recovery shows that recovery must be integrated with steady-state execution rather than treated as a separate subsystem~\cite{zhao2024recovery}. Recovery metadata, log structure, and access control together determine whether a stateful engine can remain efficient after failures.
+
+The broader lesson is that access governance must eventually become a closed loop. Observation feeds cost modeling, which informs scheduling and recovery, which in turn changes future observation. This observation-model-control loop is one of the most reusable patterns in stateful systems research.
+
+\subsection{Open Challenges in Access Management}
+
+Despite the progress, at least four challenges remain. First, most systems still rely on coarse observability and do not expose state conflicts as first-class runtime objects. Second, topology-aware models often assume relatively stable hardware and workload structure. Third, recovery and migration are still commonly optimized separately from regular access control. Fourth, intelligent-service runtimes increasingly create new shared-state objects, such as vector indexes and retriever caches, whose conflict patterns are poorly understood. Future work should therefore extend access modeling to state objects that are semantic, dynamic, and cross-request.
+
+\section{State-Aware Execution Optimization}
+
+\subsection{Why Faster Kernels Do Not Guarantee Better Services}
+
+A recurring mistake in systems design is to treat stateful execution as equivalent to faster kernels or better operator throughput. The literature reviewed here suggests a more nuanced picture. Once state interacts with heterogeneous hardware, moving data and coordinating access frequently dominate raw compute speed. Moreover, service objectives introduce latency, energy, and quality boundaries that can overturn microbenchmark gains.
+
+FineStream provides a clear example. By studying fine-grained window-based stream processing on integrated CPU-GPU architectures, it showed that topology and data path design directly alter the feasible performance envelope~\cite{zhang2020finestream}. Co-running studies on integrated architectures made similar points from a broader resource-sharing angle~\cite{zhang2016corun,zhang2016elastic}. These systems emphasize that execution gains emerge only when state organization, data movement, and device mapping are optimized together.
+
+\subsection{Energy, Compression, and Stateful Data Paths}
+
+The CStream line deepens this theme by examining stateful compression on edge and asymmetric multicore devices~\cite{zeng2023cstreamicde,zeng2024cstream}. Compression dictionaries are state; their access pattern, update granularity, and task decomposition shape both energy and latency outcomes. The key finding is not merely that hardware-conscious compression helps, but that stateful compression creates a multi-objective problem spanning throughput, delay, energy, and compression ratio.
+
+Closely related work on compressed stream processing without decompression and data-aware adaptive compression extends this view to database-style execution~\cite{zhang2023compressstreamdb,yu2025adaptivecompression}. Here, state-aware execution means choosing representation, operator placement, and access path jointly. The system's real unit of optimization becomes a stateful data path rather than an isolated operator.
+
+\subsection{Approximation and Quality Boundaries}
+
+Approximate execution adds another layer: the system must reason not only about cost but also about output quality. PECJ addresses disorder in stream window joins by proactively compensating for missing or late data using explicit error modeling~\cite{zeng2024pecj}. LibAMM studies approximate matrix multiplication and shows that algorithm choice, dataset properties, and memory behavior jointly determine whether approximate computing yields a stable efficiency-accuracy trade-off~\cite{zeng2024libamm}. Adaptive sampling systems for joins and video databases reach similar conclusions: approximation is useful only when quantity, quality, and system cost are modeled together~\cite{tang2025freesam,xu2024leap}.
+
+These works suggest a generalized principle for state-aware execution. When intermediate or retained state influences correctness, one must model an \emph{execution boundary} rather than a single performance target. This boundary is defined by hardware topology, state access cost, and quality tolerance. Stable gains occur only within a limited operating region.
+
+\subsection{Toward Closed-Loop Execution Control}
+
+The next step is to unify these mechanisms into online control loops. Existing systems have already established many ingredients: topology-aware mapping~\cite{zhang2020finestream}, energy-aware decomposition~\cite{zeng2024cstream}, and quality-aware compensation~\cite{zeng2024pecj}. What remains comparatively underdeveloped is an integrated runtime that combines state observability with online execution control across heterogeneous processors and service objectives. This gap is particularly important for modern inference stacks, where accelerator choice, memory transfer, approximation, and retrieval quality all interact.
+
+\section{State Evolution and Reuse}
+
+\subsection{From Updates to Long-Horizon Memory}
+
+The third major dimension of \sysproblem concerns what happens after execution produces new information. In many older data systems, state updates were treated as maintenance. In dynamic AI services, updates are themselves central: the system must decide what to absorb, what to retain, what to discard, and how to expose retained state for future reuse.
+
+SentiStream is illustrative. It frames adaptive online sentiment analysis as a co-training problem over evolving data streams, effectively making model adaptation and runtime update part of the same loop~\cite{wu2023sentistream}. MOStream similarly treats data stream clustering as a modular, self-optimizing problem where summarization, windowing, refinement, and outlier control determine whether the system can keep up with evolving streams~\cite{wang2024mostream}. Both works show that online update is not a single mechanism but a coupled control problem.
+
+\subsection{Memory Budgets, Retention, and Sample Selection}
+
+Once updates become continuous, retention becomes equally important. Ferret studies online continual learning under varying memory constraints and shows that update rate, memory budget, and parallel pipeline design must be coordinated~\cite{zhou2025ferret}. StreamFP adds a stronger selection signal through fingerprint-guided data selection, demonstrating that retained state should encode representativeness rather than simply recency~\cite{li2026streamfp}. These systems indicate that write cost and retention cost must be modeled together.
+
+This idea is broader than continual learning. Dynamic benchmark efforts such as CANDOR-Bench also expose how evolving vector indexes and open-world streams stress both update and retention paths~\cite{wang2026candor}. In all of these cases, a runtime must preserve future reuse value while controlling the immediate cost of updates.
+
+\subsection{Structured Memory and Dynamic Retrieval}
+
+Recent retrieval-augmented and knowledge-enhanced systems make reuse more explicit. Knowledge-graph-enhanced LLM frameworks organize external knowledge into reusable, queryable structures~\cite{li2024keldar,li2025global}. FlowRAG focuses on dynamic retriever adaptation under evolving corpora and highlights a systems issue that extends beyond machine learning: without controlled memory evolution, reuse quality decays over time~\cite{zhang2026flowrag}. The state object here is not just a parameter vector or cache line but a living retrieval substrate that must be updated without destabilizing service quality.
+
+The systems implication is substantial. Reuse requires an intermediate layer that makes memory objects updateable, retrievable, and schedulable. This layer is increasingly becoming the heart of intelligent-service infrastructure.
+
+\subsection{Bridging Evolution with Access and Execution}
+
+The survey's central claim is that evolution cannot be managed independently. Continuous updates create future access hotspots. Retention decisions alter memory footprint and execution cost. Retrieval quality affects whether approximate or hardware-conscious execution is acceptable downstream. Future systems should therefore treat memory evolution as an online control loop coupled to access and execution rather than as a background adaptation mechanism.
+
+\section{Cross-Cutting Design Principles}
+
+The literature reviewed above points to several reusable principles.
+
+\subsection{Observation Before Optimization}
+
+Systems repeatedly fail when state contention, drift, or reuse value is hidden. Access conflicts must be observable~\cite{zhang2017revisiting}; execution-quality boundaries must be measurable~\cite{zeng2024libamm}; memory evolution must expose retention and forgetting signals~\cite{zhou2025ferret,zhang2026flowrag}. Visibility is the precondition for control.
+
+\subsection{State as a First-Class Scheduling Object}
+
+Traditional schedulers place tasks. Stateful runtimes increasingly need to schedule around state objects themselves: windows, indexes, dictionaries, coresets, retriever memories, and update traces. This suggests a shift toward state-centric scheduling abstractions where the runtime models who will touch which state, on what topology, under what service objectives.
+
+\subsection{Closed-Loop Rather Than Open-Loop Policies}
+
+Across access management, execution control, and evolution, the strongest systems are closed-loop. MorphStream adapts scheduling online~\cite{mao2023morphstream}; PECJ adapts execution with proactive compensation~\cite{zeng2024pecj}; continual-learning frameworks adapt retention under shifting budgets~\cite{zhou2025ferret}. Open-loop heuristics remain useful, but the survey suggests they are increasingly insufficient for long-running services.
+
+\subsection{Stable Gains Require Boundary Modeling}
+
+Many systems report impressive local improvements, yet only some translate into service-level gains. The difference often lies in boundary modeling. A system must know where locality breaks, where approximation degrades quality, where energy savings hurt latency, or where updates erode future reuse. Efficient state management therefore depends as much on identifying safe operating regions as on optimizing the interior of those regions.
+
+\section{An Integrated Research Agenda}
+
+The next generation of stateful infrastructure should integrate the three dimensions reviewed above into one runtime loop. We highlight four priorities.
+
+\subsection{Unified State Observability}
+
+Runtimes should expose shared-state objects, access paths, retention signals, and quality impacts through a common telemetry interface. Today, most systems provide only fragments of this picture.
+
+\subsection{State-Centric Scheduling on Heterogeneous Hardware}
+
+Scheduling should jointly consider who accesses state, where the state resides, what quality boundary applies, and whether the state is being evolved concurrently. Such schedulers are especially relevant for intelligent inference stacks on heterogeneous accelerators.
+
+\subsection{Memory Middleware for Dynamic AI Services}
+
+Retrieval-augmented generation, continual learning, and agentic services need a memory middleware layer that supports controlled updates, structured retention, and multi-round reuse. Existing systems provide early building blocks but not yet a stable general abstraction.
+
+\subsection{End-to-End Evaluation Beyond Local Speedups}
+
+The field needs more evaluations that connect local mechanisms to service metrics such as tail latency, SLA violations, energy per useful result, forgetting under drift, and long-horizon reuse quality. Without such evaluation, state-management claims risk remaining local rather than infrastructural.
+
+\section{Conclusion}
+
+This survey argued that state management is the unifying systems problem behind a wide range of modern runtimes. Whether the workload is transactional streaming, hardware-conscious analytics, or dynamic retrieval-augmented inference, the core challenges recur: making shared state observable, controlling access under concurrency, mapping execution onto complex hardware and service boundaries, and evolving memory without destabilizing future reuse.
+
+The literature already provides strong ingredients for this agenda. Work on contention-aware access and scheduling established the observation-model-control chain for shared state. Hardware-conscious and quality-aware execution studies clarified why stable gains require joint modeling of topology, cost, and service boundaries. Recent work on online updates, continual retention, and dynamic retrieval showed that state evolution and reuse must be treated as first-class systems mechanisms. The key remaining step is integration: future systems should close the loop among access, execution, and evolution, turning state management into the central control plane of long-running services.
+
+\begin{acks}
+This draft was seeded from an academic-report storyline and a locally maintained publication archive, then reorganized into a survey taxonomy intended for ACM Computing Surveys. It should be treated as an evolving manuscript rather than a submission-ready version.
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\end{document}
