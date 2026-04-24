@@ -13,13 +13,11 @@ This repository contains a draft ACM Computing Surveys article titled "Efficient
 
 ## Build
 
-Use the provided Makefile to compile the PDF with Tectonic and the vendored ACM template source in the TeX search path:
+Use Tectonic with the vendored ACM template source in the TeX search path:
 
 ```bash
-make pdf
+TEXINPUTS=third_party/acmart-src//: /home/shuhao/miniconda3/envs/vllm-hust-dev/bin/tectonic main.tex
 ```
-
-The Makefile defaults to `$(HOME)/.cargo/bin/tectonic`. Override `TECTONIC` if your executable lives elsewhere.
 
 ## Status
 
