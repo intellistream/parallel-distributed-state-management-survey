@@ -17,7 +17,7 @@
 \draw[arrow] (observe.east) -- (model.west);
 \draw[arrow] (model.east) -- (schedule.west);
 \draw[arrow] (schedule.east) -- (update.west);
-\draw[arrow] (update.north) |- (11.4,1.35) -- (-0.3,1.35) |- (observe.north);
+\draw[arrow] (update.north) -- ++(0,8mm) -| (observe.north);
 
 \draw[arrow] (hardware.north) -- (model.south);
 \draw[arrow] (service.north) -- (schedule.south);

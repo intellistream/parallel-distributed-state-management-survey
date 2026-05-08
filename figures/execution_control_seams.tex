@@ -16,19 +16,21 @@
 \node[control] (c2) at (8.9,-1.1) {CPU/GPU choice\\operator path\\transfer timing};
 \node[control] (c3) at (13.4,-1.1) {compensation\\admission\\fallback mode};
 
-\node[note] (n1) at (4.4,-2.55) {compression ratio\\and reuse density};
-\node[note] (n2) at (8.9,-2.55) {movement cost\\and queueing};
-\node[note] (n3) at (13.4,-2.55) {measured error\\and boundary failures};
-\node[note] (loop) at (7.2,3.9) {closed-loop retuning across\\representation, execution, and boundary control};
+\node[note] (n1) at (4.4,-2.85) {compression ratio\\and reuse density};
+\node[note] (n2) at (8.9,-2.85) {movement cost\\and queueing};
+\node[note] (n3) at (13.4,-2.85) {measured error\\and boundary failures};
 
-\coordinate (split) at (1.8,0.2);
+% 【修改点2】将Y坐标从 3.9 降到 2.8，拉近了与下方方框的距离
+\node[note] (loop) at (7.2,2.8) {closed-loop retuning across\\representation, execution, and boundary control};
+
 \coordinate (busR) at (14.2,-3.45);
 \coordinate (busL) at (0.5,-3.45);
 \coordinate (loopR) at ([xshift=8mm]budget.east |- loop);
 \coordinate (loopL) at ([xshift=-10mm]telemetry.west |- loop);
 
-\draw[arrow] (telemetry.east) -- (split);
-\draw[arrow] (split) |- (repr.west);
+% 【修改点1】使用 -- ++(0.8,0) |- 语法，实现“向右->向上->向右”的两拐角效果
+\draw[arrow] (telemetry.east) -- ++(0.8,0) |- (repr.west);
+
 \draw[arrow] (repr.east) -- (path.west);
 \draw[arrow] (path.east) -- (budget.west);
 

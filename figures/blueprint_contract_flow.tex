@@ -22,7 +22,7 @@
 \draw[arrow] (observe.east) -- (kernel.west);
 \draw[arrow] (kernel.east) -- (actuate.west);
 \draw[arrow] (actuate.east) -- (safety.west);
-\draw[arrow] (safety.north) |- (15.4,1.45) -- (3.1,1.45) |- (observe.north);
+\draw[arrow] (safety.north) -- ++(0,8mm) -| (observe.north);
 
 \draw[arrow] (g1.north) -- (catalog.south);
 \draw[arrow] (g2.north) -- (observe.south);

@@ -1,53 +1,63 @@
 \begin{tikzpicture}[
-  plane/.style={draw, rounded corners, thick, align=center, minimum width=46mm, minimum height=11mm, fill=black!3},
-  control/.style={draw, rounded corners, align=center, minimum width=36mm, minimum height=10mm, fill=black!2},
+  plane/.style={draw, rounded corners, thick, align=center, text width=49mm, minimum width=51mm, minimum height=13mm, fill=black!3},
+  control/.style={draw, rounded corners, align=center, text width=38mm, minimum width=40mm, minimum height=12mm, fill=black!2},
   side/.style={draw, rounded corners, align=center, minimum width=30mm, minimum height=9mm, fill=black!1},
-  note/.style={align=center, text width=28mm, fill=white, inner sep=1.5pt, font=\footnotesize},
-  relabel/.style={align=left, text width=24mm, fill=white, inner sep=1pt, font=\footnotesize},
+  note/.style={align=center, inner sep=2pt, font=\footnotesize}, % 彻底移除 fill=white，无底色框
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={arrow, dashed}
+  bidir/.style={{Latex[length=2.5mm]}-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
+  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
 ]
 
+% ==================== 节点定义 ====================
 \node[side] (telemetry) at (0,0) {shared telemetry\\SLOs, drift, budgets};
 
-\node[plane] (serving) at (4.8,2.4) {Serving memory plane\\KV pages, adapters, phase queues};
-\node[plane] (retrieval) at (4.8,0) {Retrieval memory plane\\indexes, graphs, refresh traces};
-\node[plane] (retention) at (4.8,-2.4) {Retention memory plane\\replay buffers, protected state, compressed memory};
+% 中间列：Memory Planes
+\node[plane] (serving) at (6.0, 3.0) {Serving memory plane\\KV pages, adapters, phase queues};
+\node[plane] (retrieval) at (6.0, 0) {Retrieval memory plane\\indexes, graphs, refresh traces};
+\node[plane] (retention) at (6.0, -3.0) {Retention memory plane\\replay buffers, protected state,\\compressed memory};
 
-\node[control] (servingc) at (10.4,2.4) {admission, placement,\\phase transfer control};
-\node[control] (retrievalc) at (10.4,0) {refresh, rebuild,\\planner-trigger control};
-\node[control] (retentionc) at (10.4,-2.4) {retention selection,\\compression, compaction};
+% 右侧列：Controls
+\node[control] (servingc) at (12.5, 3.0) {admission, placement,\\phase transfer control};
+\node[control] (retrievalc) at (12.5, 0) {refresh, rebuild,\\planner-trigger control};
+\node[control] (retentionc) at (12.5, -3.0) {retention selection,\\compression, compaction};
 
-\node[note] (topnote) at (7.8,3.75) {queueing, reuse,\\tail-latency feedback};
-\node[note] (midnote) at (7.8,1.15) {freshness, staleness,\\maintenance debt};
-\node[note] (lownote) at (7.8,-1.15) {future utility, forgetting,\\storage pressure};
 
-\coordinate (split) at (1.7,0);
-\coordinate (topRight) at (11.9,3.75);
-\coordinate (topLeft) at (1.1,3.75);
-\coordinate (midRight) at (11.9,1.15);
-\coordinate (midLeft) at (1.1,1.15);
-\coordinate (lowRight) at (11.9,-1.15);
-\coordinate (lowLeft) at (1.1,-1.15);
-\coordinate (relA) at (12.6,1.15);
-\coordinate (relB) at (12.6,-1.15);
-
-\draw[arrow] (telemetry.east) -- (split);
-\draw[arrow] (split) |- (serving.west);
-\draw[arrow] (split) -- (retrieval.west);
-\draw[arrow] (split) |- (retention.west);
-
+% ==================== 核心连线 ====================
+\draw[bidir] (telemetry.east) -- (retrieval.west);
 \draw[arrow] (serving.east) -- (servingc.west);
 \draw[arrow] (retrieval.east) -- (retrievalc.west);
 \draw[arrow] (retention.east) -- (retentionc.west);
 
-\draw[arrow] (servingc.north) |- (topRight) -- (topLeft) |- (telemetry.north);
-\draw[arrow] (retrievalc.east) -- ++(6mm,0) |- (midRight) -- (midLeft) |- (telemetry.north east);
-\draw[arrow] (retentionc.east) -- ++(6mm,0) |- (lowRight) -- (lowLeft) |- (telemetry.south east);
 
-\draw[dashedarrow] (serving.east) -- ++(6mm,0) |- (relA) |- (retrieval.east);
-\draw[dashedarrow] (retrieval.east) -- ++(6mm,0) |- (relB) |- (retention.east);
+% ==================== 垂直虚线 (连续一根线，文字在右侧) ====================
 
-\node[relabel, right=1mm of relA, anchor=west] {longer-lived reuse\\and update traces};
-\node[relabel, right=1mm of relB, anchor=west] {persistent value\\and retention policies};
+% pos=0.75 将文字精准地压在实线(Y=1.5)与中间方框之间的下半部分，绝不重叠
+\draw[dashedarrow] (serving.south) -- node[pos=0.75, right=4pt, note] {freshness, staleness,\\maintenance debt} (retrieval.north);
+
+% 底部虚线正常居中靠右
+\draw[dashedarrow] (retrieval.south) -- node[pos=0.5, right=4pt, note] {future utility,\\forgetting,\\storage pressure} (retention.north);
+
+
+% ==================== 反馈环路 (绝对居中排版) ====================
+
+% 顶部反馈环
+\draw[arrow] (servingc.north) 
+    -- (servingc.north |- 0, 4.4) 
+    -- node[above, note] {queueing, reuse, tail-latency feedback} ([xshift=-12pt]telemetry.north |- 0, 4.4) 
+    -- ([xshift=-12pt]telemetry.north);
+
+% 中部反馈环
+% Y=1.5 确保横向线条在上下两个方块正中间
+% pos=0.23 将文字向右侧推移，放置在两列方块的垂直间隙中，远离中心虚线
+\draw[arrow] (retrievalc.north) 
+    -- (retrievalc.north |- 0, 1.5) 
+    -- node[pos=0.23, above, note] {longer-lived reuse and update traces} ([xshift=12pt]telemetry.north |- 0, 1.5) 
+    -- ([xshift=12pt]telemetry.north);
+
+% 底部反馈环
+\draw[arrow] (retentionc.south) 
+    -- (retentionc.south |- 0, -4.4) 
+    -- node[below, note] {persistent value and retention policies} (telemetry.south |- 0, -4.4) 
+    -- (telemetry.south);
+
 \end{tikzpicture}
