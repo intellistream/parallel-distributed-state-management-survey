@@ -18,3 +18,5 @@ build/
 *.xdv
 *.pdf
 comment.cut
+.vscode/
+*.code-workspace
