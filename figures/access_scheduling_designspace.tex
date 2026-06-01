@@ -1,0 +1,40 @@
+% Access & Scheduling Design Space
+% Maps the control dimensions and mechanism families for §5.1
+\begin{tikzpicture}[
+  layer/.style={draw, rounded corners, thick, align=center, minimum width=36mm, minimum height=12mm, fill=black!3},
+  mech/.style={draw, rounded corners, align=center, text width=34mm, minimum height=10mm, fill=black!1, font=\footnotesize},
+  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
+  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
+  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+]
+
+% L1: Observability
+\node[layer] (L1) at (0, 6.0) {Observability\\\footnotesize queue exposure, conflict density,\\\footnotesize progress frontiers};
+\node[mech]  (M1) at (5.4, 6.0) {Aurora, MillWheel, Naiad,\\Trill, Differential\\\footnotesize path metrics and progress visibility};
+
+% L2: Cost and Scheduling
+\node[layer] (L2) at (0, 2.4) {Cost and Scheduling\\\footnotesize topology, skew, NUMA, dependency\\\footnotesize ordering, admission, migration grain};
+\node[mech]  (M2) at (5.4, 2.4) {BriskStream, MorphStream,\\Megaphone, SOLA, ExeGPT\\\footnotesize topology-aware and dependency-aware};
+
+% L3: Recovery and Elasticity
+\node[layer] (L3) at (0,-1.2) {Recovery and Elasticity\\\footnotesize checkpoint alignment, ownership\\\footnotesize transfer, replay scheduling};
+\node[mech]  (M3) at (5.4,-1.2) {Spacker, Flink async snapshot,\\fast recovery, SONIC, ORION\\\footnotesize migration and workflow coupling};
+
+% Layer arrows
+\draw[arrow] (L1.south) -- node[pos=0.5, right=2pt] {} (L2.north);
+\draw[arrow] (L2.south) -- node[pos=0.5, right=2pt] {} (L3.north);
+
+% Mechanism arrows
+\draw[arrow] (L1.east) -- (M1.west);
+\draw[arrow] (L2.east) -- (M2.west);
+\draw[arrow] (L3.east) -- (M3.west);
+
+% Feedback
+\draw[dashedarrow] (M3.east) -- ++(0.8,0) -- ++(0,7.2) -- node[pos=0.6, right=3pt] {} (M1.east);
+
+% Labels
+\node[note] at (-2.8, 6.0) {\textbf{L1}};
+\node[note] at (-2.8, 2.4) {\textbf{L2}};
+\node[note] at (-2.8,-1.2) {\textbf{L3}};
+
+\end{tikzpicture}

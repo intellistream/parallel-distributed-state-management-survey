@@ -1,0 +1,48 @@
+% Anti-Pattern to Contract Mapping
+% Quick-reference diagram for §6.3
+\begin{tikzpicture}[
+  ap/.style={draw, rounded corners, thick, align=center, text width=34mm, minimum height=12mm, fill=black!3},
+  miss/.style={draw, rounded corners, align=center, text width=28mm, minimum height=10mm, fill=black!1, font=\footnotesize},
+  fix/.style={draw, rounded corners, align=center, text width=28mm, minimum height=10mm, fill=black!2, font=\footnotesize},
+  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
+  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+]
+
+% Headers
+\node[note] at (0,   4.4) {\textbf{Anti-Pattern}};
+\node[note] at (4.4, 4.4) {\textbf{Missing Contract}};
+\node[note] at (8.8, 4.4) {\textbf{Blueprint Repair}};
+
+% Row 1
+\node[ap]   (A1) at (0,  2.6) {Telemetry-Action Mismatch\\\footnotesize metrics without legal\\actuation target};
+\node[miss] (M1) at (4.4,2.6) {signals must name state\\object, lifecycle stage,\\and delay semantics};
+\node[fix]  (F1) at (8.8,2.6) {Observation and disturbance\\detection layer exposes\\typed, actionable metrics};
+
+% Row 2
+\node[ap]   (A2) at (0,  0.0) {Policy Layering Without\\Conflict Semantics\\\footnotesize controllers optimize\\incompatible boundaries};
+\node[miss] (M2) at (4.4,0.0) {hard constraints and soft\\objectives must be ordered\\with explicit tie-breakers};
+\node[fix]  (F2) at (8.8,0.0) {Boundary model and decision\\kernel enforces precedence\\among overlapping policies};
+
+% Row 3
+\node[ap]   (A3) at (0, -2.6) {One-Shot Benchmarking of\\Non-Stationary Mechanisms\\\footnotesize gains vanish under drift\\or disturbance};
+\node[miss] (M3) at (4.4,-2.6) {disturbance phases and\\re-stabilization windows\\must be part of contract};
+\node[fix]  (F3) at (8.8,-2.6) {Observation plus safety and\\recovery envelope enforces\\multi-phase evaluation};
+
+% Row 4
+\node[ap]   (A4) at (0, -5.2) {Ignoring Write Amplification\\in Read-Optimized Designs\\\footnotesize deferred compaction and\\rebuild cost hidden};
+\node[miss] (M4) at (4.4,-5.2) {mutation and maintenance\\debt charged to same\\boundary as read gains};
+\node[fix]  (F4) at (8.8,-5.2) {State catalog and actuation\\interfaces make write-path\\cost auditable};
+
+% Row 5
+\node[ap]   (A5) at (0, -7.8) {Treating State Ownership\\as Static\\\footnotesize scale-out and fault handling\\use separate transfer logic};
+\node[miss] (M5) at (4.4,-7.8) {ownership transfer and\\no-eviction rules must\\survive migration};
+\node[fix]  (F5) at (8.8,-7.8) {Actuation plus safety and\\recovery envelope shares one\\transferable state model};
+
+% Arrows
+\draw[arrow] (A1.east) -- (M1.west); \draw[arrow] (M1.east) -- (F1.west);
+\draw[arrow] (A2.east) -- (M2.west); \draw[arrow] (M2.east) -- (F2.west);
+\draw[arrow] (A3.east) -- (M3.west); \draw[arrow] (M3.east) -- (F3.west);
+\draw[arrow] (A4.east) -- (M4.west); \draw[arrow] (M4.east) -- (F4.west);
+\draw[arrow] (A5.east) -- (M5.west); \draw[arrow] (M5.east) -- (F5.west);
+
+\end{tikzpicture}

@@ -1,0 +1,40 @@
+% Retention Strategy Taxonomy
+% Maps retention mechanisms by control surface for §5.3
+\begin{tikzpicture}[
+  fam/.style={draw, rounded corners, thick, align=center, text width=26mm, minimum height=14mm, fill=black!3},
+  method/.style={draw, rounded corners, align=center, text width=42mm, minimum height=14mm, fill=black!1, font=\footnotesize},
+  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
+  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+]
+
+% 定义中心偏移量和列间距
+\def\colOneX{1.5}
+\def\colTwoX{6.5}
+
+% Row 1: Protection
+\node[fam] (F1) at (\colOneX,  0) {Protection\\\footnotesize constrain parameter\\\footnotesize movement};
+\node[method] (M1a) at (\colTwoX, 0) {EWC, Online EWC\\\footnotesize Fisher-based importance weights, incremental update};
+
+% Row 2: Replay
+\node[fam] (F2) at (\colOneX,  -2.2) {Replay\\\footnotesize buffer samples\\\footnotesize absorb interference};
+\node[method] (M2a) at (\colTwoX, -2.2) {GEM, A-GEM, Experience Replay, MIR\\\footnotesize gradient projection, reservoir sampling,\\interference-ranked selection};
+
+% Row 3: Admission
+\node[fam] (F3) at (\colOneX, -4.4) {Admission\\\footnotesize select which samples\\\footnotesize enter bounded store};
+\node[method] (M3a) at (\colTwoX, -4.4) {iCaRL, GDumb, StreamFP\\\footnotesize exemplar anchoring, greedy curation,\\future-utility ranking};
+
+% Row 4: Compression and Elasticity
+\node[fam] (F4) at (\colOneX, -6.6) {Compression and Elasticity\\\footnotesize cheaper representation,\\\footnotesize budget contraction};
+\node[method] (M4a) at (\colTwoX, -6.6) {REMIND, DER, Ferret\\\footnotesize feature-space replay, distilled matching,\\elastic budget and pipeline-aware};
+
+% Arrows
+\draw[arrow] (F1.east) -- (M1a.west);
+\draw[arrow] (F2.east) -- (M2a.west);
+\draw[arrow] (F3.east) -- (M3a.west);
+\draw[arrow] (F4.east) -- (M4a.west);
+
+% Annotation (居中放置于 F 和 M 的中间区域)
+\node[note, text width=100mm] at (4.0,-8.2) {\textbf{Open gap:} unified retention-store contract for\\
+admission, replay, compression, and demotion.};
+
+\end{tikzpicture}

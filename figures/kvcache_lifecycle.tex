@@ -1,0 +1,41 @@
+% KV-Cache Lifecycle Governance
+\begin{tikzpicture}[
+  stage/.style={draw, rounded corners, thick, align=center, minimum width=27mm, minimum height=14mm, fill=black!3},
+  ctrl/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!1, font=\footnotesize},
+  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
+  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
+  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+]
+
+% (其他部分代码保持不变...)
+\node[stage] (S1) at (0, 4.6) {Admit\\\footnotesize request acceptance\\\footnotesize under memory pressure};
+\node[stage] (S2) at (3.6,4.6) {Place\\\footnotesize page residency,\\\footnotesize prefix sharing};
+\node[stage] (S3) at (7.2,4.6) {Mutate\\\footnotesize decode-time growth,\\\footnotesize reuse-invalidation};
+\node[stage] (S4) at (10.8,4.6) {Transfer\\\footnotesize cross-node movement,\\\footnotesize disaggregation};
+\node[stage] (S5) at (14.4,4.6) {Reclaim\\\footnotesize eviction, restoration,\\\footnotesize reuse-window tuning};
+
+\draw[arrow] (S1.east) -- (S2.west);
+\draw[arrow] (S2.east) -- (S3.west);
+\draw[arrow] (S3.east) -- (S4.west);
+\draw[arrow] (S4.east) -- (S5.west);
+
+\node[ctrl] (C1) at (0, 2.0) {admission threshold,\\SLO-aware gating,\\burst absorption};
+\node[ctrl] (C2) at (3.6,2.0) {paged allocation,\\prefix radix tree,\\adapter colocation};
+\node[ctrl] (C3) at (7.2,2.0) {token-level growth,\\compaction triggers,\\invalidation policy};
+\node[ctrl] (C4) at (10.8,2.0) {KV compression,\\bandwidth-aware\\transfer scheduling};
+\node[ctrl] (C5) at (14.4,2.0) {restoration priority,\\cache-blend fusion,\\session persistence};
+
+\draw[arrow] (S1.south) -- (C1.north);
+\draw[arrow] (S2.south) -- (C2.north);
+\draw[arrow] (S3.south) -- (C3.north);
+\draw[arrow] (S4.south) -- (C4.north);
+\draw[arrow] (S5.south) -- (C5.north);
+
+% Feedback - 调整后的位置
+\draw[dashedarrow] (C5.south) -- ++(0,-0.8) -| (C1.south);
+\node[font=\footnotesize, fill=white, inner sep=1pt] at (7.2, 0.95) {future memory pressure};
+
+\node[note, text width=150mm] at (7.2,-1.45) {
+\textbf{Representative:} vLLM, Sarathi-Serve, SGLang (admit/place); SplitZip, CacheFlow, Mooncake (transfer); Pensieve, InfiniGen, FastServe (reclaim).
+};
+\end{tikzpicture}

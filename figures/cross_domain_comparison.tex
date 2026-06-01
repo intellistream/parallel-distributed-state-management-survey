@@ -1,0 +1,54 @@
+% Cross-Domain Comparative Synthesis
+% Maps four domains onto shared control problems for §4
+\begin{tikzpicture}[
+  dombox/.style={draw, rounded corners, thick, align=center, text width=28mm, minimum height=12mm, fill=black!3},
+  ctrl/.style={draw, rounded corners, align=center, text width=29mm, minimum height=10mm, fill=black!1, font=\footnotesize},
+  bound/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!1, font=\footnotesize},
+  gapbox/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!3, font=\footnotesize},
+  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
+  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
+  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+]
+
+% Headers
+\node[note] at (0,   5.6) {\textbf{Domain and}\\\textbf{State Object}};
+\node[note] at (3.9,5.6) {\textbf{Control}\\\textbf{Surface}};
+\node[note] at (7.8,5.6) {\textbf{Evaluation}\\\textbf{Boundary}};
+\node[note] at (11.7,5.6) {\textbf{Open}\\\textbf{Gap}};
+
+% Row 1: Streaming
+\node[dombox] (d1) at (0,  3.4) {Streaming and\\Transactional Dataflow\\\footnotesize windows, progress,\\ownership logs};
+\node[ctrl]   (c1) at (3.9,3.4) {visibility, progress,\\ownership transfer,\\recovery coupling};
+\node[bound]  (b1) at (7.8,3.4) {throughput, recovery\\time, migration lag,\\correctness envelope};
+\node[gapbox] (g1) at (11.7,3.4) {unified disturbance-\\aware controller\\across all three\\boundaries};
+
+% Row 2: Hardware-Conscious
+\node[dombox] (d2) at (0,  0.8) {Hardware-Conscious and\\Approximate Execution\\\footnotesize encoded data paths,\\quality-sensitive state};
+\node[ctrl]   (c2) at (3.9,0.8) {representation choice,\\device mapping,\\quality-budget steering};
+\node[bound]  (b2) at (7.8,0.8) {energy, bounded error,\\latency-quality frontier,\\movement cost};
+\node[gapbox] (g2) at (11.7,0.8) {portable policy across\\hardware topologies;\\recovery-time error\\contracts};
+
+% Row 3: LLM Serving
+\node[dombox] (d3) at (0, -1.8) {LLM Serving\\\footnotesize KV pages, prefix state,\\adapter/model residency};
+\node[ctrl]   (c3) at (3.9,-1.8) {allocation, phase-aware\\scheduling, transfer,\\adapter multiplexing};
+\node[bound]  (b3) at (7.8,-1.8) {TTFT, TPOT, goodput,\\memory waste,\\reuse ratio};
+\node[gapbox] (g3) at (11.7,-1.8) {lifecycle governance\\across nodes; admission,\\transfer, restoration\\composition};
+
+% Row 4: Retrieval and Retention
+\node[dombox] (d4) at (0, -4.4) {Retrieval and Retention\\\footnotesize indexes, planner memory,\\replay buffers, budget traces};
+\node[ctrl]   (c4) at (3.9,-4.4) {refresh, rebuild,\\planner-trigger, retention\\selection, compaction};
+\node[bound]  (b4) at (7.8,-4.4) {recall@k, freshness lag,\\maintenance debt,\\forgetting, reuse quality};
+\node[gapbox] (g4) at (11.7,-4.4) {cross-shard freshness\\contracts; exposure-\\aware accounting;\\elasticity semantics};
+
+% Arrows
+\draw[arrow] (d1.east) -- (c1.west); \draw[arrow] (c1.east) -- (b1.west); \draw[dashedarrow] (b1.east) -- (g1.west);
+\draw[arrow] (d2.east) -- (c2.west); \draw[arrow] (c2.east) -- (b2.west); \draw[dashedarrow] (b2.east) -- (g2.west);
+\draw[arrow] (d3.east) -- (c3.west); \draw[arrow] (c3.east) -- (b3.west); \draw[dashedarrow] (b3.east) -- (g3.west);
+\draw[arrow] (d4.east) -- (c4.west); \draw[arrow] (c4.east) -- (b4.west); \draw[dashedarrow] (b4.east) -- (g4.west);
+
+% Transfer arrows
+\draw[dashedarrow] (g1.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {ownership} (g2.north);
+\draw[dashedarrow] (g2.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {movement} (g3.north);
+\draw[dashedarrow] (g3.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {lifecycle} (g4.north);
+
+\end{tikzpicture}

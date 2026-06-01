@@ -20,7 +20,7 @@
 \usepackage{microtype}
 \usepackage{tikz}
 
-\usetikzlibrary{arrows.meta,positioning}
+\usetikzlibrary{arrows.meta,positioning,calc}
 
 \hyphenpenalty=9000
 \exhyphenpenalty=9000
@@ -297,6 +297,13 @@ More robust systems in this category therefore stop treating state access as an 
 
 Despite the progress, at least four challenges remain. First, most systems still rely on coarse observability and do not expose state conflicts as first-class runtime objects. Second, topology-aware models often assume relatively stable hardware and workload structure. Third, recovery and migration are still commonly optimized separately from regular access control. Fourth, intelligent-service runtimes increasingly create new shared-state objects, such as vector indexes, retriever caches, and prefix-shared KV caches, whose conflict patterns are poorly understood. Future work should therefore extend access modeling to state objects that are semantic, dynamic, and cross-request.
 
+\begin{figure*}[t]
+\centering
+\resizebox{0.94\textwidth}{!}{\input{figures/access_scheduling_designspace}}
+\caption{Access and scheduling design space. State access governance spans three coupled layers: observability determines what cost models can price; cost and scheduling decisions create migration debt; recovery and elasticity inherit upstream ownership commitments. The dashed feedback arrow shows that reconfiguration decisions feed back into future access pressure.}
+\label{fig:access-designspace}
+\end{figure*}
+
 \subsection{State-Aware Execution Optimization}
 
 \subsubsection{Why Faster Kernels Do Not Guarantee Better Services}
@@ -331,6 +338,13 @@ Historically, these papers clarify a progression in serving infrastructure. Clip
 
 At the level of mechanism, these systems show that KV-cache management is a state-management problem. The cache persists across token steps, affects future scheduling decisions, exposes a reuse surface across requests, and demands explicit policies for allocation, sharing, reclamation, placement, and transfer. Once stated this way, KV-cache paging, prefix reuse, decode scheduling, and phase disaggregation sit naturally beside window management, dictionary placement, and retriever maintenance as instances of the same systems abstraction. The remaining systems gap is lifecycle closure: most serving stacks still optimize allocation, scheduling, or disaggregation in isolation and rarely model how admission, cross-node transfer, reclamation, and retrieval-side updates interact over long horizons.
 
+\begin{figure*}[t]
+\centering
+\resizebox{0.96\textwidth}{!}{\input{figures/kvcache_lifecycle}}
+\caption{KV-cache lifecycle governance. Short-lived serving state traverses five stages---admit, place, mutate, transfer, reclaim---each with distinct control surfaces. No single paper governs all five; the open gap is a unified controller ranking admission, placement, transfer, and reclamation against the same TTFT/TPOT/SLO boundary.}
+\label{fig:kvcache-lifecycle}
+\end{figure*}
+
 Closely related work on compressed stream processing without decompression and data-aware adaptive compression extends this view to database-style execution~\cite{zhang2023compressstreamdb,yu2025adaptivecompression}. Here, state-aware execution means choosing representation, operator placement, and access path jointly. The system's real unit of optimization becomes a stateful data path rather than an isolated operator.
 
 \subsubsection{Approximation and Quality Boundaries}
@@ -356,6 +370,13 @@ Online adaptation and clustering systems make this shift visible. Adaptive senti
 \subsubsection{Memory Budgets, Retention, and Sample Selection}
 
 Once updates become continuous, retention becomes equally important. Recent online continual-learning systems show that memory budgeting is not a background constraint but an active control surface: update rate, memory budget, and pipeline structure must be coordinated, and retained state must encode future representativeness rather than recency alone~\cite{zhou2025ferret,li2026streamfp}. This lesson extends beyond continual learning: dynamic benchmark efforts such as CANDOR-Bench expose how evolving vector indexes and open-world streams stress both update and retention paths at the same time~\cite{wang2026candor}. In all of these cases, a runtime must preserve future reuse value while controlling the immediate cost of updates.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.90\textwidth}{!}{\input{figures/retention_strategy_taxonomy}}
+\caption{Retention strategy taxonomy. Four mechanism families---protection, replay, admission, compression and elasticity---differ by control surface and budget awareness. The remaining gap is a unified retention-store contract for admission, replay, compression, and demotion under shared infrastructure.}
+\label{fig:retention-taxonomy}
+\end{figure*}
 
 \subsubsection{Structured Memory and Dynamic Retrieval}
 
@@ -395,6 +416,13 @@ To keep the survey cumulative rather than encyclopedic, we apply three integrati
 \subsection{Cross-Domain Comparative Synthesis}
 
 The following sections provide domain-specific comparative syntheses. Each subsection answers the same three questions: which state object dominates in the domain, which runtime controls are mature, and which control seams remain under-developed. Keeping that triad fixed matters because it prevents the discussion from collapsing back into domain-local storytelling: the goal is not only to summarize each area faithfully, but also to surface where apparently different systems are converging on the same governance problem under different names and workload assumptions.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.96\textwidth}{!}{\input{figures/cross_domain_comparison}}
+\caption{Cross-domain comparative synthesis. Four domains expose structurally similar control problems under different state lifetimes. Ownership governs streaming; movement and quality govern execution; lifecycle and transfer govern serving; maintenance debt governs retrieval and retention. The dashed vertical arrows mark where the same governance question transfers across domains.}
+\label{fig:cross-domain}
+\end{figure*}
 
 \begin{table*}[t]
 \small
@@ -826,6 +854,13 @@ Ownership assumptions that are valid at small scale often fail under bursty mult
 Serving systems are converging toward the same conclusion from another direction. Phase-disaggregated serving, transferable KV state, and multi-tenant adapter management all imply that the runtime must decide who currently owns a short-lived state object, who may borrow or restore it, and when that ownership may move across workers or clusters~\cite{zhong2024distserve,patel2024splitwise,qin2026prfaas,chen2024punica}. Retrieval systems make the issue visible again at shard granularity, where partially refreshed or compacted segments cannot be treated as statically owned if exposure policy must vary by freshness state. Designs that explicitly represent transferable ownership and bounded lease semantics therefore adapt better under dynamic pressure, although they require stronger correctness reasoning and clearer safety envelopes.
 
 Across these anti-patterns, one design requirement emerges clearly: most failures stem from missing or implicit boundary contracts around observation, precedence, disturbance handling, write-path accounting, and ownership transfer. The blueprint in the next section should therefore be read as a direct response to these recurring failures rather than as an abstract implementation wish list. Its purpose is to force each control loop to answer five practical questions before deployment: what state is visible, what boundary is protected, what actions are legal, how conflicts are resolved, and which invariants still hold during disturbance.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.96\textwidth}{!}{\input{figures/antipattern_contract_map}}
+\caption{Anti-pattern to contract repair map. Each recurring failure stems from a missing boundary contract. The repair always involves making one or more blueprint layers explicit: observation, decision kernel, actuation, or safety envelope.}
+\label{fig:antipattern-map}
+\end{figure*}
 
 \subsection{A Contract-Oriented Blueprint for Stateful Runtimes}
 
