@@ -7,7 +7,6 @@
   dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
 ]
 
-% (其他部分代码保持不变...)
 \node[stage] (S1) at (0, 4.6) {Admit\\\footnotesize request acceptance\\\footnotesize under memory pressure};
 \node[stage] (S2) at (3.6,4.6) {Place\\\footnotesize page residency,\\\footnotesize prefix sharing};
 \node[stage] (S3) at (7.2,4.6) {Mutate\\\footnotesize decode-time growth,\\\footnotesize reuse-invalidation};
@@ -31,7 +30,7 @@
 \draw[arrow] (S4.south) -- (C4.north);
 \draw[arrow] (S5.south) -- (C5.north);
 
-% Feedback - 调整后的位置
+% Feedback loop
 \draw[dashedarrow] (C5.south) -- ++(0,-0.8) -| (C1.south);
 \node[font=\footnotesize, fill=white, inner sep=1pt] at (7.2, 0.95) {future memory pressure};
 

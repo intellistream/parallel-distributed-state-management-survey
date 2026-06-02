@@ -1,5 +1,5 @@
 % Retention Strategy Taxonomy
-% Maps retention mechanisms by control surface for §5.3
+% Maps retention mechanisms by control surface for §3.3
 \begin{tikzpicture}[
   fam/.style={draw, rounded corners, thick, align=center, text width=26mm, minimum height=14mm, fill=black!3},
   method/.style={draw, rounded corners, align=center, text width=42mm, minimum height=14mm, fill=black!1, font=\footnotesize},
@@ -7,7 +7,7 @@
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
 
-% 定义中心偏移量和列间距
+% Column positions
 \def\colOneX{1.5}
 \def\colTwoX{6.5}
 
@@ -33,7 +33,7 @@
 \draw[arrow] (F3.east) -- (M3a.west);
 \draw[arrow] (F4.east) -- (M4a.west);
 
-% Annotation (居中放置于 F 和 M 的中间区域)
+% Annotation
 \node[note, text width=100mm] at (4.0,-8.2) {\textbf{Open gap:} unified retention-store contract for\\
 admission, replay, compression, and demotion.};
 
