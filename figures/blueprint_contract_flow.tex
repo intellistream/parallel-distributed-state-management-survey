@@ -1,32 +1,42 @@
+% Blueprint Contract Flow — vivid pipeline with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  block/.style={draw, rounded corners, thick, align=center, minimum width=30mm, minimum height=10mm, fill=black!3},
-  guard/.style={draw, rounded corners, align=center, minimum width=26mm, minimum height=8mm, fill=black!1},
-  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+  block/.style={draw, rounded corners=2pt, align=center, minimum width=20mm,
+                minimum height=10mm, font=\footnotesize, inner sep=2pt},
+  guard/.style={draw, rounded corners=2pt, align=center, minimum width=20mm,
+                minimum height=8mm, font=\scriptsize, inner sep=2pt, fill=gray!4},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=1.8mm]}, densely dotted, orange!70!black},
+  note/.style={font=\scriptsize, text=orange!70!black}
 ]
 
-\node[block] (catalog) at (0,0) {State catalog\\schema, lifecycle,\\quality sensitivity};
-\node[block] (observe) at (3.7,0) {Observation\\steady signals,\\disturbance alerts};
-\node[block] (kernel) at (7.4,0) {Decision kernel\\hard constraints,\\soft objectives};
-\node[block] (actuate) at (11.1,0) {Actuation APIs\\migrate, refresh,\\compact, admit};
-\node[block] (safety) at (14.8,0) {Safety envelope\\rollback, replay,\\no-eviction rules};
-\node[note] (fb) at (9.3,1.95) {validated outcomes,\\violations, debt};
+% Main pipeline with icons
+\node[block, fill=blue!6]   (catalog) at (0,   0) {\faDatabase\ \textbf{State Catalog}};
+\node[block, fill=green!5]  (observe) at (2.6, 0) {\faEye\ \textbf{Observation}};
+\node[block, fill=yellow!8] (kernel)  at (5.2, 0) {\faCogs\ \textbf{Decision Kernel}};
+\node[block, fill=purple!5] (actuate) at (7.8, 0) {\faBolt\ \textbf{Actuation}};
+\node[block, fill=red!5]    (safety)  at (10.4,0) {\faShield\ \textbf{Safety Envelope}};
 
-\node[guard] (g1) at (0,-2.2) {typed state\\ownership contracts};
-\node[guard] (g2) at (3.7,-2.2) {confidence and\\delay metadata};
-\node[guard] (g3) at (7.4,-2.2) {precedence,\\utility, budgets};
-\node[guard] (g4) at (11.1,-2.2) {idempotence and\\bounded rollback};
-\node[guard] (g5) at (14.8,-2.2) {recovery invariants\\and guardrails};
+% Pipeline arrows
+\draw[arr] (catalog.east) -- (observe.west);
+\draw[arr] (observe.east) -- (kernel.west);
+\draw[arr] (kernel.east) -- (actuate.west);
+\draw[arr] (actuate.east) -- (safety.west);
 
-\draw[arrow] (catalog.east) -- (observe.west);
-\draw[arrow] (observe.east) -- (kernel.west);
-\draw[arrow] (kernel.east) -- (actuate.west);
-\draw[arrow] (actuate.east) -- (safety.west);
-\draw[arrow] (safety.north) -- ++(0,8mm) -| (observe.north);
+% Feedback loop (dotted orange)
+\draw[feedback] (safety.north) -- ++(0,0.5) -| (observe.north);
+\node[note] at (5.2, 0.8) {\faRetweet\ validated outcomes};
 
-\draw[arrow] (g1.north) -- (catalog.south);
-\draw[arrow] (g2.north) -- (observe.south);
-\draw[arrow] (g3.north) -- (kernel.south);
-\draw[arrow] (g4.north) -- (actuate.south);
-\draw[arrow] (g5.north) -- (safety.south);
+% Guard annotations below
+\node[guard] (g1) at (0,   -1.4) {\faKey\ ownership\\contracts};
+\node[guard] (g2) at (2.6, -1.4) {\faClockO\ confidence +\\delay metadata};
+\node[guard] (g3) at (5.2, -1.4) {\faList\ precedence\\+ budgets};
+\node[guard] (g4) at (7.8, -1.4) {\faRefresh\ idempotence\\+ rollback};
+\node[guard] (g5) at (10.4,-1.4) {\faShield\ recovery\\invariants};
+
+\draw[arr, thin] (g1.north) -- (catalog.south);
+\draw[arr, thin] (g2.north) -- (observe.south);
+\draw[arr, thin] (g3.north) -- (kernel.south);
+\draw[arr, thin] (g4.north) -- (actuate.south);
+\draw[arr, thin] (g5.north) -- (safety.south);
+
 \end{tikzpicture}

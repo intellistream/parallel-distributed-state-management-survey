@@ -1,40 +1,62 @@
-% Retention Strategy Taxonomy
-% Maps retention mechanisms by control surface for §3.3
+% Retention Strategy Taxonomy — wider layout for proper scaling
 \begin{tikzpicture}[
-  fam/.style={draw, rounded corners, thick, align=center, text width=26mm, minimum height=14mm, fill=black!3},
-  method/.style={draw, rounded corners, align=center, text width=42mm, minimum height=14mm, fill=black!1, font=\footnotesize},
-  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+  fam/.style={draw, rounded corners=2pt, align=center, text width=24mm,
+              minimum height=10mm, font=\footnotesize, inner sep=2pt, fill=blue!6},
+  method/.style={draw, rounded corners=2pt, align=left, text width=40mm,
+                 minimum height=9mm, font=\footnotesize, inner sep=2pt, fill=gray!4},
+  sys/.style={draw, rounded corners=2pt, align=left, text width=34mm,
+              minimum height=9mm, font=\footnotesize, inner sep=2pt},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, shorten <=2pt, shorten >=2pt},
+  note/.style={font=\footnotesize, text=gray!70!black}
 ]
 
-% Column positions
-\def\colOneX{1.5}
-\def\colTwoX{6.5}
+% Column headers
+\node[font=\footnotesize\bfseries] at (0, 0.9) {Strategy Family};
+\node[font=\footnotesize\bfseries] at (5.0, 0.9) {Mechanism};
+\node[font=\footnotesize\bfseries] at (10.0, 0.9) {Representative Systems};
+\draw[thick] (-1.6, 0.6) -- (12.2, 0.6);
 
-% Row 1: Protection
-\node[fam] (F1) at (\colOneX,  0) {Protection\\\footnotesize constrain parameter\\\footnotesize movement};
-\node[method] (M1a) at (\colTwoX, 0) {EWC, Online EWC\\\footnotesize Fisher-based importance weights, incremental update};
+% Row 1
+\node[fam] (F1) at (0,  0)   {\faShield\ \textbf{Protection}\\constrain movement};
+\node[method] (M1) at (5.0,  0)   {Fisher importance weights\\gradient regularization};
+\node[sys] (S1) at (10.0,  0)   {EWC, Online EWC,\\SI, MAS};
 
-% Row 2: Replay
-\node[fam] (F2) at (\colOneX,  -2.2) {Replay\\\footnotesize buffer samples\\\footnotesize absorb interference};
-\node[method] (M2a) at (\colTwoX, -2.2) {GEM, A-GEM, Experience Replay, MIR\\\footnotesize gradient projection, reservoir sampling,\\interference-ranked selection};
+% Row 2
+\node[fam] (F2) at (0, -1.6) {\faRefresh\ \textbf{Replay}\\absorb interference};
+\node[method] (M2) at (5.0, -1.6) {gradient projection, reservoir\\sampling, memory replay};
+\node[sys] (S2) at (10.0, -1.6) {GEM, A-GEM, MIR,\\ER, DER++};
 
-% Row 3: Admission
-\node[fam] (F3) at (\colOneX, -4.4) {Admission\\\footnotesize select which samples\\\footnotesize enter bounded store};
-\node[method] (M3a) at (\colTwoX, -4.4) {iCaRL, GDumb, StreamFP\\\footnotesize exemplar anchoring, greedy curation,\\future-utility ranking};
+% Row 3
+\node[fam] (F3) at (0, -3.2) {\faFilter\ \textbf{Admission}\\bounded store};
+\node[method] (M3) at (5.0, -3.2) {exemplar anchoring, utility\\scoring, coreset selection};
+\node[sys] (S3) at (10.0, -3.2) {iCaRL, GDumb,\\StreamFP, BiC};
 
-% Row 4: Compression and Elasticity
-\node[fam] (F4) at (\colOneX, -6.6) {Compression and Elasticity\\\footnotesize cheaper representation,\\\footnotesize budget contraction};
-\node[method] (M4a) at (\colTwoX, -6.6) {REMIND, DER, Ferret\\\footnotesize feature-space replay, distilled matching,\\elastic budget and pipeline-aware};
+% Row 4
+\node[fam] (F4) at (0, -4.8) {\faCompress\ \textbf{Compression}\\budget contraction};
+\node[method] (M4) at (5.0, -4.8) {feature distillation, elastic\\budget, compressed replay};
+\node[sys] (S4) at (10.0, -4.8) {REMIND, Ferret,\\PackNet, HAT};
 
-% Arrows
-\draw[arrow] (F1.east) -- (M1a.west);
-\draw[arrow] (F2.east) -- (M2a.west);
-\draw[arrow] (F3.east) -- (M3a.west);
-\draw[arrow] (F4.east) -- (M4a.west);
+% Family -> Mechanism arrows
+\draw[arr] (F1.east) -- (M1.west);
+\draw[arr] (F2.east) -- (M2.west);
+\draw[arr] (F3.east) -- (M3.west);
+\draw[arr] (F4.east) -- (M4.west);
 
-% Annotation
-\node[note, text width=100mm] at (4.0,-8.2) {\textbf{Open gap:} unified retention-store contract for\\
-admission, replay, compression, and demotion.};
+% Mechanism -> Systems arrows
+\draw[arr] (M1.east) -- (S1.west);
+\draw[arr] (M2.east) -- (S2.west);
+\draw[arr] (M3.east) -- (S3.west);
+\draw[arr] (M4.east) -- (S4.west);
+
+% Vertical flow
+\draw[arr] (F1.south) -- (F2.north);
+\draw[arr] (F2.south) -- (F3.north);
+\draw[arr] (F3.south) -- (F4.north);
+
+% Open gap annotation
+\node[draw, densely dotted, orange!70!black, text width=100mm, align=left,
+      font=\footnotesize, inner sep=4pt] at (5.0, -6.2) {%
+\faWarning\ \textbf{Open gap:} unified retention-store contract composing
+admission, replay, compression, and demotion under a single governance API.};
 
 \end{tikzpicture}

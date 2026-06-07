@@ -1,40 +1,47 @@
-% KV-Cache Lifecycle Governance
+% KV-Cache Lifecycle Governance — larger fonts, tighter spacing
 \begin{tikzpicture}[
-  stage/.style={draw, rounded corners, thick, align=center, minimum width=27mm, minimum height=14mm, fill=black!3},
-  ctrl/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!1, font=\footnotesize},
-  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+  stage/.style={draw, rounded corners=2pt, align=center, minimum width=18mm,
+                minimum height=9mm, font=\footnotesize, inner sep=3pt},
+  ctrl/.style={draw, rounded corners=2pt, align=center, text width=22mm,
+               minimum height=8mm, font=\scriptsize, inner sep=2pt, fill=gray!4},
+  arr/.style={-{Stealth[length=1.6mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=1.6mm]}, densely dotted, orange!70!black},
+  note/.style={font=\footnotesize, text=gray!70!black}
 ]
 
-\node[stage] (S1) at (0, 4.6) {Admit\\\footnotesize request acceptance\\\footnotesize under memory pressure};
-\node[stage] (S2) at (3.6,4.6) {Place\\\footnotesize page residency,\\\footnotesize prefix sharing};
-\node[stage] (S3) at (7.2,4.6) {Mutate\\\footnotesize decode-time growth,\\\footnotesize reuse-invalidation};
-\node[stage] (S4) at (10.8,4.6) {Transfer\\\footnotesize cross-node movement,\\\footnotesize disaggregation};
-\node[stage] (S5) at (14.4,4.6) {Reclaim\\\footnotesize eviction, restoration,\\\footnotesize reuse-window tuning};
+% Pipeline stages
+\node[stage, fill=blue!6]   (S1) at (0,    0) {\faFilter\ \textbf{Admit}};
+\node[stage, fill=green!5]  (S2) at (2.2,  0) {\faSitemap\ \textbf{Place}};
+\node[stage, fill=yellow!8] (S3) at (4.4,  0) {\faPencil\ \textbf{Mutate}};
+\node[stage, fill=purple!5] (S4) at (6.6,  0) {\faExchange\ \textbf{Transfer}};
+\node[stage, fill=red!5]    (S5) at (8.8,  0) {\faTrash\ \textbf{Reclaim}};
 
-\draw[arrow] (S1.east) -- (S2.west);
-\draw[arrow] (S2.east) -- (S3.west);
-\draw[arrow] (S3.east) -- (S4.west);
-\draw[arrow] (S4.east) -- (S5.west);
+% Forward flow
+\draw[arr] (S1.east) -- (S2.west);
+\draw[arr] (S2.east) -- (S3.west);
+\draw[arr] (S3.east) -- (S4.west);
+\draw[arr] (S4.east) -- (S5.west);
 
-\node[ctrl] (C1) at (0, 2.0) {admission threshold,\\SLO-aware gating,\\burst absorption};
-\node[ctrl] (C2) at (3.6,2.0) {paged allocation,\\prefix radix tree,\\adapter colocation};
-\node[ctrl] (C3) at (7.2,2.0) {token-level growth,\\compaction triggers,\\invalidation policy};
-\node[ctrl] (C4) at (10.8,2.0) {KV compression,\\bandwidth-aware\\transfer scheduling};
-\node[ctrl] (C5) at (14.4,2.0) {restoration priority,\\cache-blend fusion,\\session persistence};
+% Control annotations
+\node[ctrl] (C1) at (0,   -1.1) {admission thresh.\\SLO-aware gating};
+\node[ctrl] (C2) at (2.2, -1.1) {paged allocation\\prefix radix tree};
+\node[ctrl] (C3) at (4.4, -1.1) {token growth\\compaction trigger};
+\node[ctrl] (C4) at (6.6, -1.1) {KV compression\\transfer schedule};
+\node[ctrl] (C5) at (8.8, -1.1) {restore priority\\cache-blend fusion};
 
-\draw[arrow] (S1.south) -- (C1.north);
-\draw[arrow] (S2.south) -- (C2.north);
-\draw[arrow] (S3.south) -- (C3.north);
-\draw[arrow] (S4.south) -- (C4.north);
-\draw[arrow] (S5.south) -- (C5.north);
+\draw[arr, thin] (S1.south) -- (C1.north);
+\draw[arr, thin] (S2.south) -- (C2.north);
+\draw[arr, thin] (S3.south) -- (C3.north);
+\draw[arr, thin] (S4.south) -- (C4.north);
+\draw[arr, thin] (S5.south) -- (C5.north);
 
 % Feedback loop
-\draw[dashedarrow] (C5.south) -- ++(0,-0.8) -| (C1.south);
-\node[font=\footnotesize, fill=white, inner sep=1pt] at (7.2, 0.95) {future memory pressure};
+\draw[feedback] (C5.south) -- ++(0,-0.3) -| (C1.south);
+\node[font=\footnotesize, text=orange!70!black] at (4.4, -2.1) {\faRetweet\ memory pressure};
 
-\node[note, text width=150mm] at (7.2,-1.45) {
-\textbf{Representative:} vLLM, Sarathi-Serve, SGLang (admit/place); SplitZip, CacheFlow, Mooncake (transfer); Pensieve, InfiniGen, FastServe (reclaim).
-};
+% Representative systems
+\node[note, text width=90mm, align=center] at (4.4, -2.7) {%
+\textbf{Representative:} vLLM, Sarathi-Serve, SGLang (admit/place);
+SplitZip, CacheFlow, Mooncake (transfer); Pensieve, InfiniGen, FastServe (reclaim)};
+
 \end{tikzpicture}

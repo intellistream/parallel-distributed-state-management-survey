@@ -1,33 +1,42 @@
+% Disturbance Evaluation Protocol — vivid with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  phase/.style={draw, rounded corners, thick, align=center, minimum width=25mm, minimum height=10mm, fill=black!3},
-  metric/.style={draw, rounded corners, align=center, minimum width=29mm, minimum height=8mm, fill=black!1},
-  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+  phase/.style={draw, rounded corners=2pt, align=center, minimum width=18mm,
+                minimum height=10mm, font=\footnotesize, inner sep=2pt},
+  metric/.style={draw, rounded corners=2pt, align=center, minimum width=18mm,
+                 minimum height=8mm, font=\scriptsize, inner sep=2pt, fill=gray!4},
+  arr/.style={-{Stealth[length=1.8mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=1.8mm]}, densely dotted, orange!70!black},
+  note/.style={font=\scriptsize, text=orange!70!black}
 ]
 
-\node[phase] (warmup) at (0,0) {Warmup\\steady state};
-\node[phase] (burst) at (3.2,0) {Burst\\hotspot flip};
-\node[phase] (reconfig) at (6.4,0) {Reconfigure\\migrate or fail};
-\node[phase] (drift) at (9.6,0) {Drift\\quality shift};
-\node[phase] (long) at (12.8,0) {Long horizon\\maintenance debt};
-\node[note] (fb) at (6.4,1.95) {policy retuning\\or rebuild trigger};
+% Phase boxes
+\node[phase, fill=blue!6]   (warmup)   at (0,    0) {\faClockO\ \textbf{Warmup}\\steady state};
+\node[phase, fill=red!6]    (burst)    at (2.4,  0) {\faBolt\ \textbf{Burst}\\hotspot flip};
+\node[phase, fill=yellow!8] (reconfig) at (4.8,  0) {\faExchange\ \textbf{Reconfig}\\migrate/fail};
+\node[phase, fill=purple!5] (drift)    at (7.2,  0) {\faLineChart\ \textbf{Drift}\\quality shift};
+\node[phase, fill=green!5]  (long)     at (9.6,  0) {\faCalendar\ \textbf{Long Horizon}\\maint.\ debt};
 
-\node[metric] (m1) at (0,-2.2) {throughput\\resource cost};
-\node[metric] (m2) at (3.2,-2.2) {p99 latency\\conflict density};
-\node[metric] (m3) at (6.4,-2.2) {recovery lag\\migration debt};
-\node[metric] (m4) at (9.6,-2.2) {quality floor\\freshness};
-\node[metric] (m5) at (12.8,-2.2) {maintenance spikes\\reuse decay};
+% Phase flow
+\draw[arr] (warmup.east) -- (burst.west);
+\draw[arr] (burst.east) -- (reconfig.west);
+\draw[arr] (reconfig.east) -- (drift.west);
+\draw[arr] (drift.east) -- (long.west);
 
-\draw[arrow] (warmup.east) -- (burst.west);
-\draw[arrow] (burst.east) -- (reconfig.west);
-\draw[arrow] (reconfig.east) -- (drift.west);
-\draw[arrow] (drift.east) -- (long.west);
+% Metrics below
+\node[metric] (m1) at (0,   -1.4) {throughput\\resource cost};
+\node[metric] (m2) at (2.4, -1.4) {p99 latency\\conflict density};
+\node[metric] (m3) at (4.8, -1.4) {recovery lag\\migration debt};
+\node[metric] (m4) at (7.2, -1.4) {quality floor\\freshness};
+\node[metric] (m5) at (9.6, -1.4) {maint.\\ spikes\\reuse decay};
 
-\draw[arrow] (warmup.south) -- (m1.north);
-\draw[arrow] (burst.south) -- (m2.north);
-\draw[arrow] (reconfig.south) -- (m3.north);
-\draw[arrow] (drift.south) -- (m4.north);
-\draw[arrow] (long.south) -- (m5.north);
+\draw[arr, thin] (warmup.south) -- (m1.north);
+\draw[arr, thin] (burst.south) -- (m2.north);
+\draw[arr, thin] (reconfig.south) -- (m3.north);
+\draw[arr, thin] (drift.south) -- (m4.north);
+\draw[arr, thin] (long.south) -- (m5.north);
 
-\draw[arrow] (long.north) -- ++(0,8mm) -| (warmup.north);
+% Feedback loop (dotted orange)
+\draw[feedback] (long.north) -- ++(0, 0.6) -| (warmup.north);
+\node[note] at (4.8, 1.0) {\faRetweet\ policy retuning};
+
 \end{tikzpicture}

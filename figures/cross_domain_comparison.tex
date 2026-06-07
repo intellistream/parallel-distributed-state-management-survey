@@ -1,54 +1,57 @@
-% Cross-Domain Comparative Synthesis
-% Maps four domains onto shared control problems for §4
+% Cross-Domain Comparative Synthesis — vivid with FA icons, colored rows
 \begin{tikzpicture}[
-  dombox/.style={draw, rounded corners, thick, align=center, text width=28mm, minimum height=12mm, fill=black!3},
-  ctrl/.style={draw, rounded corners, align=center, text width=29mm, minimum height=10mm, fill=black!1, font=\footnotesize},
-  bound/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!1, font=\footnotesize},
-  gapbox/.style={draw, rounded corners, align=center, text width=27mm, minimum height=10mm, fill=black!3, font=\footnotesize},
-  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+  box/.style={draw, rounded corners=2pt, align=center, text width=22mm,
+              minimum height=9mm, font=\footnotesize, inner sep=2pt},
+  gap/.style={draw, rounded corners=2pt, align=center, text width=22mm,
+              minimum height=9mm, font=\footnotesize, inner sep=2pt,
+              fill=red!5, text=red!70!black},
+  hdr/.style={font=\footnotesize\bfseries, align=center},
+  arr/.style={-{Stealth[length=1.8mm]}, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=1.8mm]}, densely dotted, orange!70!black},
+  note/.style={font=\footnotesize, text=orange!70!black}
 ]
 
-% Headers
-\node[note] at (0,   5.6) {\textbf{Domain and}\\\textbf{State Object}};
-\node[note] at (3.9,5.6) {\textbf{Control}\\\textbf{Surface}};
-\node[note] at (7.8,5.6) {\textbf{Evaluation}\\\textbf{Boundary}};
-\node[note] at (11.7,5.6) {\textbf{Open}\\\textbf{Gap}};
+% Column Headers
+\node[hdr] at (0,    3.2) {\faDatabase\ Domain};
+\node[hdr] at (2.6,  3.2) {\faCogs\ Control Surface};
+\node[hdr] at (5.2,  3.2) {\faBarChart\ Eval.\ Boundary};
+\node[hdr] at (7.8,  3.2) {\faWarning\ Open Gap};
+\draw[thick] (-1.2, 2.9) -- (9.0, 2.9);
 
 % Row 1: Streaming
-\node[dombox] (d1) at (0,  3.4) {Streaming and\\Transactional Dataflow\\\footnotesize windows, progress,\\ownership logs};
-\node[ctrl]   (c1) at (3.9,3.4) {visibility, progress,\\ownership transfer,\\recovery coupling};
-\node[bound]  (b1) at (7.8,3.4) {throughput, recovery\\time, migration lag,\\correctness envelope};
-\node[gapbox] (g1) at (11.7,3.4) {unified disturbance-\\aware controller\\across all three\\boundaries};
+\node[box, fill=blue!5] (d1) at (0,   2.2) {\faSignal\ \textbf{Streaming}\\windows, progress};
+\node[box] (c1) at (2.6, 2.2) {visibility, progress,\\transfer, recovery};
+\node[box] (b1) at (5.2, 2.2) {throughput, recovery\\time, migration lag};
+\node[gap] (g1) at (7.8, 2.2) {unified disturbance\\controller};
 
-% Row 2: Hardware-Conscious
-\node[dombox] (d2) at (0,  0.8) {Hardware-Conscious and\\Approximate Execution\\\footnotesize encoded data paths,\\quality-sensitive state};
-\node[ctrl]   (c2) at (3.9,0.8) {representation choice,\\device mapping,\\quality-budget steering};
-\node[bound]  (b2) at (7.8,0.8) {energy, bounded error,\\latency-quality frontier,\\movement cost};
-\node[gapbox] (g2) at (11.7,0.8) {portable policy across\\hardware topologies;\\recovery-time error\\contracts};
+% Row 2: Hardware
+\node[box, fill=green!5] (d2) at (0,   0.7) {\faServer\ \textbf{Hardware}\\encoded data paths};
+\node[box] (c2) at (2.6, 0.7) {representation,\\device mapping,\\quality steering};
+\node[box] (b2) at (5.2, 0.7) {energy, error bound,\\latency--quality};
+\node[gap] (g2) at (7.8, 0.7) {portable policy\\across HW};
 
 % Row 3: LLM Serving
-\node[dombox] (d3) at (0, -1.8) {LLM Serving\\\footnotesize KV pages, prefix state,\\adapter/model residency};
-\node[ctrl]   (c3) at (3.9,-1.8) {allocation, phase-aware\\scheduling, transfer,\\adapter multiplexing};
-\node[bound]  (b3) at (7.8,-1.8) {TTFT, TPOT, goodput,\\memory waste,\\reuse ratio};
-\node[gapbox] (g3) at (11.7,-1.8) {lifecycle governance\\across nodes; admission,\\transfer, restoration\\composition};
+\node[box, fill=yellow!6] (d3) at (0,  -0.8) {\faCubes\ \textbf{LLM Serving}\\KV pages, prefix};
+\node[box] (c3) at (2.6,-0.8) {allocation, phase\\scheduling, transfer};
+\node[box] (b3) at (5.2,-0.8) {TTFT, TPOT,\\goodput, waste};
+\node[gap] (g3) at (7.8,-0.8) {lifecycle governance\\across nodes};
 
-% Row 4: Retrieval and Retention
-\node[dombox] (d4) at (0, -4.4) {Retrieval and Retention\\\footnotesize indexes, planner memory,\\replay buffers, budget traces};
-\node[ctrl]   (c4) at (3.9,-4.4) {refresh, rebuild,\\planner-trigger, retention\\selection, compaction};
-\node[bound]  (b4) at (7.8,-4.4) {recall@k, freshness lag,\\maintenance debt,\\forgetting, reuse quality};
-\node[gapbox] (g4) at (11.7,-4.4) {cross-shard freshness\\contracts; exposure-\\aware accounting;\\elasticity semantics};
+% Row 4: Retrieval
+\node[box, fill=purple!5] (d4) at (0,  -2.3) {\faSearch\ \textbf{Retrieval}\\indexes, planner mem};
+\node[box] (c4) at (2.6,-2.3) {refresh, rebuild,\\retention, compaction};
+\node[box] (b4) at (5.2,-2.3) {recall@k, freshness,\\maint.\ debt};
+\node[gap] (g4) at (7.8,-2.3) {cross-shard freshness\\+ elasticity};
 
-% Arrows
-\draw[arrow] (d1.east) -- (c1.west); \draw[arrow] (c1.east) -- (b1.west); \draw[dashedarrow] (b1.east) -- (g1.west);
-\draw[arrow] (d2.east) -- (c2.west); \draw[arrow] (c2.east) -- (b2.west); \draw[dashedarrow] (b2.east) -- (g2.west);
-\draw[arrow] (d3.east) -- (c3.west); \draw[arrow] (c3.east) -- (b3.west); \draw[dashedarrow] (b3.east) -- (g3.west);
-\draw[arrow] (d4.east) -- (c4.west); \draw[arrow] (c4.east) -- (b4.west); \draw[dashedarrow] (b4.east) -- (g4.west);
+% Horizontal arrows
+\foreach \i in {1,...,4} {
+  \draw[arr] (d\i.east) -- (c\i.west);
+  \draw[arr] (c\i.east) -- (b\i.west);
+  \draw[arr] (b\i.east) -- (g\i.west);
+}
 
-% Transfer arrows
-\draw[dashedarrow] (g1.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {ownership} (g2.north);
-\draw[dashedarrow] (g2.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {movement} (g3.north);
-\draw[dashedarrow] (g3.south) -- node[pos=0.5, right=2pt, font=\footnotesize] {lifecycle} (g4.north);
+% Vertical cross-domain connections (dotted orange on gap column)
+\draw[feedback] (g1.south) -- node[right, note] {ownership} (g2.north);
+\draw[feedback] (g2.south) -- node[right, note] {movement} (g3.north);
+\draw[feedback] (g3.south) -- node[right, note] {lifecycle} (g4.north);
 
 \end{tikzpicture}

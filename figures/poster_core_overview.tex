@@ -1,54 +1,60 @@
+% Survey Overview — vivid design with varied shapes, colors, and fontawesome icons
 \begin{tikzpicture}[
-  domain/.style={draw, rounded corners, thick, align=center, text width=27mm, minimum height=10mm, fill=black!2},
-  state/.style={draw, rounded corners, thick, align=center, text width=44mm, minimum height=16mm, fill=black!4},
-  core/.style={draw, rounded corners, thick, align=center, text width=30mm, minimum height=11mm, fill=black!3},
-  output/.style={draw, rounded corners, thick, align=center, text width=31mm, minimum height=10mm, fill=black!1},
-  base/.style={draw, rounded corners, align=center, text width=154mm, minimum height=10mm, fill=black!1},
-  note/.style={align=center, fill=white, inner sep=1pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+  dombox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
+                 font=\footnotesize, inner sep=3pt, text width=28mm,
+                 left color=white, right color=gray!5},
+  dimbox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
+                 font=\footnotesize, inner sep=3pt, text width=26mm,
+                 fill=blue!6},
+  outbox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
+                 font=\footnotesize, inner sep=3pt, text width=26mm,
+                 fill=green!4},
+  container/.style={draw, dashed, gray!60, inner sep=10pt, rounded corners=4pt},
+  hdr/.style={font=\footnotesize\bfseries, anchor=west},
+  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=1pt, shorten >=1pt},
+  note/.style={font=\scriptsize, text=gray!60!black}
 ]
 
-\node[note] at (0,4.65) {representative domains};
-\node[note] at (11.1,4.65) {three core dimensions};
-\node[note] at (17.4,4.65) {what the survey distills};
+% --- Column 1: System Domains ---
+\node[hdr] at (-1.6, 3.7) {\faSitemap\ System Domains};
+\node[dombox] (d1) at (0, 2.5) {\faSignal\ Streaming \&\\transactional};
+\node[dombox] (d2) at (0, 1.1) {\faServer\ Hardware-conscious\\execution};
+\node[dombox] (d3) at (0,-0.3) {\faCubes\ LLM serving \&\\inference};
+\node[dombox] (d4) at (0,-1.7) {\faSearch\ Retrieval \&\\agentic memory};
+\node[container, fit=(d1)(d2)(d3)(d4)] (domgrp) {};
 
-\node[domain] (stream) at (0,3.0) {Streaming and\\transactional\\dataflow};
-\node[domain] (hardware) at (0,1.0) {Hardware-conscious\\analytics and\\approximate execution};
-\node[domain] (serving) at (0,-1.0) {LLM serving and\\memory-bound\\inference};
-\node[domain] (memory) at (0,-3.0) {Retrieval, retention,\\and agentic\\memory services};
+% --- Column 2: Core Dimensions ---
+\node[hdr] at (3.6, 3.7) {\faCompass\ Core Dimensions};
+\node[dimbox] (c1) at (5.2, 1.8) {\faCogs\ Access \&\\scheduling};
+\node[dimbox] (c2) at (5.2, 0.2) {\faBolt\ Execution\\optimization};
+\node[dimbox] (c3) at (5.2,-1.4) {\faRefresh\ Evolution \&\\reuse};
+\node[container, fit=(c1)(c2)(c3)] (coregrp) {};
 
-\node[state] (state) at (6.2,0) {Governed state objects\\windows, queues, KV pages,\\indexes, replay buffers,\\workflow memory};
+% --- Column 3: Survey Outputs ---
+\node[hdr] at (8.2, 3.7) {\faFileTextO\ Survey Outputs};
+\node[outbox] (o1) at (9.8, 1.8) {\faBarChart\ Comparative\\synthesis};
+\node[outbox] (o2) at (9.8, 0.2) {\faWrench\ Runtime\\blueprint};
+\node[outbox] (o3) at (9.8,-1.4) {\faRocket\ Research\\agenda};
+\node[container, fit=(o1)(o2)(o3)] (outgrp) {};
 
-\node[core] (access) at (11.1,3.0) {State access\\and scheduling};
-\node[core] (exec) at (11.1,0) {State-aware\\execution};
-\node[core] (evo) at (11.1,-3.0) {State evolution\\and reuse};
+% --- Arrows: Domains -> Dimensions (staggered entry points) ---
+\draw[arr] (d1.east) -- ++(0.6,0) |- ([yshift=2pt]c1.west);
+\draw[arr] (d2.east) -- ++(0.4,0) |- ([yshift=-2pt]c1.west);
+\draw[arr] (d3.east) -- ++(0.6,0) |- (c2.west);
+\draw[arr] (d4.east) -- ++(0.4,0) |- (c3.west);
 
-\node[output] (synth) at (17.4,3.0) {Comparative synthesis\\mechanism families,\\transferable seams};
-\node[output] (blueprint) at (17.4,1.0) {Runtime blueprint\\catalog, observe,\\decide, actuate, safety};
-\node[output] (eval) at (17.4,-1.0) {Evaluation outlook\\disturbance, long horizon,\\composition};
-\node[output] (agenda) at (17.4,-3.0) {Integrated agenda\\memory middleware,\\state-centric scheduling};
+% --- Dimension coupling (vertical) ---
+\draw[arr] (c1.south) -- (c2.north);
+\draw[arr] (c2.south) -- (c3.north);
 
-\node[base] (scaffold) at (9.8,-5.45) {Shared comparison scaffold: state object $\rightarrow$ control surface $\rightarrow$ coupling path $\rightarrow$ evaluation boundary $\rightarrow$ remaining gap};
+% --- Feedback (dotted + distinct color to differentiate from container borders) ---
+\draw[arr, densely dotted, orange!70!black, thin] (c3.south) -- ++(0,-0.5) -| ([xshift=-5mm]coregrp.west)
+  |- ([yshift=-2pt]c1.west);
+\node[font=\scriptsize, text=orange!70!black] at (5.2, -2.8) {\faRetweet\ feedback};
 
-\draw[arrow] (stream.east) -- (state.west);
-\draw[arrow] (hardware.east) -- (state.west);
-\draw[arrow] (serving.east) -- (state.west);
-\draw[arrow] (memory.east) -- (state.west);
+% --- Dimensions -> Outputs ---
+\draw[arr] (c1.east) -- (o1.west);
+\draw[arr] (c2.east) -- (o2.west);
+\draw[arr] (c3.east) -- (o3.west);
 
-\draw[arrow] (state.east) -- (access.west);
-\draw[arrow] (access.south) -- (exec.north);
-\draw[arrow] (exec.south) -- (evo.north);
-\draw[dashedarrow] (evo.west) -| node[pos=0.28, left=4pt, note] {future contention,\\memory debt,\\reuse pressure} (access.west);
-
-\draw[arrow] (access.east) -- (synth.west);
-\draw[arrow] (exec.east) -- ++(8mm,0) |- (synth.west);
-\draw[arrow] (evo.east) -- ++(8mm,0) |- (synth.west);
-
-\draw[arrow] (synth.south) -- (blueprint.north);
-\draw[arrow] (blueprint.south) -- (eval.north);
-\draw[arrow] (eval.south) -- (agenda.north);
-
-\draw[arrow] ([xshift=-38mm]scaffold.north) -- ++(0,8mm) -| (state.south);
-\draw[arrow] ([xshift=42mm]scaffold.north) -- ++(0,8mm) -| (agenda.south);
 \end{tikzpicture}

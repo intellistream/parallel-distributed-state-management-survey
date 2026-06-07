@@ -1,46 +1,51 @@
+% Memory Governance Planes — vivid with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  plane/.style={draw, rounded corners, thick, align=center, text width=49mm, minimum width=51mm, minimum height=13mm, fill=black!3},
-  control/.style={draw, rounded corners, align=center, text width=38mm, minimum width=40mm, minimum height=12mm, fill=black!2},
-  side/.style={draw, rounded corners, align=center, minimum width=30mm, minimum height=9mm, fill=black!1},
-  note/.style={align=center, inner sep=2pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  bidir/.style={{Latex[length=2.5mm]}-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+  plane/.style={draw, rounded corners=3pt, align=center, text width=46mm,
+                minimum height=12mm, font=\footnotesize, inner sep=3pt},
+  ctrl/.style={draw, rounded corners=2pt, align=center, text width=36mm,
+               minimum height=10mm, font=\footnotesize, inner sep=3pt, fill=gray!4},
+  side/.style={draw, rounded corners=3pt, fill=blue!6, align=center, minimum width=28mm,
+               minimum height=16mm, font=\footnotesize, inner sep=3pt},
+  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black},
+  note/.style={font=\scriptsize, text=orange!70!black}
 ]
 
-\node[side] (telemetry) at (0,0) {shared telemetry\\SLOs, drift, budgets};
+% Shared telemetry (sidebar)
+\node[side] (tele) at (0, 0) {\faBarChart\\\textbf{Shared Telemetry}\\SLOs, drift, budgets};
 
-\node[plane] (serving) at (6.0, 3.0) {Serving memory plane\\KV pages, adapters, phase queues};
-\node[plane] (retrieval) at (6.0, 0) {Retrieval memory plane\\indexes, graphs, refresh traces};
-\node[plane] (retention) at (6.0, -3.0) {Retention memory plane\\replay buffers, protected state,\\compressed memory};
+% Three memory planes with icons
+\node[plane, fill=green!5]  (serving)   at (5.8,  2.2) {\faServer\quad \textbf{Serving Memory}\\KV pages, adapters, phase queues};
+\node[plane, fill=yellow!6] (retrieval) at (5.8,  0)   {\faSearch\quad \textbf{Retrieval Memory}\\indexes, graphs, refresh traces};
+\node[plane, fill=purple!5] (retention) at (5.8, -2.2) {\faDatabase\quad \textbf{Retention Memory}\\replay buffers, protected state};
 
-\node[control] (servingc) at (12.5, 3.0) {admission, placement,\\phase transfer control};
-\node[control] (retrievalc) at (12.5, 0) {refresh, rebuild,\\planner-trigger control};
-\node[control] (retentionc) at (12.5, -3.0) {retention selection,\\compression, compaction};
-\draw[bidir] (telemetry.east) -- (retrieval.west);
-\draw[arrow] (serving.east) -- (servingc.west);
-\draw[arrow] (retrieval.east) -- (retrievalc.west);
-\draw[arrow] (retention.east) -- (retentionc.west);
+% Dashed separators between planes
+\draw[dashed, gray!40] (3.0, 1.1) -- (10.8, 1.1);
+\draw[dashed, gray!40] (3.0,-1.1) -- (10.8,-1.1);
 
-\draw[arrow] (telemetry.north) |- (serving.west);
-\draw[arrow] ([xshift=10pt]telemetry.south) |- (retention.west);
+% Controls
+\node[ctrl] (sc) at (11.8,  2.2) {\faCogs\ admission, placement,\\phase transfer};
+\node[ctrl] (rc) at (11.8,  0)   {\faRefresh\ refresh, rebuild,\\planner-trigger};
+\node[ctrl] (tc) at (11.8, -2.2) {\faShield\ retention selection,\\compression};
 
-\draw[dashedarrow] (serving.south) -- node[pos=0.75, right=4pt, note] {freshness, staleness,\\maintenance debt} (retrieval.north);
-\draw[dashedarrow] (retrieval.south) -- node[pos=0.5, right=4pt, note] {future utility,\\forgetting,\\storage pressure} (retention.north);
+% Telemetry -> planes
+\draw[arr] (tele.north) |- (serving.west);
+\draw[arr] (tele.east) -- (retrieval.west);
+\draw[arr] (tele.south) |- (retention.west);
 
-\draw[arrow] (servingc.north)
-    -- (servingc.north |- 0, 4.4)
-    -- node[above, note] {queueing, reuse, tail-latency feedback} ([xshift=-12pt]telemetry.north |- 0, 4.4)
-    -- ([xshift=-12pt]telemetry.north);
+% Planes -> controls
+\draw[arr] (serving.east) -- (sc.west);
+\draw[arr] (retrieval.east) -- (rc.west);
+\draw[arr] (retention.east) -- (tc.west);
 
-\draw[arrow] (retrievalc.north)
-    -- (retrievalc.north |- 0, 1.5)
-    -- node[pos=0.23, above, note] {longer-lived reuse and update traces} ([xshift=12pt]telemetry.north |- 0, 1.5)
-    -- ([xshift=12pt]telemetry.north);
+% Inter-plane data flow (dotted orange)
+\draw[feedback] (serving.south) -- node[right, note] {staleness} (retrieval.north);
+\draw[feedback] (retrieval.south) -- node[right, note] {utility decay} (retention.north);
 
-\draw[arrow] (retentionc.south)
-    -- (retentionc.south |- 0, -4.4)
-    -- node[below, note] {persistent value and retention policies} ([xshift=-10pt]telemetry.south |- 0, -4.4)
-    -- ([xshift=-10pt]telemetry.south);
+% Feedback loops (dotted orange)
+\draw[feedback] (sc.north) -- ++(0, 0.6) -| ([xshift=-4mm]tele.north);
+\node[note] at (5.8, 3.8) {\faRetweet\ latency feedback};
+\draw[feedback] (tc.south) -- ++(0,-0.6) -| ([xshift=-4mm]tele.south);
+\node[note] at (5.8, -3.8) {\faRetweet\ retention policies};
 
 \end{tikzpicture}

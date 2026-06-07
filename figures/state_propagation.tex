@@ -1,21 +1,35 @@
+% State Propagation — vivid with FA icons, colored boxes, dotted feedback
 \begin{tikzpicture}[
-  box/.style={draw, rounded corners, thick, align=center, minimum width=32mm, minimum height=10mm, fill=black!3},
-  note/.style={draw, rounded corners, align=left, inner sep=4pt, fill=black!2},
-  labelnote/.style={align=center, fill=white, inner sep=1pt, font=\scriptsize, text width=28mm},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+  box/.style={draw, rounded corners=3pt, align=center, minimum width=34mm,
+              minimum height=12mm, font=\footnotesize, inner sep=3pt},
+  note/.style={font=\scriptsize, text=gray!70!black, align=center},
+  arr/.style={-{Stealth[length=2.2mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black, shorten <=2pt, shorten >=2pt}
 ]
-\node[box] (access) at (0,0) {State access\\and scheduling};
-\node[box] (exec) at (4.3,0) {State-aware\\execution};
-\node[box] (evo) at (8.6,0) {State evolution\\and reuse};
-\node[labelnote] (l1) at (2.15,0.95) {conflicts, locality,\\queueing};
-\node[labelnote] (l2) at (6.45,0.95) {cost, quality,\\resource usage};
-\node[labelnote] (fb) at (4.3,2.45) {future hotspots,\\memory pressure};
-\node[note, text width=108mm] (note1) at (4.3,-2.15) {
-\textbf{Propagation view.} Local mismatches rarely stay local. Hidden access contention distorts execution decisions; poorly modeled execution reshapes what can be updated or retained; aggressive updates feed back into later access pressure and reuse quality.
-};
 
-\draw[arrow] (access.east) -- (exec.west);
-\draw[arrow] (exec.east) -- (evo.west);
-\draw[arrow] (evo.north) to[out=150,in=30,looseness=1.15] (access.north);
-\draw[arrow] (exec.south) -- (note1.north);
+\node[box, fill=blue!6]  (access) at (0, 0)   {\faCogs\ \textbf{State Access}\\and Scheduling};
+\node[box, fill=green!5] (exec)   at (4.8, 0) {\faBolt\ \textbf{State-Aware}\\Execution};
+\node[box, fill=purple!5] (evo)    at (9.6, 0) {\faRefresh\ \textbf{State Evolution}\\and Reuse};
+
+% Edge labels above arrows
+\node[note] at (2.4, 0.7) {conflicts, locality};
+\node[note] at (7.2, 0.7) {cost, quality};
+
+% Forward arrows
+\draw[arr] (access.east) -- (exec.west);
+\draw[arr] (exec.east) -- (evo.west);
+
+% Feedback arrow (dotted orange, routed above)
+\draw[feedback] ([yshift=1mm]evo.north) -- ++(0, 0.8)
+  -| ([yshift=1mm]access.north);
+\node[font=\scriptsize, text=orange!70!black] at (4.8, 1.6) {\faRetweet\ feedback pressure};
+
+% Propagation note (closer to boxes)
+\node[draw, dashed, gray!60, rounded corners=2pt, align=left, text width=110mm,
+      font=\footnotesize, inner sep=4pt] at (4.8, -1.3) {%
+\textbf{Propagation view.}
+Access contention distorts execution decisions;
+poorly modeled execution reshapes retention;
+aggressive updates feed back into later access pressure.};
+
 \end{tikzpicture}

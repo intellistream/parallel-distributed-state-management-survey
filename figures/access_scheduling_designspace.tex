@@ -1,40 +1,51 @@
-% Access & Scheduling Design Space
-% Maps the control dimensions and mechanism families for §3.1
+% Access & Scheduling Design Space — vivid with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  layer/.style={draw, rounded corners, thick, align=center, minimum width=36mm, minimum height=12mm, fill=black!3},
-  mech/.style={draw, rounded corners, align=center, text width=34mm, minimum height=10mm, fill=black!1, font=\footnotesize},
-  note/.style={align=center, fill=white, inner sep=2pt, font=\footnotesize},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt},
-  dashedarrow/.style={-{Latex[length=2.5mm]}, thick, dashed, shorten <=2pt, shorten >=2pt}
+  box/.style={draw, rounded corners=2pt, align=center, text width=32mm,
+              minimum height=10mm, font=\footnotesize, inner sep=2pt},
+  sysbox/.style={draw, rounded corners=2pt, align=left, text width=36mm,
+                 minimum height=10mm, font=\footnotesize, inner sep=2pt, fill=gray!4},
+  layer/.style={draw, dashed, gray!50, inner sep=5pt, rounded corners=2pt},
+  lbl/.style={font=\footnotesize\bfseries, anchor=east},
+  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black},
+  note/.style={font=\scriptsize, text=gray!70!black}
 ]
 
-% L1: Observability
-\node[layer] (L1) at (0, 6.0) {Observability\\\footnotesize queue exposure, conflict density,\\\footnotesize progress frontiers};
-\node[mech]  (M1) at (5.4, 6.0) {Aurora, MillWheel, Naiad,\\Trill, Differential\\\footnotesize path metrics and progress visibility};
+% --- Layer 1: Observability ---
+\node[box, fill=blue!6] (L1) at (0, 2.6) {\faEye\ Queue exposure,\\conflict density,\\progress frontiers};
+\node[sysbox] (M1) at (5.0, 2.6) {Aurora, MillWheel, Naiad,\\Trill, Differential Dataflow};
+\node[layer, fit=(L1)(M1)] (lay1) {};
+\node[lbl] at ([xshift=-3mm]lay1.west) {\faEye\ Observability};
 
-% L2: Cost and Scheduling
-\node[layer] (L2) at (0, 2.4) {Cost and Scheduling\\\footnotesize topology, skew, NUMA, dependency\\\footnotesize ordering, admission, migration grain};
-\node[mech]  (M2) at (5.4, 2.4) {BriskStream, MorphStream,\\Megaphone, SOLA, ExeGPT\\\footnotesize topology-aware and dependency-aware};
+% Dashed separator
+\draw[dashed, gray!40] (-3.0, 1.6) -- (7.6, 1.6);
 
-% L3: Recovery and Elasticity
-\node[layer] (L3) at (0,-1.2) {Recovery and Elasticity\\\footnotesize checkpoint alignment, ownership\\\footnotesize transfer, replay scheduling};
-\node[mech]  (M3) at (5.4,-1.2) {Spacker, Flink async snapshot,\\fast recovery, SONIC, ORION\\\footnotesize migration and workflow coupling};
+% --- Layer 2: Cost & Scheduling ---
+\node[box, fill=green!5] (L2) at (0, 0.8) {\faCogs\ Topology, skew, NUMA,\\ordering, admission,\\migration};
+\node[sysbox] (M2) at (5.0, 0.8) {BriskStream, MorphStream,\\Megaphone, SOLA, ExeGPT};
+\node[layer, fit=(L2)(M2)] (lay2) {};
+\node[lbl] at ([xshift=-3mm]lay2.west) {\faCogs\ Cost \& Scheduling};
 
-% Layer arrows
-\draw[arrow] (L1.south) -- node[pos=0.5, right=2pt] {} (L2.north);
-\draw[arrow] (L2.south) -- node[pos=0.5, right=2pt] {} (L3.north);
+% Dashed separator
+\draw[dashed, gray!40] (-3.0, -0.2) -- (7.6, -0.2);
 
-% Mechanism arrows
-\draw[arrow] (L1.east) -- (M1.west);
-\draw[arrow] (L2.east) -- (M2.west);
-\draw[arrow] (L3.east) -- (M3.west);
+% --- Layer 3: Recovery & Elasticity ---
+\node[box, fill=purple!5] (L3) at (0, -1.0) {\faShield\ Checkpoint alignment,\\ownership transfer,\\replay};
+\node[sysbox] (M3) at (5.0, -1.0) {Spacker, Flink, SONIC,\\ORION, fast recovery};
+\node[layer, fit=(L3)(M3)] (lay3) {};
+\node[lbl] at ([xshift=-3mm]lay3.west) {\faShield\ Recovery \& Elasticity};
 
-% Feedback
-\draw[dashedarrow] (M3.east) -- ++(0.8,0) -- ++(0,7.2) -- node[pos=0.6, right=3pt] {} (M1.east);
+% Inter-layer arrows (between L boxes only)
+\draw[arr] (L1.south) -- (L2.north);
+\draw[arr] (L2.south) -- (L3.north);
 
-% Labels
-\node[note] at (-2.8, 6.0) {\textbf{L1}};
-\node[note] at (-2.8, 2.4) {\textbf{L2}};
-\node[note] at (-2.8,-1.2) {\textbf{L3}};
+% Layer -> mechanisms
+\draw[arr] (L1.east) -- node[above, note] {mechanisms} (M1.west);
+\draw[arr] (L2.east) -- (M2.west);
+\draw[arr] (L3.east) -- (M3.west);
+
+% Feedback (dotted orange, routed outside left)
+\draw[feedback] (M3.south) -- ++(0,-0.5) -| ([xshift=-2mm]lay3.west) |- ([yshift=-2mm]L1.west);
+\node[font=\scriptsize, text=orange!70!black] at (-2.4, -1.8) {\faRetweet\ feedback};
 
 \end{tikzpicture}

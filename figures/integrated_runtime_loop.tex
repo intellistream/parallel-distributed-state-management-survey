@@ -1,25 +1,36 @@
+% Integrated Runtime Loop — vivid with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  block/.style={draw, rounded corners, thick, align=center, minimum width=29mm, minimum height=9mm, fill=black!3},
-  side/.style={draw, rounded corners, align=center, minimum width=25mm, minimum height=8mm, fill=black!2},
-  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
-  arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
+  block/.style={draw, rounded corners=3pt, align=center, minimum width=26mm,
+                minimum height=11mm, font=\footnotesize, inner sep=2pt},
+  input/.style={draw, rounded corners=2pt, align=center, minimum width=24mm,
+                minimum height=9mm, font=\footnotesize, inner sep=2pt, fill=gray!4},
+  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=2pt, shorten >=2pt},
+  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black},
+  note/.style={font=\scriptsize, text=orange!70!black}
 ]
-\node[block] (observe) at (0,0) {Observe\\state};
-\node[block] (model) at (3.6,0) {Model\\boundaries};
-\node[block] (schedule) at (7.2,0) {Schedule\\and place};
-\node[block] (update) at (10.8,0) {Update and\\retain};
-\node[note] (fb) at (5.4,1.9) {telemetry feedback};
 
-\node[side] (hardware) at (3.6,-2.05) {hardware topology};
-\node[side] (service) at (7.2,-2.05) {latency, energy, quality};
-\node[side] (memory) at (10.8,-2.05) {retention and reuse};
+% Main loop blocks with icons
+\node[block, fill=blue!6]   (observe)  at (0,   0) {\faEye\\\textbf{Observe} state};
+\node[block, fill=green!5]  (model)    at (3.4, 0) {\faSitemap\\\textbf{Model} boundaries};
+\node[block, fill=yellow!8] (schedule) at (6.8, 0) {\faCogs\\\textbf{Schedule} and place};
+\node[block, fill=purple!5] (update)   at (10.2,0) {\faDatabase\\\textbf{Update} and retain};
 
-\draw[arrow] (observe.east) -- (model.west);
-\draw[arrow] (model.east) -- (schedule.west);
-\draw[arrow] (schedule.east) -- (update.west);
-\draw[arrow] (update.north) -- ++(0,8mm) -| (observe.north);
+% Forward flow
+\draw[arr] (observe.east) -- (model.west);
+\draw[arr] (model.east) -- (schedule.west);
+\draw[arr] (schedule.east) -- (update.west);
 
-\draw[arrow] (hardware.north) -- (model.south);
-\draw[arrow] (service.north) -- (schedule.south);
-\draw[arrow] (memory.north) -- (update.south);
+% Feedback loop (dotted orange)
+\draw[feedback] (update.north) -- ++(0, 0.6) -| (observe.north);
+\node[note] at (5.1, 1.0) {\faRetweet\ telemetry feedback};
+
+% Constraint inputs below with icons
+\node[input] (hw)  at (3.4, -1.5) {\faServer\ hardware topology};
+\node[input] (svc) at (6.8, -1.5) {\faBarChart\ latency, energy};
+\node[input] (mem) at (10.2,-1.5) {\faDatabase\ retention and reuse};
+
+\draw[arr, thin] (hw.north)  -- (model.south);
+\draw[arr, thin] (svc.north) -- (schedule.south);
+\draw[arr, thin] (mem.north) -- (update.south);
+
 \end{tikzpicture}
