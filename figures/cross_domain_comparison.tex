@@ -1,46 +1,46 @@
 % Cross-Domain Comparative Synthesis — vivid with FA icons, colored rows
 \begin{tikzpicture}[
-  box/.style={draw, rounded corners=2pt, align=center, text width=22mm,
-              minimum height=9mm, font=\footnotesize, inner sep=2pt},
-  gap/.style={draw, rounded corners=2pt, align=center, text width=22mm,
-              minimum height=9mm, font=\footnotesize, inner sep=2pt,
+  box/.style={draw, rounded corners=2pt, align=center, text width=23mm,
+              minimum height=10mm, font=\footnotesize, inner sep=2pt},
+  gap/.style={draw, rounded corners=2pt, align=center, text width=23mm,
+              minimum height=10mm, font=\footnotesize, inner sep=2pt,
               fill=red!5, text=red!70!black},
   hdr/.style={font=\footnotesize\bfseries, align=center},
-  arr/.style={-{Stealth[length=1.8mm]}, shorten <=2pt, shorten >=2pt},
+  arr/.style={-{Stealth[length=1.8mm]}, shorten <=1pt, shorten >=1pt},
   feedback/.style={-{Stealth[length=1.8mm]}, densely dotted, orange!70!black},
   note/.style={font=\footnotesize, text=orange!70!black}
 ]
 
 % Column Headers
 \node[hdr] at (0,    3.2) {\faDatabase\ Domain};
-\node[hdr] at (2.6,  3.2) {\faCogs\ Control Surface};
-\node[hdr] at (5.2,  3.2) {\faBarChart\ Eval.\ Boundary};
-\node[hdr] at (7.8,  3.2) {\faWarning\ Open Gap};
-\draw[thick] (-1.2, 2.9) -- (9.0, 2.9);
+\node[hdr] at (2.9,  3.2) {\faCogs\ Control Surface};
+\node[hdr] at (5.8,  3.2) {\faBarChart\ Eval.\ Boundary};
+\node[hdr] at (8.7,  3.2) {\faWarning\ Open Gap};
+\draw[thick] (-1.2, 2.9) -- (10.0, 2.9);
 
 % Row 1: Streaming
 \node[box, fill=blue!5] (d1) at (0,   2.2) {\faSignal\ \textbf{Streaming}\\windows, progress};
-\node[box] (c1) at (2.6, 2.2) {visibility, progress,\\transfer, recovery};
-\node[box] (b1) at (5.2, 2.2) {throughput, recovery\\time, migration lag};
-\node[gap] (g1) at (7.8, 2.2) {unified disturbance\\controller};
+\node[box] (c1) at (2.9, 2.2) {visibility, progress,\\transfer, recovery};
+\node[box] (b1) at (5.8, 2.2) {throughput,\\recovery time,\\migration lag};
+\node[gap] (g1) at (8.7, 2.2) {unified disturbance\\controller};
 
 % Row 2: Hardware
 \node[box, fill=green!5] (d2) at (0,   0.7) {\faServer\ \textbf{Hardware}\\encoded data paths};
-\node[box] (c2) at (2.6, 0.7) {representation,\\device mapping,\\quality steering};
-\node[box] (b2) at (5.2, 0.7) {energy, error bound,\\latency--quality};
-\node[gap] (g2) at (7.8, 0.7) {portable policy\\across HW};
+\node[box] (c2) at (2.9, 0.7) {representation,\\device mapping,\\quality steering};
+\node[box] (b2) at (5.8, 0.7) {energy, error bound,\\latency--quality};
+\node[gap] (g2) at (8.7, 0.7) {portable policy\\across HW};
 
 % Row 3: LLM Serving
 \node[box, fill=yellow!6] (d3) at (0,  -0.8) {\faCubes\ \textbf{LLM Serving}\\KV pages, prefix};
-\node[box] (c3) at (2.6,-0.8) {allocation, phase\\scheduling, transfer};
-\node[box] (b3) at (5.2,-0.8) {TTFT, TPOT,\\goodput, waste};
-\node[gap] (g3) at (7.8,-0.8) {lifecycle governance\\across nodes};
+\node[box] (c3) at (2.9,-0.8) {allocation, phase\\scheduling, transfer};
+\node[box] (b3) at (5.8,-0.8) {TTFT, TPOT,\\goodput, waste};
+\node[gap] (g3) at (8.7,-0.8) {lifecycle governance\\across nodes};
 
 % Row 4: Retrieval
 \node[box, fill=purple!5] (d4) at (0,  -2.3) {\faSearch\ \textbf{Retrieval}\\indexes, planner mem};
-\node[box] (c4) at (2.6,-2.3) {refresh, rebuild,\\retention, compaction};
-\node[box] (b4) at (5.2,-2.3) {recall@k, freshness,\\maint.\ debt};
-\node[gap] (g4) at (7.8,-2.3) {cross-shard freshness\\+ elasticity};
+\node[box] (c4) at (2.9,-2.3) {refresh, rebuild,\\retention, compaction};
+\node[box] (b4) at (5.8,-2.3) {recall@k, freshness,\\maint.\ debt};
+\node[gap] (g4) at (8.7,-2.3) {cross-shard freshness\\+ elasticity};
 
 % Horizontal arrows
 \foreach \i in {1,...,4} {
