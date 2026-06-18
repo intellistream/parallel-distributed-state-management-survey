@@ -30,8 +30,9 @@
 \newenvironment{keybox}{%
   \vspace{6pt}\noindent
   \begin{lrbox}{\keyboxcontent}
-  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-1.5pt\relax}
   \raggedright
+  \emergencystretch=1em
   \textbf{\faLightbulbO\ \textcolor{keyborder}{Key Insight.}}\par\smallskip
 }{%
   \end{minipage}
@@ -669,7 +670,10 @@ To make the propagation claim falsifiable rather than aspirational, we trace one
 
 \smallskip\noindent\textbf{Summary in five-tuple form.}
 \[
-\mathcal{Q}_{\text{burst}} = \bigl(\underbrace{\text{prefix KV pages}}_{\sigma},\;\underbrace{\text{admission + eviction}}_{\kappa},\;\underbrace{\text{reuse destruction}}_{\chi},\;\underbrace{\text{p99 TTFT}}_{\beta},\;\underbrace{\text{no restoration accounting}}_{\gamma}\bigr).
+\begin{aligned}
+\mathcal{Q}_{\text{burst}} = \bigl(&\underbrace{\text{prefix KV pages}}_{\sigma},\;\underbrace{\text{admission + eviction}}_{\kappa},\;\underbrace{\text{reuse destruction}}_{\chi},\\
+&\underbrace{\text{p99 TTFT}}_{\beta},\;\underbrace{\text{no restoration accounting}}_{\gamma}\bigr).
+\end{aligned}
 \]
 The worked example shows that admission, execution, and evolution form one coupled loop: the access decision at $t_0$ raises execution cost at $t_0{+}8\text{s}$ and creates restoration debt that persists for $\sim$20~seconds after the burst ends. A controller that optimizes only admission throughput can produce a 2.1$\times$ TTFT regression and an 8\% decode throughput loss that are invisible in the access-only view.
 
@@ -884,15 +888,15 @@ The following long-form matrices make cross-domain comparison explicit at scale 
 \footnotesize
 \renewcommand{\arraystretch}{1.08}
 
-\setlength{\tabcolsep}{1.5pt}
+\setlength{\tabcolsep}{1pt}
 \scriptsize
 \begin{longtable}{>{
-\raggedright\arraybackslash}p{0.13\textwidth}>{
-\raggedright\arraybackslash}p{0.15\textwidth}>{
-\raggedright\arraybackslash}p{0.15\textwidth}>{
-\raggedright\arraybackslash}p{0.14\textwidth}>{
-\raggedright\arraybackslash}p{0.14\textwidth}>{
-\raggedright\arraybackslash}p{0.13\textwidth}}
+\raggedright\arraybackslash}p{0.16\textwidth}>{
+\raggedright\arraybackslash}p{0.18\textwidth}>{
+\raggedright\arraybackslash}p{0.18\textwidth}>{
+\raggedright\arraybackslash}p{0.17\textwidth}>{
+\raggedright\arraybackslash}p{0.17\textwidth}>{
+\raggedright\arraybackslash}p{0.05\textwidth}}
 \caption{Large-scale mechanism matrix across representative papers. Columns correspond to the five-tuple $\mathcal{Q}=(\sigma,\kappa,\chi,\beta,\gamma)$ introduced in Section~\ref{sec:foundations}: state object~($\sigma$), control surface~($\kappa$), evaluated boundary~($\beta$), and extension note identifying the remaining gap~($\gamma$). The coupling path~($\chi$) is implicit in each row's narrative but becomes explicit in the cross-domain synthesis. The \emph{confidence} column indicates validation depth: \textbf{A}~=~multi-system end-to-end evaluation under disturbance; \textbf{B}~=~single-system evaluation with controlled workload; \textbf{C}~=~mechanism demonstration without long-horizon or disturbance evidence.}\label{tab:large-matrix-a}\\
 \toprule
 Paper line & State object~($\sigma$) & Control surface~($\kappa$) & Evaluated boundary~($\beta$) & Remaining gap~($\gamma$) & Conf. \\
@@ -912,10 +916,10 @@ Megaphone/\newline OSM/SEEP \\
 \cite{nasir2019megaphone,fernandez2013osm,fernandez2010seep} & movable state shards & migration and elasticity control & reconfiguration latency & add correctness-envelope taxonomy & A \\
 FineStream/CStream/\newline CompressStreamDB \\
 \cite{zhang2020finestream,zeng2024cstream,zhang2023compressstreamdb} & representation-aware operator \newline and format state & hardware-conscious mapping \newline + state-path control & speed/energy-delay tradeoffs & extend to accelerator mixes \newline and closed-loop format switching & B \\
-PECJ/LibAMM~\cite{zeng2024pecj,zeng2024libamm} & quality-sensitive   
-ewline intermediate state & approximation and   
-ewline compensation control & bounded quality   
-ewline vs cost & unify with service-level   
+PECJ/LibAMM~\cite{zeng2024pecj,zeng2024libamm} & quality-sensitive 
+ewline intermediate state & approximation and 
+ewline compensation control & bounded quality 
+ewline vs cost & unify with service-level 
 ewline quality floors & B \\
 vLLM~\cite{kwon2023pagedattention} & paged KV and \newline memory-plane state & allocation, sharing, and \newline lifecycle admission & throughput at latency target & add cluster lifecycle governance & A \\
 Sarathi-Serve~\cite{agrawal2024sarathi} & phase-skewed serving state & prefill/decode scheduling \newline and batch shaping & throughput-latency frontier & benchmark disturbance and \newline phase migration & B \\
@@ -923,36 +927,36 @@ SGLang~\cite{zheng2023sglang} & reusable program-\newline structured state & rad
 Clockwork/\newline Clipper \\
 \cite{gujarati2020clockwork,crankshaw2017clipper} & serving control-plane state & predictability and \newline orchestration control & tail-latency/SLO isolation & tie to lifecycle admission & B \\
 DistServe/Splitwise/\newline FastGen \\
-\cite{zhong2024distserve,patel2024splitwise,holmes2024fastgen} & disaggregated phase and   
-ewline transfer-queue state & phase split and   
-ewline cluster governance & goodput + tail   
-ewline behavior & unify with tenant-aware   
+\cite{zhong2024distserve,patel2024splitwise,holmes2024fastgen} & disaggregated phase and 
+ewline transfer-queue state & phase split and 
+ewline cluster governance & goodput + tail 
+ewline behavior & unify with tenant-aware 
 ewline admission & B \\
 Nexus/InferLine/\newline INFaaS/Punica/\newline AlpaServe \\
-\cite{shen2019nexus,crankshaw2020inferline,romero2021infaas,chen2024punica,li2023alpaserve} & multiplexed tenant and   
-ewline control-plane state & admission, provisioning,   
-ewline isolation, and placement control & throughput/cost/   
-ewline SLO stability & unify phase and   
+\cite{shen2019nexus,crankshaw2020inferline,romero2021infaas,chen2024punica,li2023alpaserve} & multiplexed tenant and 
+ewline control-plane state & admission, provisioning, 
+ewline isolation, and placement control & throughput/cost/ 
+ewline SLO stability & unify phase and 
 ewline tenant governance & B \\
 DPR/ColBERT~\cite{karpukhin2020dpr,khattab2020colbert} & dense and late-interaction retrieval indexes & offline/online retrieval decomposition & retrieval quality vs serving cost & add update/refresh lifecycle dimension & B \\
 Self-RAG/FlowRAG/\newline CANDOR \\
 \cite{asai2024selfrag,zhang2026flowrag,wang2026candor} & planner and evolving \newline index state & retrieval gating + \newline rebuild control & long-horizon quality/\newline cost balance & add staleness-trigger policy & C \\
 Milvus/Manu/\newline FreshDiskANN/\newline IP-DiskANN \\
-\cite{wang2021milvus,guo2022manu,singh2021freshdiskann,xu2025place} & segmented vector-store and   
-ewline mutable graph state & shard lifecycle, deletion,   
-ewline and maintenance control & distributed latency/   
-ewline freshness balance & define cross-shard freshness   
+\cite{wang2021milvus,guo2022manu,singh2021freshdiskann,xu2025place} & segmented vector-store and 
+ewline mutable graph state & shard lifecycle, deletion, 
+ewline and maintenance control & distributed latency/ 
+ewline freshness balance & define cross-shard freshness 
 ewline and compaction contracts & B \\
 HippoRAG/\newline FlowRAG \\
 \cite{wang2024hipporag,zhang2026flowrag} & graph-enhanced and evolving \newline retriever memory & dynamic memory \newline evolution control & long-horizon quality \newline and efficiency & add stale-memory debt metrics & C \\
 Continual retention \newline line \\
-\cite{kirkpatrick2017ewc,lopez2017gem,aljundi2019mir,buzzega2020der,hayes2020remind,prabhu2020gdumb,zhou2025ferret,li2026streamfp} & constrained parameters,   
-ewline replay buffers, compressed   
-ewline state, and budget traces & interference control,   
-ewline replay selection, budget   
-ewline elasticity, and retention governance & forgetting vs adaptation   
-ewline quality + store cost & connect with retrieval retention,   
-ewline maintenance debt, and   
+\cite{kirkpatrick2017ewc,lopez2017gem,aljundi2019mir,buzzega2020der,hayes2020remind,prabhu2020gdumb,zhou2025ferret,li2026streamfp} & constrained parameters, 
+ewline replay buffers, compressed 
+ewline state, and budget traces & interference control, 
+ewline replay selection, budget 
+ewline elasticity, and retention governance & forgetting vs adaptation 
+ewline quality + store cost & connect with retrieval retention, 
+ewline maintenance debt, and 
 ewline elastic shared stores & B \\
 Approx. analytics \newline line \\
 \cite{agarwal2013blinkdb,goiri2015approxhadoop,wang2018approxjoin,hu2018streamapprox,chen2018incapprox} & summary, sample, and \newline compensation state & accuracy-cost budget and \newline maintenance control & latency/error boundaries & link with serving SLAs \newline and recovery-time error contracts & A \\
