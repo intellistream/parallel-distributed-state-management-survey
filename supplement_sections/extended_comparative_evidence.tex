@@ -1,0 +1,96 @@
+\section{Extended Comparative Evidence}
+
+This section restores structured evidence that the main paper compressed into shorter synthesis prose. The goal is not to reproduce a paper inventory mechanically, but to preserve auditable cross-domain comparison under the same five-field frame.
+
+\subsection{Cross-Domain Reading Key Restored from the Main Paper}
+
+The compact cross-domain visual and reading-key table still matters because it shows how the same governance seams recur under different state lifetimes. The point is not to re-rank domains.
+
+It is to make the main paper's comparison rule auditable: visibility and ownership dominate streaming, movement and quality boundaries dominate hardware-conscious execution, short-lived lifecycle control dominates serving, and maintenance debt dominates retrieval and retention.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.96\textwidth}{!}{\input{figures/cross_domain_comparison}}
+\caption{Cross-domain comparison restored in the supplement. It remains a visual index for the recurring seams discussed in the comparative synthesis.}
+\label{fig:supp-cross-domain}
+\end{figure*}
+
+\begin{table*}[t]
+\small
+\setlength{\tabcolsep}{3.5pt}
+\caption{Compact cross-domain reading key restored from the main paper.}
+\label{tab:supp-comparison-guide}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}Y}
+\toprule
+Domain cluster & Dominant state object & Mature control surfaces & Boundary usually protected first & Persistent open seam \\
+\midrule
+Streaming and transactional dataflow & windows, frontiers, dependency state, movable shards & visibility, advancement, migration, replay, ownership transfer & correctness plus pause-time stability & one ownership-transfer contract across steady state, elasticity, and recovery \\
+
+Hardware-conscious execution & encoded paths, compressed intermediates, tiered residency state & format choice, placement, decompression path, approximation steering & movement cost and quality boundary & portable control that prices movement and error debt together \\
+
+LLM serving and short-lived lifecycle control & KV pages, phase queues, residency layers & admission, paging, sharing, disaggregation, transfer, restoration & TTFT/TPOT/goodput under tight SLOs & lifecycle closure over reuse legality, isolation, restoration, ownership \\
+
+Retrieval and retention governance & mutable shards, freshness metadata, replay stores, demotable memory objects & invocation, refresh, publication, replay, compression, demotion, budget shrink & freshness, reuse value, maintenance stability & policy-visible exposure contract for stale or demoted memory \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Representative Cross-Domain Mechanism Matrix}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.17\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.15\textwidth}}
+\caption{Representative extended mechanism matrix. This is a supplement landing zone for the larger matrices removed from the main paper.}\\
+\toprule
+Cluster & State object & Control surface & Evaluation boundary & Remaining gap \\
+\midrule
+\endfirsthead
+\toprule
+Cluster & State object & Control surface & Evaluation boundary & Remaining gap \\
+\midrule
+\endhead
+Streaming visibility and progress~\cite{akidau2013millwheel,murray2013naiad,akidau2015dataflow} & windows, frontiers, progress metadata & visibility, advancement, buffering, replay timing & correctness plus latency & progress and movement remain weakly unified \\
+
+Streaming migration and recovery~\cite{carbone2015asynchronous,nasir2019megaphone,zhao2024recovery,mao2025spacker} & movable shards, replay logs, ownership metadata & migration trigger, transfer grain, replay scheduling, barrier alignment & pause time, recovery time, overhead & ownership-transfer legality across steady state and disturbance \\
+
+Hardware-conscious execution~\cite{zhang2020finestream,zeng2024cstream,zhang2023compressstreamdb} & encoded paths, local and remote representations & format choice, placement, decompression path, execution mapping & speed, energy, latency, movement cost & portability across devices and tiers \\
+
+Approximation control~\cite{agarwal2013blinkdb,hu2018streamapprox,zeng2024pecj,zeng2024libamm} & samples, summaries, compensation state & sample sizing, compensation, approximation activation, quality steering & latency/error or cost/quality & service-level quality contracts \\
+
+Serving paging and phase control~\cite{kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise} & KV pages, phase queues, transfer-ready state & paging, admission, prefill/decode separation, transfer scheduling & TTFT, TPOT, goodput, p99 latency & lifecycle closure over admission, transfer, reclamation, restoration \\
+
+Serving tenant and model multiplexing~\cite{chen2024punica,sheng2023slora,zhang2025jenga,yu2025prism} & adapters, heterogeneous caches, residency windows & batching, eviction, co-placement, reactivation, pooled ownership & throughput, SLO stability, GPU memory efficiency & lease and invalidation semantics across request, model, adapter, node boundaries \\
+
+Retrieval index maintenance~\cite{singh2021freshdiskann,wang2021milvus,guo2022manu,xu2023spfresh,xu2025place} & mutable ANN shards, segment metadata, deletion and repair state & local repair, compaction, sealing, publication, routing & recall, freshness, maintenance cost, latency & cross-shard exposure contracts and unified triggers \\
+
+Planner-mediated retrieval~\cite{asai2024selfrag,zhang2026flowrag,wang2026candor} & evolving retriever memory, freshness and confidence state & query invocation, refresh, rebuild trigger, exposure control & answer quality, freshness, lifecycle cost & auditable policy for stale memory \\
+
+Retention governance~\cite{kirkpatrick2017ewc,aljundi2019mir,prabhu2020gdumb,hayes2020remind,zhou2025ferret,li2026streamfp} & protected parameters, exemplar stores, replay buffers, budget traces & protect, admit, replay, compress, demote, budget shrink & forgetting, reuse value, store cost, disturbance response & retention-store contract with precedence \\
+\bottomrule
+\end{longtable}
+
+\subsection{Extended Evaluation-and-Gap Matrix}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.21\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}}
+\caption{Representative disturbance-oriented evaluation matrix.}\\
+\toprule
+Cluster & Recommended disturbance tests & Common blind spot & Research extension \\
+\midrule
+\endfirsthead
+\toprule
+Cluster & Recommended disturbance tests & Common blind spot & Research extension \\
+\midrule
+\endhead
+State access under skew & hotspot flips, burst tenant switch, rebalance under live joins & separating locality and recovery experiments & connect placement choices to future replay and migration debt \\
+
+Serving lifecycle control & mixed prompt lengths, burst after warmup, reclaim-and-restore stress, tenant churn & allocator-only or phase-only evaluation & measure admission, transfer, reclamation, restoration on one SLO boundary \\
+
+Retrieval under drift & continuous updates, deletion bursts, stale-data injection, compaction lag & one-shot index assumption & add exposure-safety and maintenance-debt metrics \\
+
+Retention under budget elasticity & abrupt budget contraction, asynchronous updates, background compaction & reporting accuracy alone & define retention-store metrics and disturbance protocols \\
+
+Cross-domain middleware & concurrent serving, retrieval, and update pressure & layer-by-layer optimization & compare policy-composition and precedence models \\
+\bottomrule
+\end{longtable}
+
+\subsection{Why These Matrices Belong Here}
+
+Wide matrices belong here because they make synthesis auditable without forcing the main text to read like a staging ledger. If future rounds remove more comparative detail from the main paper, this section should absorb the corresponding structured evidence rather than let it disappear entirely.

@@ -1,0 +1,160 @@
+\documentclass[acmsmall,screen,review]{acmart}
+
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+\raggedbottom
+
+\acmJournal{CSUR}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{placeins}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{fontawesome}
+
+\definecolor{keyborder}{RGB}{66,133,244}
+\definecolor{keybg}{RGB}{240,248,255}
+\definecolor{quoteborder}{RGB}{160,160,160}
+
+\newsavebox{\keyboxcontent}
+\newenvironment{keybox}{%
+  \vspace{6pt}\noindent
+  \begin{lrbox}{\keyboxcontent}
+  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-1.5pt\relax}
+  \raggedright
+  \emergencystretch=1em
+  \textbf{\faLightbulbO\ \textcolor{keyborder}{Key Insight.}}\par\smallskip
+}{%
+  \end{minipage}
+  \end{lrbox}
+  \fcolorbox{keyborder}{keybg}{\usebox{\keyboxcontent}}%
+  \vspace{6pt}%
+}
+
+\newsavebox{\quoteboxcontent}
+\newenvironment{quotebox}{%
+  \vspace{4pt}\noindent
+  \begin{lrbox}{\quoteboxcontent}
+  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-14pt\relax}
+  \raggedright\small\itshape
+  \hspace{6pt}%
+}{%
+  \end{minipage}
+  \end{lrbox}
+  \setlength{\fboxrule}{0.8pt}%
+  \fcolorbox{quoteborder}{white}{\usebox{\quoteboxcontent}}%
+  \vspace{4pt}%
+}
+
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\sysproblem}{state management in parallel and distributed systems\xspace}
+
+\begin{document}
+
+\title{Electronic Supplement to ``Beyond Storage: State as a Runtime Control Problem in Parallel and Distributed Systems''}
+
+\author{Shuhao Zhang}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Haoran Peng}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Chun Ho Ma}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Yancan Mao}
+\affiliation{%
+  \institution{ByteDance}
+  \city{Singapore}
+  \country{Singapore}}
+
+\author{Yufeng Du}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Shifeng Liu}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Ruijie Qiu}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Xiaofei Liao}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\author{Hai Jin}
+\affiliation{%
+  \institution{Huazhong University of Science and Technology}
+  \city{Wuhan}
+  \country{China}}
+
+\begin{abstract}
+This electronic supplement presents extended evidence organized under the same analytical frame as the main paper: state object, control surface, coupling path, evaluation boundary, and remaining gap.
+
+It restores broader literature context, longer mechanism comparisons, worked examples, and structured tables that support the survey's auditability.
+\end{abstract}
+
+\maketitle
+\renewcommand{\shortauthors}{Zhang et al.}
+
+\section{Scope and Relation to the Main Paper}
+
+This supplement collects supporting evidence, longer comparative paths, and structured matrices.
+
+Its role is to make the survey's claims auditable without changing the survey boundary. The added material falls into four classes:
+\begin{enumerate}[leftmargin=*]
+\item broader literature landscape material that helps locate the survey in neighboring systems traditions;
+\item longer mechanism-level comparative evidence that would otherwise turn the main paper back into a literature inventory;
+\item worked examples and case-study style walkthroughs that make propagation arguments concrete;
+\item structured matrices that support auditability but are not necessary for the main paper's argumentative spine.
+\end{enumerate}
+
+\begin{keybox}
+This supplement is evidence infrastructure for the same survey argument. Material belongs here when it strengthens a claim but would consume disproportionate page budget in the core article.
+\end{keybox}
+
+\input{supplement_sections/extended_landscape}
+\input{supplement_sections/extended_worked_example}
+\input{supplement_sections/extended_comparative_evidence}
+\input{supplement_sections/extended_design_notes}
+\input{supplement_sections/extended_case_studies}
+\input{supplement_sections/extended_domain_notes}
+
+\FloatBarrier
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,35 @@
+\section{Extended Literature Landscape}
+
+This section restores context that was deliberately shortened in the main paper's foundations chapter. Its purpose is not to expand the survey boundary indiscriminately, but to make clearer which adjacent traditions contributed reusable state-management mechanisms and which mostly provide background or contrast.
+
+\subsection{Streaming and Dataflow Context Beyond the Main Text}
+
+The main paper keeps the streaming literature focused on visibility, ownership, and disturbance-aware control. A broader historical reading helps explain why those seams emerged. Early systems such as Aurora and Borealis already made continuous query plans, adaptation paths, and stateful operators explicit runtime artifacts rather than passive storage structures~\cite{abadi2003aurora,abadi2005borealis}. Later systems such as MillWheel, Naiad, and the Dataflow model shifted the comparison unit from raw operator throughput to controlled advancement over time, frontiers, and externally visible progress~\cite{akidau2013millwheel,murray2013naiad,akidau2015dataflow}. That shift matters because it reveals an early version of the survey's main thesis: performance-relevant state becomes governable only after the runtime exposes when it is safe to publish, buffer, replay, or move it.
+
+The same line then broadened toward elasticity, migration, and recovery. Trill and Differential Dataflow show that partially materialized state can still be updated incrementally when timestamps and frontier metadata make legality explicit~\cite{chandramouli2014trill,murray2013differential}. Flink, StreamCloud, Megaphone, and later migration/recovery work add the deployment-facing extension: once operator state is movable, the runtime must govern not just update cost but also transfer legality, replay scope, and disturbance-time pause behavior~\cite{carbone2015flink,gulisano2012streamcloud,nasir2019megaphone,zhao2024recovery,mao2025spacker}. The broader landscape therefore helps justify why the main paper treats visibility and ownership as coupled rather than separate concerns.
+
+\subsection{Replicated, Transactional, and Memory-Resident Systems as Boundary References}
+
+The survey does not treat classic transactional or replicated systems as a full co-equal cluster, but they remain important boundary references because they make legality contracts more explicit than many newer runtime papers do.
+
+Spanner clarifies leaseholder continuity and writer legitimacy across distributed transactions~\cite{corbett2012spanner}. Calvin clarifies how deterministic ordering can turn replay from conflict resolution into continued execution~\cite{thomson2012calvin}. Raft and related replicated-log systems clarify term-scoped authority and old-owner retirement semantics~\cite{ongaro2014raft}. FaRM and RAMCloud contribute the perspective that reconstruction speed and serving ownership after failure are themselves runtime-managed state problems rather than mere recovery afterthoughts~\cite{dragojevic2014farm,ousterhout2011ramcloud}. These systems are not inserted into the survey to broaden venue coverage; they help specify what many modern stateful runtimes still leave implicit.
+
+\subsection{Serving, Retrieval, and Memory-Governance Systems in Broader Perspective}
+
+The main text intentionally centers the serving literature on short-lived lifecycle control. A broader perspective shows why this concentration happened.
+
+Earlier serving systems such as Clipper, Clockwork, Nexus, InferLine, and INFaaS primarily exposed orchestration, provisioning, predictability, and admission as control surfaces around model invocation~\cite{crankshaw2017clipper,gujarati2020clockwork,shen2019nexus,crankshaw2020inferline,romero2021infaas}. Later LLM-oriented systems internalized more of the memory substrate itself: vLLM and related paging systems govern KV state directly; Sarathi, DistServe, Splitwise, and FastGen govern phase asymmetry; Punica, S-LoRA, Jenga, and Prism govern tenant multiplexing, adapter residency, heterogeneous cache layouts, and whole-model activation windows~\cite{kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise,holmes2024fastgen,chen2024punica,sheng2023slora,zhang2025jenga,yu2025prism}. This trajectory is exactly why the main paper reads serving as a state-governance problem rather than as a mere systems-for-LLMs topic.
+
+Retrieval and memory-governance systems underwent a parallel shift. Dense retrieval and late-interaction systems such as DPR and ColBERT originally foregrounded query-time quality versus cost over mostly offline-built memory substrates~\cite{karpukhin2020dpr,khattab2020colbert}.
+
+Dynamic ANN systems, vector stores, and planner-mediated retrievers later made freshness, repair, shard exposure, and long-horizon memory evolution first-class runtime concerns~\cite{singh2021freshdiskann,wang2021milvus,guo2022manu,asai2024selfrag,zhang2026flowrag,wang2026candor}. The larger landscape therefore supports the main paper's claim that retrieval quality should increasingly be read as a lifecycle property rather than a static model property.
+
+\subsection{Retention, Approximation, and Middleware as Adjacent Traditions}
+
+Approximation and bounded-retention lines also matter because they make evaluation boundaries explicit in ways many mainstream runtime papers still do not. BlinkDB, ApproxHadoop, ApproxJoin, StreamApprox, and IncApprox show that speedup claims over sampled or summarized state only become comparable after the runtime states which error boundary is being protected~\cite{agarwal2013blinkdb,goiri2015approxhadoop,wang2018approxjoin,hu2018streamapprox,chen2018incapprox}.
+
+PECJ and LibAMM extend that logic toward online control and explicit quality compensation~\cite{zeng2024pecj,zeng2024libamm}. Continual-retention lines such as EWC, GEM, MIR, GDumb, REMIND, and Ferret similarly show that bounded memory is not just a model problem; it creates operational questions over protection, admission, replay, compression, and budget shrinkage~\cite{kirkpatrick2017ewc,lopez2017gem,aljundi2019mir,prabhu2020gdumb,hayes2020remind,zhou2025ferret}.
+
+Finally, recent memory-middleware proposals such as Neuromem and SAGE are useful not because they already solve the full problem, but because they expose lifecycle decomposition and workflow-visible actuation as first-class abstractions~\cite{zhang2026neuromem,liu2026sage}.
+
+They help motivate why the main paper ends with contract-oriented blueprint and middleware pressure-point arguments rather than with one more domain-specific taxonomy.
