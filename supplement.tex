@@ -1,7 +1,7 @@
 \documentclass[acmsmall,screen,review]{acmart}
 
 \setcopyright{none}
-\settopmatter{printacmref=false}
+\settopmatter{printacmref=true}
 \renewcommand\footnotetextcopyrightpermission[1]{}
 \pagestyle{plain}
 \raggedbottom
@@ -29,22 +29,22 @@
 
 \newsavebox{\keyboxcontent}
 \newenvironment{keybox}{%
-  \vspace{6pt}\noindent
+  \par\smallskip\noindent
   \begin{lrbox}{\keyboxcontent}
   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-1.5pt\relax}
   \raggedright
   \emergencystretch=1em
-  \textbf{\faLightbulbO\ \textcolor{keyborder}{Key Insight.}}\par\smallskip
+  {\color{keyborder}\faLightbulbO}\ \textbf{\textcolor{keyborder}{Key Insight.}}\par\smallskip
 }{%
   \end{minipage}
   \end{lrbox}
   \fcolorbox{keyborder}{keybg}{\usebox{\keyboxcontent}}%
-  \vspace{6pt}%
+  \par\smallskip
 }
 
 \newsavebox{\quoteboxcontent}
 \newenvironment{quotebox}{%
-  \vspace{4pt}\noindent
+  \par\smallskip\noindent
   \begin{lrbox}{\quoteboxcontent}
   \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-14pt\relax}
   \raggedright\small\itshape
@@ -54,7 +54,7 @@
   \end{lrbox}
   \setlength{\fboxrule}{0.8pt}%
   \fcolorbox{quoteborder}{white}{\usebox{\quoteboxcontent}}%
-  \vspace{4pt}%
+  \par\smallskip
 }
 
 \usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
@@ -121,28 +121,32 @@
   \country{China}}
 
 \begin{abstract}
-This electronic supplement presents extended evidence organized under the same analytical frame as the main paper: state object, control surface, coupling path, evaluation boundary, and remaining gap.
+This electronic supplement extends the evidence base under the same analytical frame as the main paper: state object, control surface, coupling path, evaluation boundary, and remaining gap.
 
-It restores broader literature context, longer mechanism comparisons, worked examples, and structured tables that support the survey's auditability.
+It collects broader literature context, longer mechanism comparisons, worked examples, and structured tables that strengthen the survey's evidentiary basis.
 \end{abstract}
+
+\ccsdesc[500]{Computer systems organization~Distributed architectures}
+\ccsdesc[300]{Software and its engineering~Middleware}
+\ccsdesc[300]{Information systems~Data management systems}
+\ccsdesc[200]{Computing methodologies~Machine learning}
+\keywords{state management, distributed systems, parallel systems, stream processing, LLM serving, retrieval-augmented generation, continual learning, electronic supplement}
 
 \maketitle
 \renewcommand{\shortauthors}{Zhang et al.}
 
 \section{Scope and Relation to the Main Paper}
 
-This supplement collects supporting evidence, longer comparative paths, and structured matrices.
-
-Its role is to make the survey's claims auditable without changing the survey boundary. The added material falls into four classes:
+The supplement adds supporting evidence, longer comparative paths, and structured matrices without changing the survey boundary. The added material falls into four classes:
 \begin{enumerate}[leftmargin=*]
 \item broader literature landscape material that helps locate the survey in neighboring systems traditions;
-\item longer mechanism-level comparative evidence that would otherwise turn the main paper back into a literature inventory;
+\item longer mechanism-level comparative evidence for cross-domain comparison under a shared analytical frame;
 \item worked examples and case-study style walkthroughs that make propagation arguments concrete;
-\item structured matrices that support auditability but are not necessary for the main paper's argumentative spine.
+\item structured matrices that keep comparisons explicit without interrupting the core narrative.
 \end{enumerate}
 
 \begin{keybox}
-This supplement is evidence infrastructure for the same survey argument. Material belongs here when it strengthens a claim but would consume disproportionate page budget in the core article.
+Material belongs here when it strengthens a claim through broader comparison, fuller walkthroughs, or tabulated evidence.
 \end{keybox}
 
 \input{supplement_sections/extended_landscape}

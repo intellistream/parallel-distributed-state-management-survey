@@ -1,6 +1,6 @@
 \section{Extended Worked Example: Propagation of State Debt}
 
-The main paper keeps only a summary-level worked example because the core comparative lesson is conceptual rather than numerical. This section restores a longer version of that reasoning so the propagation view can be inspected more concretely.
+This section develops the propagation argument in greater detail so that the coupling path becomes operationally explicit.
 
 \subsection{Scenario}
 
@@ -23,16 +23,10 @@ The propagation argument can be decomposed into five steps:
 The key point is not the exact numbers but the temporal ordering of debt: the runtime can spend future reuse value in order to improve present occupancy, and that trade is invisible unless admission, reclamation, and restoration are evaluated on the same boundary.
 \end{quotebox}
 
-\subsection{Why This Example Was Shortened in the Main Paper}
+\subsection{Interpretive Value of the Example}
 
-This worked example was compressed in the main paper for two reasons. First, the main paper needs only the transferable systems lesson: access, execution, and evolution form one loop, so local wins must be charged against later state debt. Second, the full trace consumes page budget disproportionately because it requires scenario assumptions, lifecycle detail, and alternate branches that are useful for auditability but not strictly necessary for the article's thesis. The supplement is therefore the right home for the more detailed walkthrough.
+The worked example makes the transferable systems lesson concrete: access, execution, and evolution form one loop, so local wins must be charged against later state debt. The longer walkthrough keeps the lifecycle assumptions, alternate branches, and restoration path explicit enough to test the argument rather than treating it as intuition.
 
-\subsection{Implications for Main-Text Compression}
+\subsection{What the Example Clarifies}
 
-The example also shows how the supplement should support later main-paper cuts. If future compression removes more of the main paper's serving-lifecycle detail, this section can absorb:
-\begin{itemize}[leftmargin=*]
-\item longer admission-versus-restoration narratives,
-\item fuller prefix-reuse legality discussion,
-\item expanded disturbance scenarios such as burst after warmup or tenant-switch after partial reclamation,
-\item optional figure material illustrating state-debt propagation over time.
-\end{itemize}
+The example sharpens four serving-lifecycle boundaries that are easy to miss in a shorter summary. First, it makes admission-versus-restoration tradeoffs visible over time rather than at one instant. Second, it shows that prefix reuse is not only an optimization opportunity but also a legality question about which shared state may be safely reclaimed or retained. Third, it highlights why disturbance scenarios such as burst-after-warmup or tenant-switch after partial reclamation are necessary for evaluating lifecycle control honestly. Fourth, it makes clear that the real object being governed is not one allocator event, but a state-debt trajectory that unfolds across admission, reclamation, and later restoration.
