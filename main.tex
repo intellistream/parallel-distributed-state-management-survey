@@ -1,12 +1,8 @@
-\documentclass[acmsmall,screen,review]{acmart}
+\documentclass[manuscript,screen,review]{acmart}
 
 \setcopyright{none}
 \settopmatter{printacmref=false}
-\renewcommand\footnotetextcopyrightpermission[1]{}
-\pagestyle{plain}
 \raggedbottom
-
-\acmJournal{CSUR}
 
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -201,6 +197,14 @@ These criteria favor papers that make control decisions legible. For retrieval a
 
 The review protocol is comparative and mechanism-centered rather than narrowly bibliometric. We seed the corpus from canonical systems lines and adjacent surveys, then follow forward and backward citation paths around shared-state access, state-aware execution, and state evolution. The aim is to cover mechanism families, not to maximize paper counts. When a stable venue version exists, we prefer it over a moving preprint; recent papers enter the analytical core only when they expose a new state object, runtime control seam, or evaluation boundary. The synthesis distinguishes foundational papers, transfer-oriented systems, and frontier systems, so local speedups, transfer demonstrations, and long-horizon governance claims are not treated as equivalent evidence.
 
+The protocol also separates \emph{coverage} from \emph{representativeness}. Coverage asks whether the survey has included the mechanism families needed to support its taxonomy: visibility and progress, ownership transfer, hardware-conscious placement, approximation control, serving-memory lifecycle management, retrieval maintenance, and retention governance. Representativeness asks whether the selected papers expose enough design variation to make comparison meaningful. For example, a single KV-cache allocator would not support claims about serving-memory lifecycle control; the survey therefore compares paging, prefix reuse, phase separation, tenant multiplexing, disaggregation, and restoration mechanisms under one latency and memory boundary. Similarly, one vector-index paper would not support claims about retrieval evolution; the survey instead combines retriever invocation, mutable ANN maintenance, publication safety, freshness control, and placement.
+
+This distinction matters because the paper is not trying to be an encyclopedic bibliography. A paper can be important historically yet remain contextual if it does not expose a runtime control surface over state; conversely, a recent system can enter the analytical core if it makes a previously hidden lifecycle boundary measurable. Borderline papers are handled by asking whether they change at least one field of the comparison tuple. A storage-engine paper, for instance, may remain a boundary case when it assumes stable object identities and clear invalidation semantics, but it becomes analytically relevant when compaction, admission, eviction, or tiering becomes visible to a scheduler or service-level controller. This rule keeps the scope broad enough to connect streaming, serving, retrieval, and retention, while preventing the survey from collapsing into a list of all systems that merely store data.
+
+The evidence classes used later in the paper follow from this rule. \emph{Foundational} papers introduce state objects or control boundaries that later systems inherit, such as progress frontiers, checkpoint barriers, ownership metadata, bounded-error summaries, or reusable memory stores. \emph{Transfer-oriented} papers show that a mechanism survives a neighboring systems pressure: a placement policy remains useful under recovery, a cache policy remains useful under tenant churn, or a retrieval policy remains useful under update drift. \emph{Frontier} papers expose a control boundary that is not yet mature but is likely to matter as workloads change, such as disaggregated serving memory, planner-visible retrieval freshness, or budget-elastic retention. We use these classes to avoid a common survey failure mode: treating an early abstraction paper, a mature runtime system, and a speculative frontier system as if they made the same kind of claim. The comparison is strongest when it states which class a paper belongs to and what kind of evidence would be needed to move the mechanism into a stronger class.
+
+We also treat negative space as evidence. When a paper reports excellent local performance but omits migration, recovery, freshness, restoration, or quality-debt measurements that its own mechanism would plausibly affect, that omission becomes part of the comparative result. This does not make the paper weak in its own domain; it marks the boundary beyond which its evidence should not be extrapolated. For example, an LLM serving paper that improves goodput through aggressive reclamation still leaves open whether the reclaimed state damages prefix reuse under follow-up bursts. A retrieval paper that improves recall-latency trade-offs on a static index still leaves open whether deletion repair and publication lag change the service boundary. These omissions are precisely where the survey's unresolved-contract field becomes useful.
+
 \subsection{Positioning Relative to Existing Surveys}
 
 Several prior surveys already cover important slices of this design space, including catalogs of stream-processing design choices~\cite{hirzel2014catalog,cugola2012processing}, transactional stream processing~\cite{zhang2024survey}, hardware-conscious stream processing~\cite{zhang2020hardware}, and continual learning~\cite{delange2021survey}. These are valuable adjacent references, but they adopt narrower units of analysis than the present manuscript. Our comparison unit is not one application class or one execution substrate; it is the runtime control problem exposed over state. That choice lets us place migration, checkpointing, KV-cache lifecycle control, vector-index maintenance, retrieval freshness governance, and retention budgeting into the same analytical frame without flattening them into a chronology of subfields.
@@ -254,7 +258,7 @@ This definition covers both persistent state (database indexes, checkpoint logs)
 
 As summarized in Table~\ref{tab:state-system-model}, the concrete state object changes across runtime architectures, but its relationship to the runtime is stable. State constrains computation, communication, scheduling, memory, recovery, and long-horizon service quality because workers must read or update it, moving work often requires moving or reconstructing it, and future decisions depend on its size, ownership, hotness, freshness, and reuse potential.
 
-\begin{table*}[t]
+\begin{table}[!htbp]
 \centering
 \caption{State in representative runtime architectures.}
 \label{tab:state-system-model}
@@ -305,7 +309,7 @@ Summaries, sketches, compression dictionaries, quality-control metadata \\
 \bottomrule
 \end{tabular}%
 }
-\end{table*}
+\end{table}
 
 
 This model also clarifies why state has multiple coupled forms: \emph{logical state} captures the semantic object; \emph{physical state} captures representation and placement; \emph{metadata state} records ownership, routing, and progress; \emph{control state} summarizes observations such as hotness or freshness; and \emph{evolution state} records updates, compaction, retention, refresh, eviction, or reuse. A change in one form often forces movement, metadata updates, scheduler decisions, and new recovery constraints in the others.
@@ -380,6 +384,10 @@ where \(\sigma\) is the \emph{state object} governed by the mechanism,
 \(\beta\) is the \emph{evaluation boundary} (the service-level property optimized or bounded), and
 \(\gamma\) is the \emph{unresolved contract} left after the mechanism is applied.
 Two papers are directly comparable when their tuples differ in at most one field; they address fundamentally different control problems when they differ in \(\sigma\) or \(\beta\).
+
+The tuple is meant to be reusable rather than merely descriptive. When reading a new paper, the first pass identifies the concrete state object and its lifetime: an object that exists only inside one kernel invocation does not create the same control problem as a KV page, mutable shard, progress frontier, replay buffer, or retriever memory that survives across requests or failures. The second pass identifies the control surface and coupling path: a mechanism is relevant only if the runtime can act on the object and if that action changes an end-to-end property through contention, locality, memory pressure, quality loss, replay, or future reuse. The final pass asks whether the evaluation boundary matches the coupling path. A scheduler that claims to manage lifecycle state but reports only steady-state throughput leaves a different gap from one that tests burst, drift, or recovery but omits ownership semantics.
+
+This procedure also clarifies how future work can extend the survey without rewriting the taxonomy. A new system can be inserted by changing one tuple field at a time. If the state object is familiar but the control surface is new, the contribution is a mechanism refinement; if the control surface is familiar but the evaluation boundary changes, the contribution is a transfer result; if the unresolved contract changes, the contribution is architectural. This discipline is especially useful for fast-moving LLM and retrieval systems, where papers often introduce new names for related cache, memory, or planner objects. Normalizing them through the tuple makes it harder to over-credit a local optimization and easier to see when a paper has actually exposed a new runtime boundary.
 
 \begin{table*}[t]
 \small
@@ -600,11 +608,17 @@ Portability across hardware and disturbance regimes remains weak. Capacity expan
 
 LLM serving is the clearest recent case where state management effectively \emph{is} the runtime. KV pages, prefix-sharing metadata, phase-skewed queues, and multiplexed adapter or model-residency layers often define the service envelope more directly than the model graph alone~\cite{kwon2023pagedattention,agrawal2024sarathi,li2023alpaserve,chen2024punica}. The local control problem is therefore not generic batching, but how a runtime admits, places, shares, reclaims, transfers, and restores short-lived state under tight SLOs. The literature is most comparable when grouped into a few control seams over one lifecycle: SLO-facing orchestration, KV allocation and sharing, prefill/decode phase control, and tenant or residency governance~\cite{crankshaw2017clipper,gujarati2020clockwork,kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise,chen2024punica,sheng2023slora,zhang2025jenga,yu2025prism}. Later predictive, structural-reuse, and temporal-lifecycle systems sharpen the same point from different angles: short-lived serving memory should be treated as a governed lifecycle rather than as a passive buffer pool~\cite{windserve2025,guo2025gllm,gong2025pastfuture,mo2025hetis,su2025seesaw,jiang2025thunderserve,gim2024promptcache,pan2025marconi,yu2025iccache,yao2025cacheblend,gim2025pie,yu2025pensieve,qin2025mooncake,wu2026fastserve,sun2024llumnix,agarwal2026symphony,lou2026hydraserve,fu2024serverlessllm}.
 
+The supplementary evidence is useful here because it separates three families that are easy to blur under the phrase ``KV-cache optimization.'' Predictive-serving systems forecast different future debts: phase imbalance, future KV peaks, heterogeneous placement pressure, or queue amplification. They are valuable only when the prediction is tied to an action surface such as admission, batching, re-sharding, offload, or transfer. Structural-reuse systems ask a different question: not how to shrink a cache entry, but whether a prefix, branch, chunk, adapter state, or session fragment may be reused legally. Temporal-lifecycle systems intervene at yet another boundary, preserving or restoring reuse value across turns, tenants, cold starts, and disaggregated decode pools. Grouped this way, the serving literature forms one lifecycle---admit, place, share, reclaim, transfer, restore---rather than a collection of unrelated cache tricks.
+
+This distinction also clarifies why local serving metrics are often misleading. Allocator efficiency can improve while restoration cost grows; prefill/decode separation can improve goodput while transfer ordering becomes the next bottleneck; prefix reuse can reduce compute while weakening tenant isolation or invalidation semantics. A mature serving runtime therefore needs to state which reuse is legal, which state may be reclaimed, when restoration debt is charged, and whether the SLO boundary is request-local, session-local, or tenant-wide. The strongest serving papers expose at least part of this contract; the open problem is to make the whole lifecycle portable across batching, disaggregation, adapter multiplexing, and speculative execution.
+
 The unresolved issue is contractual. Current systems expose local interference more clearly than they reconcile prediction, reuse legality, tenant isolation, and restoration under one service boundary. Practical runtimes still lack portable semantics for when KV fragments may be shared, transferred, restored, or invalidated across continuous batching, adapter multiplexing, speculative branches, and disaggregated decode paths.
 
 \subsubsection{Retrieval Memory and Vector-Index State Layers}
 
 Retrieval systems are easiest to misread as a sequence of better retrievers, but the more durable systems lesson is about memory governance. Once retrieval moved from static lexical indexes to dense and hybrid memory substrates, invocation, refresh, exposure, and maintenance became coupled runtime decisions rather than offline preprocessing details~\cite{karpukhin2020dpr,khattab2020colbert,guu2020realm,lewis2020rag}. The local control problem is therefore how to keep a living memory layer queryable without hiding freshness debt, rebuild debt, or exposure risk. The literature is most comparable as a trigger hierarchy: invocation policy, index maintenance, safe publication, and placement or movement policy~\cite{guu2020realm,lewis2020rag,borgeaud2022retro,izacard2022atlas,asai2024selfrag,jegou2011pq,malkov2020hnsw,singh2021freshdiskann,xu2023spfresh,xu2025place,yue2025marco,wang2021milvus,guo2022manu,chen2024singlestorev,zhang2024rummy,quinn2025accelerating}. Planner-mediated and continuous-maintenance systems make the missing coupling explicit: one controller can preserve short-run latency by querying stale memory while another silently accumulates rebuild debt~\cite{zhang2026flowrag,wang2026candor,liu2025heterrag}.
+
+The trigger hierarchy is worth making explicit. Request-time invocation decides whether external memory should be consulted at all; index-time maintenance decides whether insertion, deletion, repair, or compaction has pushed the memory substrate away from its intended recall-latency operating point; publication-time exposure decides whether a partially refreshed shard may serve internal traffic, restricted traffic, or general requests; placement-time residency decides whether movement is justified by downstream quality gain rather than lookup throughput alone. These triggers often live in different modules, but the user-facing answer quality depends on their ordering. A retriever can appear accurate in a static benchmark while its publication lag, deletion debt, or rebuild backlog makes the live memory layer unsafe to expose.
 
 Retrieval systems still lack a compositional trigger policy that orders stale-memory tolerance, rebuild triggers, shard-exposure legality, and movement under one service boundary. Without that contract, reported gains remain hard to compare across request-time quality, maintenance stability, exposure safety, and placement efficiency. Retention systems arrive at the same abstraction from a different timescale. Retrieval asks when partially stale memory is still safe to expose; retention asks when compressed, demoted, or budget-constrained memory is still safe to preserve and replay. In both cases, the systems question is when the runtime can still treat memory as legally useful.
 
@@ -613,6 +627,8 @@ Retrieval systems still lack a compositional trigger policy that orders stale-me
 Continual-learning systems matter here not mainly because they report forgetting curves, but because they provide a runtime language for bounded retention. Once memory is scarce, the main question is which historical state deserves protection, admission, replay, compression, demotion, or eviction as future updates arrive~\cite{kirkpatrick2017ewc,rebuffi2017icarl,lopez2017gem,aljundi2019mir,buzzega2020der,prabhu2020gdumb,hayes2020remind}. The reusable comparison is therefore between lifecycle controls over one bounded store rather than between named replay heuristics alone.
 
 Protection methods decide what must not drift; admission methods decide what enters the scarce retained set; replay methods decide when stored state should re-enter the update path; compression methods decide whether a cheaper representation preserves enough future utility; and systems such as Ferret and StreamFP make budget elasticity and future-use ranking explicit runtime concerns~\cite{kirkpatrick2017ewc,rebuffi2017icarl,lopez2017gem,chaudhry2019agem,prabhu2020gdumb,hayes2020remind,zhou2025ferret,li2026streamfp}. This same logic extends to broader long-horizon reuse settings such as federated adaptation and tiered training-state storage~\cite{kumar2020quiver,khan2025flstore,zhan2025assyllm}. The missing abstraction is a retention-store contract that composes protect, admit, replay, compress, demote, and budget-shrink decisions under one service boundary, rather than treating end-task accuracy as the only judge~\cite{delange2021survey}.
+
+The retrieval-retention comparison exposes a useful asymmetry. Retrieval systems usually know which memory object is queryable now but struggle to price the future cost of stale exposure and rebuild debt. Retention systems usually know the memory budget now but struggle to price the future value of a protected, compressed, or demoted item. In both cases, the runtime needs a demotion rule: when does memory remain fully usable, when does it become restricted, when is it only useful for replay or reconstruction, and when may it be dropped? Making those states explicit would let freshness, recall, forgetting, and budget pressure be evaluated as different views of the same lifecycle problem rather than as unrelated metrics.
 
 \subsubsection{Comparative Mechanism Matrices}
 
@@ -708,6 +724,10 @@ Stronger systems approximate a typed state catalog containing object name, granu
 
 The decision kernel is where the state catalog and observation streams become boundary-aware choices. Whether heuristic, model-based, or learned, the comparative requirement is the same: decisions should remain analyzable and their precedence over competing objectives should be explicit. Actuation interfaces are most comparable when they are explicit and bounded; the surveyed mechanisms repeatedly distinguish between observation, decision, and actuation only when the actuation surface is narrow enough to describe. Finally, a stateful system remains analytically incomplete without a safety envelope: invariants that must hold during and after control actions. These guarantees depend on the fault model, whether crash-stop, crash-recovery with replay, network partition, or silent degradation~\cite{carbone2015asynchronous,chandy1985snapshot,mao2023morphstream,zhao2024recovery,corbett2012spanner,ongaro2014raft,wang2026candor,zhang2026flowrag}. In retrieval and retention settings, the key invariants are freshness exposure and retention demotion.
 
+The blueprint is not intended to prescribe a single control-plane architecture. Its role is to make design reviews sharper. A runtime with an embedded scheduler can satisfy the blueprint if it names the objects it controls, exposes the signals that trigger action, and states the invariants that survive migration or recovery. A sidecar controller can also satisfy it, but only if the delay between observation and actuation is part of the contract. A shared memory service can satisfy it when its APIs expose not just allocation and release, but also lease duration, invalidation rules, restoration cost, and the boundary to which deferred debt is charged. The same review therefore applies to stream processors, serving stacks, and retrieval middleware even when their implementations look unrelated.
+
+The blueprint also helps separate mechanism novelty from integration maturity. A new eviction policy, approximation rule, or retrieval trigger may be technically clever, but it remains a local policy until the system states how it composes with neighboring controllers. Integration maturity increases when the mechanism has a typed state object, a measurable trigger, a bounded action surface, an explicit precedence relation, and a recovery or safety condition. This is why the survey repeatedly emphasizes contracts over algorithms. Algorithms decide what to do under a local objective; contracts decide when an action is legal, which boundary absorbs its cost, and how later controllers observe the debt it created.
+
 \subsection{Cross-Domain Case Studies}
 
 The three running scenarios expose the same rule from different directions. Multi-tenant LLM serving under burst arrival shows how admission, transfer, reclamation, and restoration share one p99-facing boundary. Stateful stream reconfiguration shows that migration, progress, and replay need one transfer protocol. Retrieval under corpus drift shows that freshness, rebuild debt, and exposure legality must be co-governed. Local gains are not stable unless the runtime also names the debt they push into neighboring phases.
@@ -730,10 +750,10 @@ Systems that score well on only one dimension deliver local improvements rather 
 
 These dimensions form an evidence ladder. A strong paper makes its state object and control boundary explicit, demonstrates local gains, shows that they survive disturbance, and tests whether they remain meaningful when composed with neighboring controllers or maintenance tasks. The benchmark unit should shift from one-shot runs to multi-phase disturbance traces: warmup, burst, reconfiguration, drift, and long-horizon maintenance belong in one connected experiment.
 
-\begin{table*}[t]
+\begin{center}
 \small
-\caption{Representative disturbance-oriented evaluation matrix.}
-\label{tab:disturbance-evaluation-matrix}
+\refstepcounter{table}\label{tab:disturbance-evaluation-matrix}
+\textbf{Table~\thetable. Representative disturbance-oriented evaluation matrix.}\par\smallskip
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}Y}
 \toprule
 Cluster & Recommended disturbance tests & Common blind spot & Research extension \\
@@ -749,7 +769,7 @@ Retention under budget elasticity & abrupt budget contraction, asynchronous upda
 Cross-domain middleware & concurrent serving, retrieval, and update pressure & layer-by-layer optimization & compare policy-composition and precedence models \\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{center}
 
 \FloatBarrier
 
