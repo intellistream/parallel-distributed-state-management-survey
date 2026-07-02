@@ -1,15 +1,15 @@
-\section{Extended Design and Blueprint Notes}
+\section{Design Checklist and Contract Skeleton}
 
-This section develops the design-space, anti-pattern, blueprint, and case-study evidence behind the design conclusions. The organization follows recurring principles, architecture axes, contract repairs, and concrete boundary examples.
+This appendix material keeps the design-space, anti-pattern, blueprint, and boundary evidence behind the design conclusions. The organization follows recurring principles, architecture axes, contract repairs, and concrete examples.
 
-\subsection{Design Guide Summary}
+\subsection{Design Checklist}
 
-The summary below is intentionally short: it turns the comparative synthesis into a compact design checklist. The table names recurring design questions, and the following subsections unpack them into principles, axes, and repair patterns.
+The checklist turns the comparative synthesis into concrete design questions. The table names recurring questions, and the following subsections unpack them into principles, axes, and repair patterns.
 
 \begin{table}[H]
 \small
 \centering
-\caption{Extended guide for translating synthesis into runtime design choices.}
+\caption{Appendix guide for translating synthesis into runtime design choices.}
 \label{tab:supp-design-guide}
 \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.25\textwidth}Y>{\raggedright\arraybackslash}p{0.22\textwidth}}
 \toprule
@@ -23,11 +23,11 @@ Recovery reuses the same state objects as steady state & Which invariants surviv
 \end{tabularx}
 \end{table}
 
-\subsection{Cross-Cutting Principles}
+\subsection{Contract Principles}
 
 Observation before optimization means the relevant state boundary must already be named in telemetry. State as a first-class scheduling object means runtimes should schedule around mutable state rather than passive tasks. Closed-loop rather than open-loop policies means action must feed back into accounting. Stable gains require boundary modeling means every gain must declare what is held fixed, what debt is deferred, and what disturbance invalidates the claim.
 
-\subsection{Design Space Axes}
+\subsection{Architecture Axes}
 
 The architecture axes are state granularity, control-plane coupling, lifecycle management, and service-boundary alignment. Granularity ranges from record to session. Control logic may be embedded, sidecar-based, or shared. Lifecycle management should make admit, place, mutate, compact, and evict explicit. Boundary alignment asks whether local wins survive end-to-end service constraints.
 
@@ -42,26 +42,11 @@ Telemetry-action mismatch is repaired by naming a legal control action for each 
 \label{fig:supp-antipattern-map}
 \end{figure*}
 
-\subsection{Blueprint Contract Notes}
+\subsection{Blueprint Contract Skeleton}
 
 The blueprint is a conceptual reference model, not a monolithic runtime. Its five layers are typed state catalog, observation and disturbance detection, boundary model and decision kernel, actuation interfaces, and safety and recovery envelope.
 
-\begin{table*}[t]
-\small
-\caption{Mapping recurring anti-patterns to the blueprint contracts that repair them.}
-\label{tab:supp-antipattern-blueprint}
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.26\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}Y}
-\toprule
-Anti-pattern & Missing contract & Primary blueprint layer & Expected design effect \\
-\midrule
-Telemetry-action mismatch & signals must name a legal actuation target and its delay/confidence semantics & observation and disturbance detection & dashboards become control inputs rather than passive monitoring \\
-Policy layering without conflict semantics & hard constraints, soft objectives, and tie-breakers must be ordered explicitly & boundary model and decision kernel & overlapping controllers stop oscillating under burst or skew \\
-One-shot benchmarking of non-stationary mechanisms & disturbance phases and re-stabilization windows must be part of the contract & observation plus safety and recovery envelope & reported gains remain meaningful outside stationary replay \\
-Ignoring write amplification in read-optimized designs & mutation, compaction, deletion repair, and maintenance debt must be charged to the same boundary as read gains & state catalog plus actuation interfaces & deferred rebuild or compaction cost becomes visible during design review \\
-Treating state ownership as static & ownership transfer and no-eviction rules must survive migration and recovery & actuation interfaces plus safety and recovery envelope & scale-out and fault handling share one transferable state model \\
-\bottomrule
-\end{tabularx}
-\end{table*}
+The main paper includes the compact anti-pattern repair table. The appendix keeps the abstract policy skeleton and additional evidence anchors for readers who want the contract view in a more operational form.
 
 \begin{table*}[t]
 \small
@@ -81,11 +66,11 @@ Step & Policy skeleton \\
 \end{tabularx}
 \end{table*}
 
-\subsection{Case Study Bridges}
+\subsection{Boundary Case Bridges}
 
 These case bridges highlight three recurring boundary failures. Multi-tenant LLM serving under burst arrival shows how admission, transfer, reclamation, and restoration share one p99-facing boundary. Stateful stream reconfiguration shows that migration, progress, and replay need one transfer protocol. Retrieval under corpus drift shows that freshness, rebuild debt, and exposure legality must be co-governed.
 
-\subsection{Additional Evidence Anchors for the Hardware-Conscious Cluster}
+\subsection{Hardware-Conscious Evidence Anchors}
 
 The hardware-conscious cluster is most useful when read through three debts that the main paper could only summarize briefly. The first is \emph{representation debt}: approximate execution and compressed-state systems such as Anda, TurboAttention, QServe, ATOM, VAttention, FlashInfer, SampleAttention, QuantLLM, and related low-bit cache work all show that encoding decisions reshape memory traffic, kernel regularity, and quality loss simultaneously~\cite{fang2025anda,kang2025turboattention,lin2025qserve,zhao2024atom,prabhu2025vattention,ye2025flashinfer,zhu2024sampleattention,xia2024quantllm,dong2024qhitter}. Even systems that make representation look cheaper, such as FuseMax-style lines, do so by shifting complexity into calibration, selection, or error accounting rather than eliminating it~\cite{nayak2024fusemax,kwon2020fvm,jha2025hycache}.
 

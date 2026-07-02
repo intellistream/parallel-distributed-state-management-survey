@@ -3,7 +3,7 @@
 ## Repository Role
 
 - This repository is a long-form survey manuscript workspace, not an implementation repo.
-- The primary artifact is the survey in `main.tex`, supported by `refs.bib`, `LITERATURE_MATRIX.md`, `HANDOFF.md`, and `WRITING_FRAMEWORK.md`.
+- The primary artifacts are the survey in `main.tex`, the appendix-style supplement in `supplement.tex`, and `refs.bib`.
 - The expected output is synthesis prose with a clear systems abstraction, not a bibliography dump or paper-by-paper summary list.
 
 ## First Reads
@@ -11,22 +11,21 @@
 Before editing, read these files in order:
 
 1. `README.md`
-2. `HANDOFF.md`
-3. `WRITING_FRAMEWORK.md`
-4. `LITERATURE_MATRIX.md`
-5. `main.tex`
+2. `AGENTS.md`
+3. `main.tex`
+4. `supplement.tex` when appendix material is involved
 
 The goal of this first pass is to identify one subsection-sized literature cluster to deepen, not to remap the entire manuscript.
 
 ## Core Working Contract
 
-Every paper integrated into the manuscript should be understood through the same scaffold:
+Every paper integrated into the manuscript should be understood through the same five-field tuple:
 
 1. What is the state object?
 2. What control surface does the runtime expose?
 3. What coupling path makes that control matter system-wide?
 4. What evaluation boundary does the paper optimize or bound?
-5. What systems gap remains open?
+5. What unresolved contract remains open?
 
 If these five fields are not clear, the paper is not ready for prose integration.
 
@@ -35,10 +34,10 @@ If these five fields are not clear, the paper is not ready for prose integration
 When asked to continue the survey, prefer this sequence:
 
 1. Pick one cluster-sized unit, such as serving disaggregation, stream migration and checkpointing, retrieval index evolution, or continual-retention control.
-2. Update `LITERATURE_MATRIX.md` before writing new synthesis into `main.tex`.
-3. Add or correct BibTeX entries in `refs.bib` before citing them in prose.
-4. Expand the existing subsection locally instead of rewriting top-level structure.
-5. Compile the manuscript and verify there are no undefined citation warnings.
+2. Add or correct BibTeX entries in `refs.bib` before citing them in prose.
+3. Expand the existing subsection locally instead of rewriting top-level structure.
+4. Put extended evidence, figures, and case walkthroughs in `supplement.tex` when they would interrupt the main narrative.
+5. Compile the affected TeX file and verify there are no undefined citation warnings.
 
 ## Writing Rules
 
@@ -61,16 +60,17 @@ When asked to continue the survey, prefer this sequence:
 A survey-editing task is complete only when:
 
 1. The targeted subsection gained real synthesis, not just extra citations.
-2. `LITERATURE_MATRIX.md` reflects the integrated papers.
-3. `refs.bib` is consistent with the new discussion.
-4. `main.tex` compiles cleanly.
-5. The new text ends with at least one explicit open systems gap or design implication.
+2. `refs.bib` is consistent with the new discussion.
+3. `main.tex` or `supplement.tex` compiles cleanly, depending on the edited artifact.
+4. The new text ends with at least one explicit open systems gap or design implication.
 
 ## Build Command
 
 Use the repository's documented build path:
 
-`TEXINPUTS=third_party/acmart-src//: /home/shuhao/miniconda3/envs/vllm-hust-dev/bin/tectonic main.tex`
+`TEXINPUTS=third_party/acmart-src//: tectonic main.tex`
+
+`TEXINPUTS=third_party/acmart-src//: tectonic supplement.tex`
 
 ## Non-Goals
 

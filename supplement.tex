@@ -23,136 +23,23 @@
 \usepackage{xcolor}
 \usepackage{fontawesome}
 
-\definecolor{keyborder}{RGB}{66,133,244}
-\definecolor{keybg}{RGB}{240,248,255}
-\definecolor{quoteborder}{RGB}{160,160,160}
-
-\newsavebox{\keyboxcontent}
-\newenvironment{keybox}{%
-  \par\smallskip\noindent
-  \begin{lrbox}{\keyboxcontent}
-  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-1.5pt\relax}
-  \raggedright
-  \emergencystretch=1em
-  {\color{keyborder}\faLightbulbO}\ \textbf{\textcolor{keyborder}{Key Insight.}}\par\smallskip
-}{%
-  \end{minipage}
-  \end{lrbox}
-  \fcolorbox{keyborder}{keybg}{\usebox{\keyboxcontent}}%
-  \par\smallskip
-}
-
-\newsavebox{\quoteboxcontent}
-\newenvironment{quotebox}{%
-  \par\smallskip\noindent
-  \begin{lrbox}{\quoteboxcontent}
-  \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule-14pt\relax}
-  \raggedright\small\itshape
-  \hspace{6pt}%
-}{%
-  \end{minipage}
-  \end{lrbox}
-  \setlength{\fboxrule}{0.8pt}%
-  \fcolorbox{quoteborder}{white}{\usebox{\quoteboxcontent}}%
-  \par\smallskip
-}
-
 \usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
 
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcommand{\sysproblem}{state management in parallel and distributed systems\xspace}
+\makeatletter
+\gdef\shorttitle{Appendix}
+\gdef\shortauthors{}
+\makeatother
 
 \begin{document}
 
-\title{Electronic Supplement to ``Beyond Storage: State as a Runtime Control Problem in Parallel and Distributed Systems''}
+\appendix
+\section*{Appendix}
 
-\author{Shuhao Zhang}
-\orcid{0000-0002-9927-6925}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Haoran Peng}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Chun Ho Ma}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Yancan Mao}
-\affiliation{%
-  \institution{ByteDance}
-  \city{Singapore}
-  \country{Singapore}}
-
-\author{Yufeng Du}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Shifeng Liu}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Ruijie Qiu}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Xiaofei Liao}
-\orcid{0000-0002-2960-4982}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\author{Hai Jin}
-\orcid{0000-0002-3934-7605}
-\affiliation{%
-  \institution{Huazhong University of Science and Technology}
-  \city{Wuhan}
-  \country{China}}
-
-\begin{abstract}
-This electronic supplement expands the survey's evidence base under the same analytical frame as the main paper.
-It preserves the same comparison tuple: state object, control surface, coupling path, evaluation boundary, and remaining gap.
-It also gathers broader literature context, longer mechanism comparisons, worked examples, and structured tables that strengthen the survey's evidentiary basis.
-\end{abstract}
-
-\ccsdesc[500]{Computer systems organization~Distributed architectures}
-\ccsdesc[300]{Software and its engineering~Middleware}
-\ccsdesc[300]{Information systems~Data management systems}
-\ccsdesc[200]{Computing methodologies~Machine learning}
-\maketitle
-\renewcommand{\shortauthors}{Zhang et al.}
-
-\section{Scope and Relation to the Main Paper}
-
-The supplement adds supporting evidence, longer comparative paths, and structured matrices without changing the survey boundary. The added material falls into four classes:
-\begin{enumerate}[leftmargin=*]
-\item broader literature landscape material that helps locate the survey in neighboring systems traditions;
-\item longer mechanism-level comparative evidence for cross-domain comparison under a shared analytical frame;
-\item worked examples and case-study style walkthroughs that make propagation arguments concrete;
-\item structured matrices that keep comparisons explicit without interrupting the core narrative.
-\end{enumerate}
-
-\begin{keybox}
-Material belongs here when it strengthens a claim through broader comparison, fuller walkthroughs, or tabulated evidence.
-\end{keybox}
+This appendix provides supporting material for the main paper, including literature-boundary context, design checklists, case walkthroughs, and additional domain figures. Its bibliography includes the works cited directly in the appendix.
 
 \input{supplement_sections/extended_landscape}
-\input{supplement_sections/extended_worked_example}
-\input{supplement_sections/extended_comparative_evidence}
 \input{supplement_sections/extended_design_notes}
 \input{supplement_sections/extended_case_studies}
 \input{supplement_sections/extended_domain_notes}
