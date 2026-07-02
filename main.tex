@@ -736,10 +736,10 @@ Systems that score well on only one dimension deliver local improvements rather 
 
 These dimensions form an evidence ladder. A strong paper makes its state object and control boundary explicit, demonstrates local gains, shows that they survive disturbance, and tests whether they remain meaningful when composed with neighboring controllers or maintenance tasks. The benchmark unit should shift from one-shot runs to multi-phase disturbance traces: warmup, burst, reconfiguration, drift, and long-horizon maintenance belong in one connected experiment.
 
-\begin{center}
+\begin{table}[t]
 \small
-\refstepcounter{table}\label{tab:disturbance-evaluation-matrix}
-\textbf{Table~\thetable. Representative disturbance-oriented evaluation matrix.}\par\smallskip
+\caption{Representative disturbance-oriented evaluation matrix.}
+\label{tab:disturbance-evaluation-matrix}
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.24\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}>{\raggedright\arraybackslash}Y}
 \toprule
 Cluster & Recommended disturbance tests & Common blind spot & Research extension \\
@@ -755,15 +755,15 @@ Retention under budget elasticity & abrupt budget contraction, asynchronous upda
 Cross-domain middleware & concurrent serving, retrieval, and update pressure & layer-by-layer optimization & compare policy-composition and precedence models \\
 \bottomrule
 \end{tabularx}
-\end{center}
-
-\FloatBarrier
+\end{table}
 
 \subsection{Boundary Conditions and Threats to Transfer}
 
 The comparison above is deliberately mechanism-centered, but the mechanisms do not transfer automatically. A scheduler that works for keyed stream partitions may fail for KV-cache pages because the ownership interval is shorter, the reuse value is more speculative, and the protected boundary is tail latency rather than exactly-once progress. Conversely, a serving allocator that reacts well to phase imbalance may offer little guidance for retrieval maintenance, where the costly action is not immediate eviction but publication, repair, or rebuild under freshness constraints. The transferable unit is therefore not the policy itself, but the contract it implies: which object is governed, which actions are legal, which service boundary absorbs the cost, and which future debt is recorded.
 
 Three threats are especially easy to miss when reading across domains. First, state identity is often less stable than the paper's terminology suggests. A stream shard, a KV page, an ANN segment, and an exemplar buffer can all be called ``state,'' but their mutability, ownership, and invalidation semantics differ sharply. Second, disturbance horizons differ. Stream recovery may unfold over seconds, serving reclamation over milliseconds, retriever rebuilds over minutes or hours, and continual-retention effects over many update rounds; an evaluation that is long enough for one domain can still be too short for another. Third, quality boundaries are not interchangeable. Bounded approximation error, answer freshness, p99 latency, and forgetting are all service properties, but they tolerate different kinds of temporary debt. These differences explain why the survey emphasizes tuples and contracts rather than mechanism names.
+
+Transfer claims are most convincing when they include at least one explicit non-transfer case. A mechanism that generalizes from stream migration to KV transfer, for example, should say which field of the tuple changes when progress fences become tenant SLOs, when shard ownership becomes page residency, or when replay legality becomes restoration priority. Likewise, a retrieval-maintenance policy that borrows from retention should identify whether it is transferring an admission rule, a demotion rule, or only an evaluation pattern. This negative boundary is not a weakness in the contribution; it is what makes the contribution reviewable. Without it, cross-domain synthesis can overstate similarity by reusing words such as locality, freshness, or memory while hiding the different legality conditions under which those words operate.
 
 For future systems papers, the practical implication is to state the transfer claim narrowly. A contribution is strongest when it names the state class it governs, reports the disturbance horizon over which the result holds, and exposes at least one adjacent boundary where the mechanism could fail. For example, a KV-cache policy should report not only memory savings and decode latency, but also whether reclamation harms later prefix reuse or restoration cost; a retrieval-maintenance policy should report not only recall and query latency, but also whether delayed compaction changes exposure safety or update backlog. Such reporting does not make every paper larger; it makes the claim reviewable. It also prevents the field from treating local throughput, local accuracy, and local freshness as interchangeable evidence for state-management progress.
 
