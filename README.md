@@ -4,6 +4,14 @@ This repository contains a draft ACM Computing Surveys article titled "Efficient
 
 For collaboration and agent-specific writing rules, see `AGENTS.md`.
 
+## Included Skill
+
+This repository also includes a reusable Codex skill for bibliography auditing:
+
+- `skills/reference-validation-report/`: verifies LaTeX references against authoritative sources and generates a Chinese PDF reference validation report.
+
+See `skills/reference-validation-report/README.md` for installation, usage, limitations, and known failure modes.
+
 ## Layout
 
 - `main.tex`: survey manuscript draft.
