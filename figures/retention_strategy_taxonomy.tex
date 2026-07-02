@@ -1,62 +1,70 @@
-% Retention Strategy Taxonomy — wider layout for proper scaling
 \begin{tikzpicture}[
-  fam/.style={draw, rounded corners=2pt, align=center, text width=24mm,
-              minimum height=10mm, font=\footnotesize, inner sep=2pt, fill=blue!6},
-  method/.style={draw, rounded corners=2pt, align=left, text width=40mm,
-                 minimum height=9mm, font=\footnotesize, inner sep=2pt, fill=gray!4},
-  sys/.style={draw, rounded corners=2pt, align=left, text width=34mm,
-              minimum height=9mm, font=\footnotesize, inner sep=2pt},
-  arr/.style={-{Stealth[length=1.8mm]}, thick, shorten <=2pt, shorten >=2pt},
-  note/.style={font=\footnotesize, text=gray!70!black}
+  font=\footnotesize,
+  head/.style={font=\scriptsize\bfseries, align=center, text=black!70},
+  fam/.style={
+    draw=black!45,
+    rounded corners=2pt,
+    align=center,
+    text width=25mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=blue!6
+  },
+  method/.style={
+    draw=black!35,
+    rounded corners=2pt,
+    align=left,
+    text width=42mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=black!2
+  },
+  sys/.style={
+    draw=black!35,
+    rounded corners=2pt,
+    align=left,
+    text width=35mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=white
+  },
+  arr/.style={-{Stealth[length=1.7mm]}, line width=0.62pt, draw=black!60, shorten <=2pt, shorten >=2pt},
+  gap/.style={draw=red!35, fill=red!4, rounded corners=2pt, align=left, text width=102mm, inner sep=4pt, font=\scriptsize}
 ]
 
-% Column headers
-\node[font=\footnotesize\bfseries] at (0, 0.9) {Strategy Family};
-\node[font=\footnotesize\bfseries] at (5.0, 0.9) {Mechanism};
-\node[font=\footnotesize\bfseries] at (10.0, 0.9) {Representative Systems};
-\draw[thick] (-1.6, 0.6) -- (12.2, 0.6);
+\node[head] at (0,0.9) {Strategy family};
+\node[head] at (5.0,0.9) {Mechanism};
+\node[head] at (10.0,0.9) {Representative systems};
+\draw[black!45, line width=0.6pt] (-1.65,0.58) -- (12.2,0.58);
 
-% Row 1
-\node[fam] (F1) at (0,  0)   {\faShield\ \textbf{Protection}\\constrain movement};
-\node[method] (M1) at (5.0,  0)   {Fisher importance weights\\gradient regularization};
-\node[sys] (S1) at (10.0,  0)   {EWC, Online EWC,\\SI, MAS};
+\node[fam, fill=blue!6] (f1) at (0,0) {\textbf{Protection}\\constrain drift};
+\node[method] (m1) at (5.0,0) {importance weights\\gradient regularization};
+\node[sys] (s1) at (10.0,0) {EWC, Online EWC,\\SI, MAS};
 
-% Row 2
-\node[fam] (F2) at (0, -1.6) {\faRefresh\ \textbf{Replay}\\absorb interference};
-\node[method] (M2) at (5.0, -1.6) {gradient projection, reservoir\\sampling, memory replay};
-\node[sys] (S2) at (10.0, -1.6) {GEM, A-GEM, MIR,\\ER, DER++};
+\node[fam, fill=green!6] (f2) at (0,-1.45) {\textbf{Replay}\\absorb interference};
+\node[method] (m2) at (5.0,-1.45) {gradient projection\\reservoir sampling\\memory replay};
+\node[sys] (s2) at (10.0,-1.45) {GEM, A-GEM, MIR,\\ER, DER++};
 
-% Row 3
-\node[fam] (F3) at (0, -3.2) {\faFilter\ \textbf{Admission}\\bounded store};
-\node[method] (M3) at (5.0, -3.2) {exemplar anchoring, utility\\scoring, coreset selection};
-\node[sys] (S3) at (10.0, -3.2) {iCaRL, GDumb,\\StreamFP, BiC};
+\node[fam, fill=yellow!10] (f3) at (0,-2.9) {\textbf{Admission}\\bound the store};
+\node[method] (m3) at (5.0,-2.9) {exemplar anchoring\\utility scoring\\coreset selection};
+\node[sys] (s3) at (10.0,-2.9) {iCaRL, GDumb,\\StreamFP, BiC};
 
-% Row 4
-\node[fam] (F4) at (0, -4.8) {\faCompress\ \textbf{Compression}\\budget contraction};
-\node[method] (M4) at (5.0, -4.8) {feature distillation, elastic\\budget, compressed replay};
-\node[sys] (S4) at (10.0, -4.8) {REMIND, Ferret,\\PackNet, HAT};
+\node[fam, fill=purple!6] (f4) at (0,-4.35) {\textbf{Compression}\\contract budget};
+\node[method] (m4) at (5.0,-4.35) {feature distillation\\elastic budgets\\compressed replay};
+\node[sys] (s4) at (10.0,-4.35) {REMIND, Ferret,\\PackNet, HAT};
 
-% Family -> Mechanism arrows
-\draw[arr] (F1.east) -- (M1.west);
-\draw[arr] (F2.east) -- (M2.west);
-\draw[arr] (F3.east) -- (M3.west);
-\draw[arr] (F4.east) -- (M4.west);
+\foreach \i in {1,2,3,4} {
+  \draw[arr] (f\i.east) -- (m\i.west);
+  \draw[arr] (m\i.east) -- (s\i.west);
+}
+\foreach \a/\b in {f1/f2,f2/f3,f3/f4} {
+  \draw[arr] (\a.south) -- (\b.north);
+}
 
-% Mechanism -> Systems arrows
-\draw[arr] (M1.east) -- (S1.west);
-\draw[arr] (M2.east) -- (S2.west);
-\draw[arr] (M3.east) -- (S3.west);
-\draw[arr] (M4.east) -- (S4.west);
-
-% Vertical flow
-\draw[arr] (F1.south) -- (F2.north);
-\draw[arr] (F2.south) -- (F3.north);
-\draw[arr] (F3.south) -- (F4.north);
-
-% Open gap annotation
-\node[draw, densely dotted, orange!70!black, text width=100mm, align=left,
-      font=\footnotesize, inner sep=4pt] at (5.0, -6.2) {%
-\faWarning\ \textbf{Open gap:} unified retention-store contract composing
-admission, replay, compression, and demotion under a single governance API.};
+\node[gap] at (5.0,-5.75) {
+  \textbf{Open contract.}
+  Admission, replay, compression, and demotion need one retention-store API
+  so budget pressure can be compared with future reuse value.
+};
 
 \end{tikzpicture}

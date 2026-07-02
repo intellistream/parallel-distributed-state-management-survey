@@ -1,51 +1,57 @@
-% Access & Scheduling Design Space — vivid with FA icons, dotted orange feedback
 \begin{tikzpicture}[
-  box/.style={draw, rounded corners=2pt, align=center, text width=32mm,
-              minimum height=10mm, font=\footnotesize, inner sep=2pt},
-  sysbox/.style={draw, rounded corners=2pt, align=left, text width=36mm,
-                 minimum height=10mm, font=\footnotesize, inner sep=2pt, fill=gray!4},
-  layer/.style={draw, dashed, gray!50, inner sep=5pt, rounded corners=2pt},
-  lbl/.style={font=\footnotesize\bfseries, anchor=east},
-  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=2pt, shorten >=2pt},
-  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black},
-  note/.style={font=\scriptsize, text=gray!70!black}
+  font=\footnotesize,
+  layer/.style={
+    draw=black!40,
+    rounded corners=2pt,
+    fill=black!1,
+    minimum width=118mm,
+    minimum height=12mm,
+    inner sep=4pt
+  },
+  focus/.style={
+    draw=black!45,
+    rounded corners=2pt,
+    align=left,
+    text width=35mm,
+    minimum height=9mm,
+    inner sep=3pt
+  },
+  systems/.style={
+    draw=black!30,
+    rounded corners=2pt,
+    align=left,
+    text width=48mm,
+    minimum height=9mm,
+    inner sep=3pt,
+    fill=white
+  },
+  lab/.style={font=\footnotesize\bfseries, align=right, text width=28mm},
+  arr/.style={-{Stealth[length=1.9mm]}, line width=0.65pt, draw=black!60, shorten <=2pt, shorten >=2pt},
+  feed/.style={-{Stealth[length=1.9mm]}, line width=0.65pt, densely dashed, draw=black!55, shorten <=2pt, shorten >=2pt}
 ]
 
-% --- Layer 1: Observability ---
-\node[box, fill=blue!6] (L1) at (0, 2.6) {\faEye\ Queue exposure,\\conflict density,\\progress frontiers};
-\node[sysbox] (M1) at (5.0, 2.6) {Aurora, MillWheel, Naiad,\\Trill, Differential Dataflow};
-\node[layer, fit=(L1)(M1)] (lay1) {};
-\node[lbl] at ([xshift=-3mm]lay1.west) {\faEye\ Observability};
+\node[layer] (l1) at (4.4,2.3) {};
+\node[layer] (l2) at (4.4,0.7) {};
+\node[layer] (l3) at (4.4,-0.9) {};
 
-% Dashed separator
-\draw[dashed, gray!40] (-3.0, 1.6) -- (7.6, 1.6);
+\node[lab] at (-2.45,2.3) {Observability};
+\node[focus, fill=blue!6] (f1) at (1.15,2.3) {queue exposure\\conflict density\\progress frontiers};
+\node[systems] (s1) at (6.0,2.3) {Aurora, MillWheel, Naiad, Trill, Differential Dataflow};
 
-% --- Layer 2: Cost & Scheduling ---
-\node[box, fill=green!5] (L2) at (0, 0.8) {\faCogs\ Topology, skew, NUMA,\\ordering, admission,\\migration};
-\node[sysbox] (M2) at (5.0, 0.8) {BriskStream, MorphStream,\\Megaphone, SOLA, ExeGPT};
-\node[layer, fit=(L2)(M2)] (lay2) {};
-\node[lbl] at ([xshift=-3mm]lay2.west) {\faCogs\ Cost \& Scheduling};
+\node[lab] at (-2.45,0.7) {Cost and scheduling};
+\node[focus, fill=green!6] (f2) at (1.15,0.7) {topology, skew\\NUMA, ordering\\admission, migration};
+\node[systems] (s2) at (6.0,0.7) {BriskStream, MorphStream, Megaphone, SOLA, ExeGPT};
 
-% Dashed separator
-\draw[dashed, gray!40] (-3.0, -0.2) -- (7.6, -0.2);
+\node[lab] at (-2.45,-0.9) {Recovery and elasticity};
+\node[focus, fill=purple!6] (f3) at (1.15,-0.9) {checkpoint alignment\\ownership transfer\\replay boundary};
+\node[systems] (s3) at (6.0,-0.9) {Spacker, Flink, SONIC, ORION, fast recovery};
 
-% --- Layer 3: Recovery & Elasticity ---
-\node[box, fill=purple!5] (L3) at (0, -1.0) {\faShield\ Checkpoint alignment,\\ownership transfer,\\replay};
-\node[sysbox] (M3) at (5.0, -1.0) {Spacker, Flink, SONIC,\\ORION, fast recovery};
-\node[layer, fit=(L3)(M3)] (lay3) {};
-\node[lbl] at ([xshift=-3mm]lay3.west) {\faShield\ Recovery \& Elasticity};
+\foreach \i in {1,2,3} {
+  \draw[arr] (f\i.east) -- (s\i.west);
+}
 
-% Inter-layer arrows (between L boxes only)
-\draw[arr] (L1.south) -- (L2.north);
-\draw[arr] (L2.south) -- (L3.north);
-
-% Layer -> mechanisms
-\draw[arr] (L1.east) -- node[above, note] {mechanisms} (M1.west);
-\draw[arr] (L2.east) -- (M2.west);
-\draw[arr] (L3.east) -- (M3.west);
-
-% Feedback (dotted orange, routed outside left)
-\draw[feedback] (M3.south) -- ++(0,-0.5) -| ([xshift=-2mm]lay3.west) |- ([yshift=-2mm]L1.west);
-\node[font=\scriptsize, text=orange!70!black] at (-2.4, -1.8) {\faRetweet\ feedback};
+\draw[arr] (f1.south) -- (f2.north);
+\draw[arr] (f2.south) -- (f3.north);
+\draw[feed] (s3.south) -- ++(0,-0.38) -| (f1.west);
 
 \end{tikzpicture}

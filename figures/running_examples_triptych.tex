@@ -1,46 +1,46 @@
-% Running Examples — vivid with FA icons, colored rows
 \begin{tikzpicture}[
-  cell/.style={draw, rounded corners=2pt, align=left, text width=26mm,
-               minimum height=12mm, font=\footnotesize, inner sep=3pt},
-  hdr/.style={font=\footnotesize\bfseries, minimum height=7mm, align=center},
-  tag/.style={font=\footnotesize\bfseries, text=blue!60!black},
-  arr/.style={-{Stealth[length=1.8mm]}, shorten <=2pt, shorten >=2pt}
+  font=\footnotesize,
+  cell/.style={
+    draw=black!35,
+    rounded corners=2pt,
+    align=left,
+    text width=27mm,
+    minimum height=12mm,
+    inner sep=3pt
+  },
+  rowlab/.style={font=\scriptsize\bfseries, align=right, text width=12mm, text=black!70},
+  head/.style={font=\scriptsize\bfseries, align=center, text=black!72},
+  arr/.style={-{Stealth[length=1.7mm]}, line width=0.6pt, draw=black!58, shorten <=2pt, shorten >=2pt}
 ]
 
-% Column Headers
-\node[hdr] at (0,   2.6) {\faDatabase\ State Object};
-\node[hdr] at (3.6, 2.6) {\faBolt\ Stress Event};
-\node[hdr] at (7.2, 2.6) {\faCogs\ Runtime Decision};
-\node[hdr] at (10.8,2.6) {\faBarChart\ Service Effect};
+\node[head] at (0,2.45) {State object};
+\node[head] at (3.65,2.45) {Stress event};
+\node[head] at (7.30,2.45) {Runtime decision};
+\node[head] at (10.95,2.45) {Service effect};
+\draw[black!45, line width=0.6pt] (-2.25,2.12) -- (12.55,2.12);
 
-% Header separator
-\draw[thick] (-2.0, 2.2) -- (12.4, 2.2);
+\node[rowlab] at (-2.15,1.05) {A};
+\node[cell, fill=blue!4] (a1) at (0,1.05) {streaming fraud\\hot keys};
+\node[cell, fill=blue!4] (a2) at (3.65,1.05) {campaign burst\\flips popularity};
+\node[cell, fill=blue!4] (a3) at (7.30,1.05) {repartition hotspots\\adjust snapshots};
+\node[cell, fill=blue!4] (a4) at (10.95,1.05) {tail latency recovers\\replay debt bounded};
 
-% Row A
-\node[tag] at (-1.8, 1.1) {\faSignal};
-\node[cell, fill=blue!4] (a1) at (0,   1.1) {Streaming fraud\\detection: hot keys};
-\node[cell, fill=blue!4] (a2) at (3.6, 1.1) {Campaign burst\\flips key popularity};
-\node[cell, fill=blue!4] (a3) at (7.2, 1.1) {Repartition hotspots,\\adjust snapshot};
-\node[cell, fill=blue!4] (a4) at (10.8,1.1) {Tail latency recovers,\\replay debt bounded};
+\node[rowlab] at (-2.15,-0.25) {B};
+\node[cell, fill=green!4] (b1) at (0,-0.25) {LLM assistant\\KV pages, adapters};
+\node[cell, fill=green!4] (b2) at (3.65,-0.25) {long prompts create\\memory pressure};
+\node[cell, fill=green!4] (b3) at (7.30,-0.25) {phase-aware admit\\selective transfer};
+\node[cell, fill=green!4] (b4) at (10.95,-0.25) {TTFT stabilizes\\goodput survives};
 
-% Row B
-\node[tag] at (-1.8,-0.2) {\faCubes};
-\node[cell, fill=green!4] (b1) at (0,  -0.2) {LLM assistant:\\KV pages + adapters};
-\node[cell, fill=green!4] (b2) at (3.6,-0.2) {Long prompts trigger\\memory pressure};
-\node[cell, fill=green!4] (b3) at (7.2,-0.2) {Phase-aware admit,\\selective KV transfer};
-\node[cell, fill=green!4] (b4) at (10.8,-0.2) {TTFT stabilizes,\\no collapse};
+\node[rowlab] at (-2.15,-1.55) {C};
+\node[cell, fill=purple!4] (c1) at (0,-1.55) {RAG knowledge\\index, refresh queue};
+\node[cell, fill=purple!4] (c2) at (3.65,-1.55) {corpus drift and\\delete backlog};
+\node[cell, fill=purple!4] (c3) at (7.30,-1.55) {gate stale shards\\stage refresh};
+\node[cell, fill=purple!4] (c4) at (10.95,-1.55) {freshness improves\\compaction controlled};
 
-% Row C
-\node[tag] at (-1.8,-1.5) {\faSearch};
-\node[cell, fill=purple!4] (c1) at (0,  -1.5) {RAG knowledge:\\index + refresh queue};
-\node[cell, fill=purple!4] (c2) at (3.6,-1.5) {Corpus drift + deletes\\accum.\ maint.\ debt};
-\node[cell, fill=purple!4] (c3) at (7.2,-1.5) {Gate stale shards,\\staged refresh};
-\node[cell, fill=purple!4] (c4) at (10.8,-1.5) {Freshness up,\\compaction controlled};
-
-% Arrows (with shorten to avoid hitting box borders)
 \foreach \r in {a,b,c} {
   \draw[arr] (\r1.east) -- (\r2.west);
   \draw[arr] (\r2.east) -- (\r3.west);
   \draw[arr] (\r3.east) -- (\r4.west);
 }
+
 \end{tikzpicture}

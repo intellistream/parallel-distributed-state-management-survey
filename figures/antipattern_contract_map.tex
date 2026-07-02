@@ -1,71 +1,57 @@
-% Anti-Pattern → Contract Repair — cascade vs. stack metaphor, larger fonts
 \begin{tikzpicture}[
-  ap/.style={draw, rounded corners=2pt, align=center, text width=34mm,
-             minimum height=11mm, font=\footnotesize, inner sep=3pt,
-             fill=red!6, draw=red!30},
-  fix/.style={draw, rounded corners=2pt, align=center, text width=34mm,
-              minimum height=11mm, font=\footnotesize, inner sep=3pt,
-              fill=green!6, draw=green!30},
-  aspect/.style={font=\footnotesize\bfseries, text=blue!50!black, align=center,
-                 minimum width=14mm},
-  bridge/.style={-{Stealth[length=1.6mm]}, densely dotted, orange!70!black,
-                 shorten <=2pt, shorten >=2pt},
-  cascade/.style={-{Stealth[length=1.6mm]}, thick, red!30},
-  reinforce/.style={-{Stealth[length=1.6mm]}, thick, green!30},
-  colhdr/.style={font=\footnotesize\bfseries, align=center, text=gray!50!black}
+  font=\footnotesize,
+  ap/.style={
+    draw=red!35,
+    rounded corners=2pt,
+    align=left,
+    text width=35mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=red!4
+  },
+  fix/.style={
+    draw=green!35!black,
+    rounded corners=2pt,
+    align=left,
+    text width=37mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=green!5
+  },
+  mid/.style={font=\scriptsize, align=center, text=black!62, text width=27mm},
+  head/.style={font=\scriptsize\bfseries, align=center, text=black!70},
+  bridge/.style={-{Stealth[length=1.6mm]}, line width=0.62pt, draw=black!55, shorten <=2pt, shorten >=2pt},
+  spine/.style={line width=0.7pt, draw=black!28}
 ]
 
-% --- Column Headers ---
-\node[colhdr] at (-0.8, 1.9) {\faWarning\ Implicit Contracts};
-\node[colhdr] at (7.8,  1.9) {\faCheck\ Explicit Contracts};
-\node[colhdr, text=orange!60!black] at (3.5, 1.9) {\faKey\ Missing Boundary};
+\node[head] at (-1.0,1.75) {Implicit anti-pattern};
+\node[head] at (3.65,1.75) {Missing boundary};
+\node[head] at (8.3,1.75) {Explicit contract repair};
+\draw[black!45, line width=0.6pt] (-3.1,1.43) -- (10.5,1.43);
 
-% --- State lifecycle aspect labels (far left) ---
-\node[aspect] (as1) at (-4.4, 1.0) {\faEye\\visibility};
-\node[aspect] (as2) at (-4.4,-0.5) {\faCogs\\precedence};
-\node[aspect] (as3) at (-4.4,-2.0) {\faBolt\\dynamics};
-\node[aspect] (as4) at (-4.4,-3.5) {\faDatabase\\mutation};
-\node[aspect] (as5) at (-4.4,-5.0) {\faExchange\\ownership};
+\node[ap] (a1) at (-1.0,0.95) {\textbf{Telemetry-action mismatch}\\signals do not name legal actions};
+\node[ap] (a2) at (-1.0,-0.45) {\textbf{Policy layering}\\objectives lack precedence};
+\node[ap] (a3) at (-1.0,-1.85) {\textbf{One-shot benchmark}\\disturbance is omitted};
+\node[ap] (a4) at (-1.0,-3.25) {\textbf{Hidden write path}\\read gains defer mutation debt};
+\node[ap] (a5) at (-1.0,-4.65) {\textbf{Static ownership}\\handoff legality is implicit};
 
-% Lifecycle spine
-\draw[thick, blue!30] (-4.4, 1.9) -- (-4.4, -5.6);
+\node[mid] (m1) at (3.65,0.95) {signal $\rightarrow$ state object};
+\node[mid] (m2) at (3.65,-0.45) {ordering and tie-break};
+\node[mid] (m3) at (3.65,-1.85) {disturbance phases};
+\node[mid] (m4) at (3.65,-3.25) {mutation accounting};
+\node[mid] (m5) at (3.65,-4.65) {transfer survival};
 
-% --- Left column: Anti-pattern cascade ---
-\node[ap] (A1) at (-0.8, 1.0) {Telemetry--Action\\Mismatch};
-\node[ap] (A2) at (-0.8,-0.5) {Policy Layering\\w/o Conflict Rules};
-\node[ap] (A3) at (-0.8,-2.0) {One-Shot Bench\\Non-Stationary};
-\node[ap] (A4) at (-0.8,-3.5) {Hidden Write\\Amplification};
-\node[ap] (A5) at (-0.8,-5.0) {Static Ownership\\Assumption};
+\node[fix] (f1) at (8.3,0.95) {\textbf{Typed observation layer}\\metrics feed bounded actions};
+\node[fix] (f2) at (8.3,-0.45) {\textbf{Precedence-aware kernel}\\hard rules precede soft goals};
+\node[fix] (f3) at (8.3,-1.85) {\textbf{Multi-phase envelope}\\warmup, burst, drift, recovery};
+\node[fix] (f4) at (8.3,-3.25) {\textbf{Auditable state catalog}\\writes charged to same boundary};
+\node[fix] (f5) at (8.3,-4.65) {\textbf{Transferable state model}\\authority, replay, reclamation};
 
-% Cascade arrows
-\draw[cascade] (A1.south) -- (A2.north);
-\draw[cascade] (A2.south) -- (A3.north);
-\draw[cascade] (A3.south) -- (A4.north);
-\draw[cascade] (A4.south) -- (A5.north);
-
-% --- Right column: Contract repair stack ---
-\node[fix] (F1) at (7.8, 1.0) {\faEye\ Typed observation\\layer};
-\node[fix] (F2) at (7.8,-0.5) {\faCogs\ Precedence-aware\\decision kernel};
-\node[fix] (F3) at (7.8,-2.0) {\faShield\ Multi-phase eval\\envelope};
-\node[fix] (F4) at (7.8,-3.5) {\faDatabase\ Auditable write-path\\in state catalog};
-\node[fix] (F5) at (7.8,-5.0) {\faExchange\ Transferable state\\model + safety};
-
-% Reinforcement arrows
-\draw[reinforce] (F5.north) -- (F4.south);
-\draw[reinforce] (F4.north) -- (F3.south);
-\draw[reinforce] (F3.north) -- (F2.south);
-\draw[reinforce] (F2.north) -- (F1.south);
-
-% --- Bridge arrows: anti-pattern -> repair, with contract labels ---
-\draw[bridge] (A1.east) -- node[above, font=\scriptsize, text=orange!65!black]
-  {signal $\to$ state obj} (F1.west);
-\draw[bridge] (A2.east) -- node[above, font=\scriptsize, text=orange!65!black]
-  {ordering + tie-break} (F2.west);
-\draw[bridge] (A3.east) -- node[above, font=\scriptsize, text=orange!65!black]
-  {disturbance phases} (F3.west);
-\draw[bridge] (A4.east) -- node[above, font=\scriptsize, text=orange!65!black]
-  {mutation debt} (F4.west);
-\draw[bridge] (A5.east) -- node[above, font=\scriptsize, text=orange!65!black]
-  {transfer survival} (F5.west);
+\foreach \i in {1,2,3,4,5} {
+  \draw[bridge] (a\i.east) -- (m\i.west);
+  \draw[bridge] (m\i.east) -- (f\i.west);
+}
+\draw[spine] (a1.south west) -- (a5.north west);
+\draw[spine] (f1.south east) -- (f5.north east);
 
 \end{tikzpicture}

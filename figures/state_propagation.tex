@@ -1,35 +1,55 @@
-% State Propagation — vivid with FA icons, colored boxes, dotted feedback
 \begin{tikzpicture}[
-  box/.style={draw, rounded corners=3pt, align=center, minimum width=34mm,
-              minimum height=12mm, font=\footnotesize, inner sep=3pt},
-  note/.style={font=\scriptsize, text=gray!70!black, align=center},
-  arr/.style={-{Stealth[length=2.2mm]}, thick, shorten <=2pt, shorten >=2pt},
-  feedback/.style={-{Stealth[length=2mm]}, densely dotted, orange!70!black, shorten <=2pt, shorten >=2pt}
+  font=\footnotesize,
+  stage/.style={
+    draw=black!55,
+    rounded corners=2pt,
+    very thick,
+    align=center,
+    text width=31mm,
+    minimum height=13mm,
+    inner sep=4pt
+  },
+  seam/.style={
+    font=\scriptsize,
+    align=center,
+    text=black!68,
+    text width=25mm
+  },
+  debt/.style={
+    draw=black!45,
+    rounded corners=2pt,
+    fill=black!2,
+    align=left,
+    text width=106mm,
+    inner sep=4pt,
+    font=\scriptsize
+  },
+  arr/.style={-{Stealth[length=2.2mm]}, line width=0.7pt, draw=black!70, shorten <=2pt, shorten >=2pt},
+  feed/.style={-{Stealth[length=2.1mm]}, line width=0.7pt, densely dashed, draw=black!55, shorten <=2pt, shorten >=2pt}
 ]
 
-\node[box, fill=blue!6]  (access) at (0, 0)   {\faCogs\ \textbf{State Access}\\and Scheduling};
-\node[box, fill=green!5] (exec)   at (4.8, 0) {\faBolt\ \textbf{State-Aware}\\Execution};
-\node[box, fill=purple!5] (evo)    at (9.6, 0) {\faRefresh\ \textbf{State Evolution}\\and Reuse};
+\node[stage, fill=blue!7] (access) at (0,0)
+  {\textbf{Access \& Scheduling}\\contention, locality, ownership};
+\node[stage, fill=green!7] (exec) at (4.55,0)
+  {\textbf{State-Aware Execution}\\placement, representation, quality};
+\node[stage, fill=purple!7] (evo) at (9.1,0)
+  {\textbf{Evolution \& Reuse}\\refresh, retention, replay};
 
-% Edge labels above arrows
-\node[note] at (2.4, 0.7) {conflicts, locality};
-\node[note] at (7.2, 0.7) {cost, quality};
-
-% Forward arrows
 \draw[arr] (access.east) -- (exec.west);
 \draw[arr] (exec.east) -- (evo.west);
 
-% Feedback arrow (dotted orange, routed above)
-\draw[feedback] ([yshift=1mm]evo.north) -- ++(0, 0.8)
-  -| ([yshift=1mm]access.north);
-\node[font=\scriptsize, text=orange!70!black] at (4.8, 1.6) {\faRetweet\ feedback pressure};
+\node[seam] at (2.28,0.98) {access cost\\sets execution region};
+\node[seam] at (6.83,0.98) {execution choices\\reshape update debt};
 
-% Propagation note (closer to boxes)
-\node[draw, dashed, gray!60, rounded corners=2pt, align=left, text width=110mm,
-      font=\footnotesize, inner sep=4pt] at (4.8, -1.3) {%
-\textbf{Propagation view.}
-Access contention distorts execution decisions;
-poorly modeled execution reshapes retention;
-aggressive updates feed back into later access pressure.};
+\draw[feed] (evo.north) -- ++(0,0.75) -| (access.north);
+\node[font=\scriptsize, align=center, text=black!65] at (4.55,1.55)
+  {future reuse, freshness, and recovery pressure feed back into access};
+
+\node[debt] at (4.55,-1.35) {
+  \textbf{Propagation view.}
+  A local state action is evaluated by the boundary it later stresses:
+  access skew can destroy locality, execution shortcuts can create quality or movement debt,
+  and aggressive updates can return as future contention or stale-memory exposure.
+};
 
 \end{tikzpicture}

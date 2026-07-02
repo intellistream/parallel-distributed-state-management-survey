@@ -1,51 +1,59 @@
-% KV-Cache Lifecycle Governance — larger fonts, tighter spacing
 \begin{tikzpicture}[
-  stage/.style={draw, rounded corners=2pt, align=center, minimum width=14mm,
-                minimum height=9mm, font=\footnotesize, inner sep=3pt},
-  ctrl/.style={draw, rounded corners=2pt, align=center, text width=16mm,
-               minimum height=8mm, font=\scriptsize, inner sep=2pt, fill=gray!4},
-  arr/.style={-{Stealth[length=1.6mm]}, thick, shorten <=1pt, shorten >=1pt},
-  feedback/.style={-{Stealth[length=1.6mm]}, densely dotted, orange!70!black},
-  note/.style={font=\footnotesize, text=gray!70!black}
+  font=\footnotesize,
+  stage/.style={
+    draw=black!45,
+    rounded corners=2pt,
+    align=center,
+    text width=17mm,
+    minimum height=10mm,
+    inner sep=3pt
+  },
+  ctrl/.style={
+    draw=black!30,
+    rounded corners=2pt,
+    align=center,
+    text width=18mm,
+    minimum height=8mm,
+    inner sep=2pt,
+    fill=black!2,
+    font=\scriptsize
+  },
+  arr/.style={-{Stealth[length=1.7mm]}, line width=0.65pt, draw=black!65, shorten <=1pt, shorten >=1pt},
+  feed/.style={-{Stealth[length=1.7mm]}, line width=0.65pt, densely dashed, draw=black!55, shorten <=1pt, shorten >=1pt},
+  note/.style={font=\scriptsize, text=black!62, align=center}
 ]
 
-% Pipeline stages
-\node[stage, fill=blue!6]   (S1) at (0,    0) {\faFilter\ \textbf{Admit}};
-\node[stage, fill=green!5]  (S2) at (2.1,  0) {\faSitemap\ \textbf{Place}};
-\node[stage, fill=yellow!8] (S3) at (4.2,  0) {\faPencil\ \textbf{Mutate}};
-\node[stage, fill=purple!5] (S4) at (6.5,  0) {\faExchange\ \textbf{Expose/}\\\textbf{Transfer}};
-\node[stage, fill=orange!8] (S5) at (8.8,  0) {\faCompress\ \textbf{Compact}};
-\node[stage, fill=red!5]    (S6) at (11.1, 0) {\faTrash\ \textbf{Evict/}\\\textbf{Reclaim}};
+\node[stage, fill=blue!6]   (s1) at (0,0) {\textbf{Admit}\\request};
+\node[stage, fill=green!6]  (s2) at (2.25,0) {\textbf{Place}\\KV pages};
+\node[stage, fill=yellow!10] (s3) at (4.5,0) {\textbf{Mutate}\\token state};
+\node[stage, fill=purple!6] (s4) at (6.9,0) {\textbf{Expose /}\\\textbf{Transfer}};
+\node[stage, fill=orange!8] (s5) at (9.3,0) {\textbf{Compact}\\fragments};
+\node[stage, fill=red!5]    (s6) at (11.7,0) {\textbf{Evict /}\\\textbf{Reclaim}};
 
-% Forward flow
-\draw[arr] (S1.east) -- (S2.west);
-\draw[arr] (S2.east) -- (S3.west);
-\draw[arr] (S3.east) -- (S4.west);
-\draw[arr] (S4.east) -- (S5.west);
-\draw[arr] (S5.east) -- (S6.west);
+\foreach \a/\b in {s1/s2,s2/s3,s3/s4,s4/s5,s5/s6} {
+  \draw[arr] (\a.east) -- (\b.west);
+}
 
-% Control annotations
-\node[ctrl] (C1) at (0,    -1.1) {admission\\SLO gating};
-\node[ctrl] (C2) at (2.1,  -1.1) {paged alloc.\\residency plan};
-\node[ctrl] (C3) at (4.2,  -1.1) {token growth\\share edits};
-\node[ctrl] (C4) at (6.5,  -1.1) {reuse legality\\KV transfer};
-\node[ctrl] (C5) at (8.8,  -1.1) {fragmentation\\debt control};
-\node[ctrl] (C6) at (11.1, -1.1) {restore priority\\memory release};
+\node[ctrl] (c1) at (0,-1.15) {SLO gate\\admission};
+\node[ctrl] (c2) at (2.25,-1.15) {residency\\plan};
+\node[ctrl] (c3) at (4.5,-1.15) {growth and\\sharing edits};
+\node[ctrl] (c4) at (6.9,-1.15) {reuse legality\\transfer};
+\node[ctrl] (c5) at (9.3,-1.15) {fragmentation\\debt};
+\node[ctrl] (c6) at (11.7,-1.15) {restore priority\\release};
 
-\draw[arr, thin] (S1.south) -- (C1.north);
-\draw[arr, thin] (S2.south) -- (C2.north);
-\draw[arr, thin] (S3.south) -- (C3.north);
-\draw[arr, thin] (S4.south) -- (C4.north);
-\draw[arr, thin] (S5.south) -- (C5.north);
-\draw[arr, thin] (S6.south) -- (C6.north);
+\foreach \i in {1,2,3,4,5,6} {
+  \draw[arr] (s\i.south) -- (c\i.north);
+}
 
-% Feedback loop
-\draw[feedback] (C6.south) -- ++(0,-0.3) -| (C1.south);
-\node[font=\footnotesize, text=orange!70!black] at (5.5, -2.1) {\faRetweet\ memory pressure};
+\draw[feed] (c6.south) -- ++(0,-0.35) -| (c1.south);
+\node[note, text width=118mm] at (5.85,-2.25) {
+  Memory pressure is not a terminal event: reclaiming KV state changes later restoration cost,
+  prefix reuse, and tenant-visible SLO stability.
+};
 
-% Representative systems
-\node[note, text width=118mm, align=center] at (5.5, -2.7) {%
-\textbf{Representative:} vLLM, Sarathi-Serve, SGLang (admit/place/mutate);
-DistServe, Splitwise, SGLang, SplitZip (expose/transfer); Jenga, CacheFlow (compact); Pensieve, Mooncake, FastServe (evict/reclaim)};
+\node[note, text width=118mm] at (5.85,-2.85) {
+  Representative systems: vLLM, Sarathi-Serve, SGLang, DistServe, Splitwise,
+  Jenga, CacheFlow, Pensieve, Mooncake, FastServe.
+};
 
 \end{tikzpicture}

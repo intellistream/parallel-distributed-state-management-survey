@@ -1,60 +1,55 @@
-% Survey Overview — vivid design with varied shapes, colors, and fontawesome icons
 \begin{tikzpicture}[
-  dombox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
-                 font=\footnotesize, inner sep=3pt, text width=28mm,
-                 left color=white, right color=gray!5},
-  dimbox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
-                 font=\footnotesize, inner sep=3pt, text width=26mm,
-                 fill=blue!6},
-  outbox/.style={draw, rounded corners=3pt, align=center, minimum height=11mm,
-                 font=\footnotesize, inner sep=3pt, text width=26mm,
-                 fill=green!4},
-  container/.style={draw, dashed, gray!60, inner sep=10pt, rounded corners=4pt},
-  hdr/.style={font=\footnotesize\bfseries, anchor=west},
-  arr/.style={-{Stealth[length=2mm]}, thick, shorten <=1pt, shorten >=1pt},
-  note/.style={font=\scriptsize, text=gray!60!black}
+  font=\footnotesize,
+  box/.style={
+    draw=black!38,
+    rounded corners=2pt,
+    align=center,
+    minimum height=10mm,
+    inner sep=3pt,
+    text width=28mm,
+    fill=white
+  },
+  dim/.style={box, text width=27mm, fill=blue!6},
+  outbox/.style={box, text width=27mm, fill=green!5},
+  group/.style={draw=black!25, rounded corners=2pt, inner sep=7pt},
+  head/.style={font=\scriptsize\bfseries, align=center, text=black!70},
+  arr/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, draw=black!58, shorten <=2pt, shorten >=2pt},
+  feed/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, densely dashed, draw=black!50, shorten <=2pt, shorten >=2pt}
 ]
 
-% --- Column 1: System Domains ---
-\node[hdr] at (-1.6, 3.7) {\faSitemap\ System Domains};
-\node[dombox] (d1) at (0, 2.5) {\faSignal\ Streaming \&\\transactional};
-\node[dombox] (d2) at (0, 1.1) {\faServer\ Hardware-conscious\\execution};
-\node[dombox] (d3) at (0,-0.3) {\faCubes\ LLM serving \&\\inference};
-\node[dombox] (d4) at (0,-1.7) {\faSearch\ Retrieval \&\\agentic memory};
-\node[container, fit=(d1)(d2)(d3)(d4)] (domgrp) {};
+\node[head] at (0,3.35) {System domains};
+\node[box, fill=blue!4] (d1) at (0,2.45) {Streaming and\\transactional};
+\node[box, fill=green!4] (d2) at (0,1.10) {Hardware-conscious\\execution};
+\node[box, fill=yellow!8] (d3) at (0,-0.25) {LLM serving and\\inference};
+\node[box, fill=purple!4] (d4) at (0,-1.60) {Retrieval and\\agentic memory};
+\node[group, fit=(d1)(d2)(d3)(d4)] {};
 
-% --- Column 2: Core Dimensions ---
-\node[hdr] at (3.6, 3.7) {\faCompass\ Core Dimensions};
-\node[dimbox] (c1) at (5.2, 1.8) {\faCogs\ Access \&\\scheduling};
-\node[dimbox] (c2) at (5.2, 0.2) {\faBolt\ Execution\\optimization};
-\node[dimbox] (c3) at (5.2,-1.4) {\faRefresh\ Evolution \&\\reuse};
-\node[container, fit=(c1)(c2)(c3)] (coregrp) {};
+\node[head] at (5.0,3.35) {Core dimensions};
+\node[dim] (c1) at (5.0,1.75) {Access and\\scheduling};
+\node[dim] (c2) at (5.0,0.20) {Execution\\optimization};
+\node[dim] (c3) at (5.0,-1.35) {Evolution and\\reuse};
+\node[group, fit=(c1)(c2)(c3)] {};
 
-% --- Column 3: Survey Outputs ---
-\node[hdr] at (8.2, 3.7) {\faFileTextO\ Survey Outputs};
-\node[outbox] (o1) at (9.8, 1.8) {\faBarChart\ Comparative\\synthesis};
-\node[outbox] (o2) at (9.8, 0.2) {\faWrench\ Runtime\\blueprint};
-\node[outbox] (o3) at (9.8,-1.4) {\faRocket\ Research\\agenda};
-\node[container, fit=(o1)(o2)(o3)] (outgrp) {};
+\node[head] at (9.8,3.35) {Survey outputs};
+\node[outbox] (o1) at (9.8,1.75) {Comparative\\synthesis};
+\node[outbox] (o2) at (9.8,0.20) {Runtime\\blueprint};
+\node[outbox] (o3) at (9.8,-1.35) {Research\\agenda};
+\node[group, fit=(o1)(o2)(o3)] {};
 
-% --- Arrows: Domains -> Dimensions (staggered entry points) ---
-\draw[arr] (d1.east) -- ++(0.6,0) |- ([yshift=2pt]c1.west);
-\draw[arr] (d2.east) -- ++(0.4,0) |- ([yshift=-2pt]c1.west);
-\draw[arr] (d3.east) -- ++(0.6,0) |- (c2.west);
-\draw[arr] (d4.east) -- ++(0.4,0) |- (c3.west);
+\draw[arr] (d1.east) -- ++(0.55,0) |- (c1.west);
+\draw[arr] (d2.east) -- ++(0.35,0) |- (c1.west);
+\draw[arr] (d3.east) -- ++(0.55,0) |- (c2.west);
+\draw[arr] (d4.east) -- ++(0.35,0) |- (c3.west);
 
-% --- Dimension coupling (vertical) ---
 \draw[arr] (c1.south) -- (c2.north);
 \draw[arr] (c2.south) -- (c3.north);
+\draw[feed] (c3.south) -- ++(0,-0.45) -| (c1.west);
 
-% --- Feedback (dotted + distinct color to differentiate from container borders) ---
-\draw[arr, densely dotted, orange!70!black, thin] (c3.south) -- ++(0,-0.5) -| ([xshift=-5mm]coregrp.west)
-  |- ([yshift=-2pt]c1.west);
-\node[font=\scriptsize, text=orange!70!black] at (5.2, -2.8) {\faRetweet\ feedback};
-
-% --- Dimensions -> Outputs ---
 \draw[arr] (c1.east) -- (o1.west);
 \draw[arr] (c2.east) -- (o2.west);
 \draw[arr] (c3.east) -- (o3.west);
+
+\node[font=\scriptsize, text=black!58, align=center] at (5.0,-2.55)
+  {access, execution, and evolution form one feedback loop};
 
 \end{tikzpicture}

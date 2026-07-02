@@ -1,57 +1,66 @@
-% Cross-Domain Comparative Synthesis — vivid with FA icons, colored rows
 \begin{tikzpicture}[
-  box/.style={draw, rounded corners=2pt, align=center, text width=23mm,
-              minimum height=10mm, font=\footnotesize, inner sep=2pt},
-  gap/.style={draw, rounded corners=2pt, align=center, text width=23mm,
-              minimum height=10mm, font=\footnotesize, inner sep=2pt,
-              fill=red!5, text=red!70!black},
-  hdr/.style={font=\footnotesize\bfseries, align=center},
-  arr/.style={-{Stealth[length=1.8mm]}, shorten <=1pt, shorten >=1pt},
-  feedback/.style={-{Stealth[length=1.8mm]}, densely dotted, orange!70!black},
-  note/.style={font=\footnotesize, text=orange!70!black}
+  font=\footnotesize,
+  cell/.style={
+    draw=black!38,
+    rounded corners=1.5pt,
+    align=left,
+    text width=26mm,
+    minimum height=10mm,
+    inner sep=3pt,
+    fill=white
+  },
+  domainbox/.style={
+    cell,
+    text width=28mm,
+    font=\footnotesize\bfseries,
+    fill=black!3
+  },
+  gap/.style={
+    cell,
+    text width=29mm,
+    fill=red!4,
+    draw=red!35,
+    text=black!85
+  },
+  head/.style={font=\scriptsize\bfseries, align=center, text=black!75},
+  arr/.style={-{Stealth[length=1.7mm]}, draw=black!45, line width=0.55pt, shorten <=1pt, shorten >=1pt},
+  link/.style={draw=black!35, densely dashed, line width=0.55pt}
 ]
 
-% Column Headers
-\node[hdr] at (0,    3.2) {\faDatabase\ Domain};
-\node[hdr] at (2.9,  3.2) {\faCogs\ Control Surface};
-\node[hdr] at (5.8,  3.2) {\faBarChart\ Eval.\ Boundary};
-\node[hdr] at (8.7,  3.2) {\faWarning\ Open Gap};
-\draw[thick] (-1.2, 2.9) -- (10.0, 2.9);
+\node[head] at (0,3.35) {Domain\\state};
+\node[head] at (3.25,3.35) {Runtime\\control};
+\node[head] at (6.5,3.35) {Protected\\boundary};
+\node[head] at (9.75,3.35) {Open\\contract};
+\draw[black!45, line width=0.6pt] (-1.45,3.02) -- (11.2,3.02);
 
-% Row 1: Streaming
-\node[box, fill=blue!5] (d1) at (0,   2.2) {\faSignal\ \textbf{Streaming}\\windows, progress};
-\node[box] (c1) at (2.9, 2.2) {visibility, progress,\\transfer, recovery};
-\node[box] (b1) at (5.8, 2.2) {throughput,\\recovery time,\\migration lag};
-\node[gap] (g1) at (8.7, 2.2) {unified disturbance\\controller};
+\node[domainbox, fill=blue!5] (d1) at (0,2.35) {Streaming\\{\normalfont windows, frontiers}};
+\node[cell] (c1) at (3.25,2.35) {visibility\\advancement\\ownership transfer};
+\node[cell] (b1) at (6.5,2.35) {correctness\\pause-time stability\\recovery latency};
+\node[gap] (g1) at (9.75,2.35) {one transfer contract across steady state and recovery};
 
-% Row 2: Hardware
-\node[box, fill=green!5] (d2) at (0,   0.7) {\faServer\ \textbf{Hardware}\\encoded data paths};
-\node[box] (c2) at (2.9, 0.7) {representation,\\device mapping,\\quality steering};
-\node[box] (b2) at (5.8, 0.7) {energy, error bound,\\latency--quality};
-\node[gap] (g2) at (8.7, 0.7) {portable policy\\across HW};
+\node[domainbox, fill=green!5] (d2) at (0,0.8) {Hardware-aware\\{\normalfont encoded paths}};
+\node[cell] (c2) at (3.25,0.8) {format choice\\placement\\approximation};
+\node[cell] (b2) at (6.5,0.8) {movement cost\\energy\\quality bound};
+\node[gap] (g2) at (9.75,0.8) {portable policy that prices movement and error debt};
 
-% Row 3: LLM Serving
-\node[box, fill=yellow!6] (d3) at (0,  -0.8) {\faCubes\ \textbf{LLM Serving}\\KV pages, prefix};
-\node[box] (c3) at (2.9,-0.8) {allocation, phase\\scheduling, transfer};
-\node[box] (b3) at (5.8,-0.8) {TTFT, TPOT,\\goodput, waste};
-\node[gap] (g3) at (8.7,-0.8) {lifecycle governance\\across nodes};
+\node[domainbox, fill=yellow!8] (d3) at (0,-0.75) {LLM serving\\{\normalfont KV pages, queues}};
+\node[cell] (c3) at (3.25,-0.75) {admit, share\\reclaim\\transfer, restore};
+\node[cell] (b3) at (6.5,-0.75) {TTFT / TPOT\\goodput\\tenant SLOs};
+\node[gap] (g3) at (9.75,-0.75) {lifecycle semantics for reuse and invalidation};
 
-% Row 4: Retrieval
-\node[box, fill=purple!5] (d4) at (0,  -2.3) {\faSearch\ \textbf{Retrieval}\\indexes, planner mem};
-\node[box] (c4) at (2.9,-2.3) {refresh, rebuild,\\retention, compaction};
-\node[box] (b4) at (5.8,-2.3) {recall@k, freshness,\\maint.\ debt};
-\node[gap] (g4) at (8.7,-2.3) {cross-shard freshness\\+ elasticity};
+\node[domainbox, fill=purple!5] (d4) at (0,-2.3) {Retrieval \& retention\\{\normalfont shards, replay stores}};
+\node[cell] (c4) at (3.25,-2.3) {refresh\\publication\\replay, demotion};
+\node[cell] (b4) at (6.5,-2.3) {freshness\\reuse value\\maintenance debt};
+\node[gap] (g4) at (9.75,-2.3) {exposure contract for stale or demoted memory};
 
-% Horizontal arrows
-\foreach \i in {1,...,4} {
+\foreach \i in {1,2,3,4} {
   \draw[arr] (d\i.east) -- (c\i.west);
   \draw[arr] (c\i.east) -- (b\i.west);
   \draw[arr] (b\i.east) -- (g\i.west);
 }
 
-% Vertical cross-domain connections (dotted orange on gap column)
-\draw[feedback] (g1.south) -- node[right, note] {ownership} (g2.north);
-\draw[feedback] (g2.south) -- node[right, note] {movement} (g3.north);
-\draw[feedback] (g3.south) -- node[right, note] {lifecycle} (g4.north);
+\draw[link] (g1.south) -- (g2.north);
+\draw[link] (g2.south) -- (g3.north);
+\draw[link] (g3.south) -- (g4.north);
 
 \end{tikzpicture}
