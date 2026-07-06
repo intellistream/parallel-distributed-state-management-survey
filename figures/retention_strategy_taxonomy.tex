@@ -5,6 +5,7 @@
     draw=black!45,
     rounded corners=2pt,
     align=center,
+    text centered,
     text width=25mm,
     minimum height=10mm,
     inner sep=3pt,
@@ -13,7 +14,8 @@
   method/.style={
     draw=black!35,
     rounded corners=2pt,
-    align=left,
+    align=center,
+    text centered,
     text width=42mm,
     minimum height=10mm,
     inner sep=3pt,
@@ -22,36 +24,37 @@
   sys/.style={
     draw=black!35,
     rounded corners=2pt,
-    align=left,
+    align=center,
+    text centered,
     text width=35mm,
     minimum height=10mm,
     inner sep=3pt,
     fill=white
   },
-  arr/.style={-{Stealth[length=1.7mm]}, line width=0.62pt, draw=black!60, shorten <=2pt, shorten >=2pt},
-  gap/.style={draw=red!35, fill=red!4, rounded corners=2pt, align=left, text width=102mm, inner sep=4pt, font=\scriptsize}
+  arr/.style={-{Stealth[length=1.7mm]}, line width=0.64pt, draw=black!60, shorten <=2pt, shorten >=2pt},
+  gap/.style={draw=red!35, fill=red!4, rounded corners=2pt, align=left, text width=104mm, inner sep=4pt, font=\scriptsize}
 ]
 
-\node[head] at (0,0.9) {Strategy family};
-\node[head] at (5.0,0.9) {Mechanism};
-\node[head] at (10.0,0.9) {Representative systems};
-\draw[black!45, line width=0.6pt] (-1.65,0.58) -- (12.2,0.58);
+\node[head] at (0,0.95) {Strategy family};
+\node[head] at (5.35,0.95) {Mechanism};
+\node[head] at (10.7,0.95) {Representative systems};
+\draw[black!45, line width=0.6pt] (-1.85,0.62) -- (13.0,0.62);
 
 \node[fam, fill=blue!6] (f1) at (0,0) {\textbf{Protection}\\constrain drift};
-\node[method] (m1) at (5.0,0) {importance weights\\gradient regularization};
-\node[sys] (s1) at (10.0,0) {EWC, Online EWC,\\SI, MAS};
+\node[method] (m1) at (5.35,0) {importance weights\\gradient regularization};
+\node[sys] (s1) at (10.7,0) {EWC, Online EWC,\\SI, MAS};
 
 \node[fam, fill=green!6] (f2) at (0,-1.45) {\textbf{Replay}\\absorb interference};
-\node[method] (m2) at (5.0,-1.45) {gradient projection\\reservoir sampling\\memory replay};
-\node[sys] (s2) at (10.0,-1.45) {GEM, A-GEM, MIR,\\ER, DER++};
+\node[method] (m2) at (5.35,-1.45) {gradient projection\\reservoir sampling\\memory replay};
+\node[sys] (s2) at (10.7,-1.45) {GEM, A-GEM, MIR,\\ER, DER++};
 
 \node[fam, fill=yellow!10] (f3) at (0,-2.9) {\textbf{Admission}\\bound the store};
-\node[method] (m3) at (5.0,-2.9) {exemplar anchoring\\utility scoring\\coreset selection};
-\node[sys] (s3) at (10.0,-2.9) {iCaRL, GDumb,\\StreamFP, BiC};
+\node[method] (m3) at (5.35,-2.9) {exemplar anchoring\\utility scoring\\coreset selection};
+\node[sys] (s3) at (10.7,-2.9) {iCaRL, GDumb,\\StreamFP, BiC};
 
 \node[fam, fill=purple!6] (f4) at (0,-4.35) {\textbf{Compression}\\contract budget};
-\node[method] (m4) at (5.0,-4.35) {feature distillation\\elastic budgets\\compressed replay};
-\node[sys] (s4) at (10.0,-4.35) {REMIND, Ferret,\\PackNet, HAT};
+\node[method] (m4) at (5.35,-4.35) {feature distillation\\elastic budgets\\compressed replay};
+\node[sys] (s4) at (10.7,-4.35) {REMIND, Ferret,\\PackNet, HAT};
 
 \foreach \i in {1,2,3,4} {
   \draw[arr] (f\i.east) -- (m\i.west);
@@ -61,7 +64,7 @@
   \draw[arr] (\a.south) -- (\b.north);
 }
 
-\node[gap] at (5.0,-5.75) {
+\node[gap] at (5.35,-5.55) {
   \textbf{Open contract.}
   Admission, replay, compression, and demotion need one retention-store API
   so budget pressure can be compared with future reuse value.

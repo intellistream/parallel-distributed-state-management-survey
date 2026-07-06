@@ -11,7 +11,7 @@
   focus/.style={
     draw=black!45,
     rounded corners=2pt,
-    align=left,
+    align=center,
     text width=35mm,
     minimum height=9mm,
     inner sep=3pt
@@ -19,13 +19,13 @@
   systems/.style={
     draw=black!30,
     rounded corners=2pt,
-    align=left,
+    align=center,
     text width=48mm,
     minimum height=9mm,
     inner sep=3pt,
     fill=white
   },
-  lab/.style={font=\footnotesize\bfseries, align=right, text width=28mm},
+  lab/.style={font=\footnotesize\bfseries, align=right, text width=31mm},
   arr/.style={-{Stealth[length=1.9mm]}, line width=0.65pt, draw=black!60, shorten <=2pt, shorten >=2pt},
   feed/.style={-{Stealth[length=1.9mm]}, line width=0.65pt, densely dashed, draw=black!55, shorten <=2pt, shorten >=2pt}
 ]
@@ -34,17 +34,17 @@
 \node[layer] (l2) at (4.4,0.7) {};
 \node[layer] (l3) at (4.4,-0.9) {};
 
-\node[lab] at (-2.45,2.3) {Observability};
-\node[focus, fill=blue!6] (f1) at (1.15,2.3) {queue exposure\\conflict density\\progress frontiers};
-\node[systems] (s1) at (6.0,2.3) {Aurora, MillWheel, Naiad, Trill, Differential Dataflow};
+\node[lab] at (-3.40,2.3) {Observability};
+\node[focus, fill=blue!6] (f1) at (1.65,2.3) {queue exposure\\conflict density\\progress frontiers};
+\node[systems] (s1) at (6.5,2.3) {Aurora, MillWheel, Naiad, Trill, Differential Dataflow};
 
-\node[lab] at (-2.45,0.7) {Cost and scheduling};
-\node[focus, fill=green!6] (f2) at (1.15,0.7) {topology, skew\\NUMA, ordering\\admission, migration};
-\node[systems] (s2) at (6.0,0.7) {BriskStream, MorphStream, Megaphone, SOLA, ExeGPT};
+\node[lab] at (-3.40,0.7) {Cost and scheduling};
+\node[focus, fill=green!6] (f2) at (1.65,0.7) {topology, skew\\NUMA, ordering\\admission, migration};
+\node[systems] (s2) at (6.5,0.7) {BriskStream, MorphStream, Megaphone, SOLA, ExeGPT};
 
-\node[lab] at (-2.45,-0.9) {Recovery and elasticity};
-\node[focus, fill=purple!6] (f3) at (1.15,-0.9) {checkpoint alignment\\ownership transfer\\replay boundary};
-\node[systems] (s3) at (6.0,-0.9) {Spacker, Flink, SONIC, ORION, fast recovery};
+\node[lab] at (-3.40,-0.9) {Recovery and elasticity};
+\node[focus, fill=purple!6] (f3) at (1.65,-0.9) {checkpoint alignment\\ownership transfer\\replay boundary};
+\node[systems] (s3) at (6.5,-0.9) {Spacker, Flink, SONIC, ORION, fast recovery};
 
 \foreach \i in {1,2,3} {
   \draw[arr] (f\i.east) -- (s\i.west);
@@ -52,6 +52,6 @@
 
 \draw[arr] (f1.south) -- (f2.north);
 \draw[arr] (f2.south) -- (f3.north);
-\draw[feed] (s3.south) -- ++(0,-0.38) -| (f1.west);
+\draw[feed] (s3.south) -- ++(0,-0.38) -| ([xshift=-3.2mm]f1.west) -- (f1.west);
 
 \end{tikzpicture}

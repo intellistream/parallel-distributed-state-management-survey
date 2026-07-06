@@ -18,40 +18,47 @@
     inner sep=3pt,
     fill=green!5
   },
-  mid/.style={font=\scriptsize, align=center, text=black!62, text width=27mm},
+  mid/.style={
+    draw=black!30,
+    rounded corners=2pt,
+    align=center,
+    text=black!62,
+    text width=30mm,
+    minimum height=11mm,
+    inner sep=2.5pt,
+    font=\scriptsize,
+    fill=black!1
+  },
   head/.style={font=\scriptsize\bfseries, align=center, text=black!70},
-  bridge/.style={-{Stealth[length=1.6mm]}, line width=0.62pt, draw=black!55, shorten <=2pt, shorten >=2pt},
-  spine/.style={line width=0.7pt, draw=black!28}
+  bridge/.style={-{Stealth[length=1.7mm]}, line width=0.64pt, draw=black!58, shorten <=2pt, shorten >=2pt},
+  spine/.style={line width=0.72pt, draw=black!28}
 ]
 
-\node[head] at (-1.0,1.75) {Implicit anti-pattern};
-\node[head] at (3.65,1.75) {Missing boundary};
-\node[head] at (8.3,1.75) {Explicit contract repair};
-\draw[black!45, line width=0.6pt] (-3.1,1.43) -- (10.5,1.43);
+\node[head] at (-1.25,1.98) {Implicit anti-pattern};
+\node[head] at (4.25,1.98) {Missing boundary};
+\node[head] at (9.75,1.98) {Explicit contract repair};
+\draw[black!45, line width=0.6pt] (-3.35,1.80) -- (11.85,1.80);
 
-\node[ap] (a1) at (-1.0,0.95) {\textbf{Telemetry-action mismatch}\\signals do not name legal actions};
-\node[ap] (a2) at (-1.0,-0.45) {\textbf{Policy layering}\\objectives lack precedence};
-\node[ap] (a3) at (-1.0,-1.85) {\textbf{One-shot benchmark}\\disturbance is omitted};
-\node[ap] (a4) at (-1.0,-3.25) {\textbf{Hidden write path}\\read gains defer mutation debt};
-\node[ap] (a5) at (-1.0,-4.65) {\textbf{Static ownership}\\handoff legality is implicit};
+\node[ap] (a1) at (-1.25,0.95) {\textbf{Telemetry-action mismatch}\\signals do not name legal actions};
+\node[ap] (a2) at (-1.25,-0.45) {\textbf{Policy layering}\\objectives lack precedence};
+\node[ap] (a3) at (-1.25,-1.85) {\textbf{One-shot benchmark}\\disturbance is omitted};
+\node[ap] (a4) at (-1.25,-3.25) {\textbf{Hidden write path}\\read gains defer mutation debt};
+\node[ap] (a5) at (-1.25,-4.65) {\textbf{Static ownership}\\handoff legality is implicit};
 
-\node[mid] (m1) at (3.65,0.95) {signal $\rightarrow$ state object};
-\node[mid] (m2) at (3.65,-0.45) {ordering and tie-break};
-\node[mid] (m3) at (3.65,-1.85) {disturbance phases};
-\node[mid] (m4) at (3.65,-3.25) {mutation accounting};
-\node[mid] (m5) at (3.65,-4.65) {transfer survival};
+\node[mid] (m1) at (4.25,0.95) {signal $\rightarrow$ state object};
+\node[mid] (m2) at (4.25,-0.45) {ordering and tie-break};
+\node[mid] (m3) at (4.25,-1.85) {disturbance phases};
+\node[mid] (m4) at (4.25,-3.25) {mutation accounting};
+\node[mid] (m5) at (4.25,-4.65) {transfer survival};
 
-\node[fix] (f1) at (8.3,0.95) {\textbf{Typed observation layer}\\metrics feed bounded actions};
-\node[fix] (f2) at (8.3,-0.45) {\textbf{Precedence-aware kernel}\\hard rules precede soft goals};
-\node[fix] (f3) at (8.3,-1.85) {\textbf{Multi-phase envelope}\\warmup, burst, drift, recovery};
-\node[fix] (f4) at (8.3,-3.25) {\textbf{Auditable state catalog}\\writes charged to same boundary};
-\node[fix] (f5) at (8.3,-4.65) {\textbf{Transferable state model}\\authority, replay, reclamation};
+\node[fix] (f1) at (9.75,0.95) {\textbf{Typed observation layer}\\metrics feed bounded actions};
+\node[fix] (f2) at (9.75,-0.45) {\textbf{Precedence-aware kernel}\\hard rules precede soft goals};
+\node[fix] (f3) at (9.75,-1.85) {\textbf{Multi-phase envelope}\\warmup, burst, drift, recovery};
+\node[fix] (f4) at (9.75,-3.25) {\textbf{Auditable state catalog}\\writes charged to same boundary};
+\node[fix] (f5) at (9.75,-4.65) {\textbf{Transferable state model}\\authority, replay, reclamation};
 
 \foreach \i in {1,2,3,4,5} {
   \draw[bridge] (a\i.east) -- (m\i.west);
   \draw[bridge] (m\i.east) -- (f\i.west);
 }
-\draw[spine] (a1.south west) -- (a5.north west);
-\draw[spine] (f1.south east) -- (f5.north east);
-
 \end{tikzpicture}

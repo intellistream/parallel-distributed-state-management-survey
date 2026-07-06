@@ -5,19 +5,19 @@ These walkthroughs preserve the same five-field structure while making the deplo
 \subsection{Multi-Tenant LLM Serving Under Burst Arrival}
 
 \paragraph{State object.}
-The governed objects are paged KV state, prefix-sharing metadata, tenant-specific adapters, model-residency windows, and restoration debt inherited by subsequent requests.
+The governed objects are paged KV state, prefix-sharing metadata, tenant-specific adapters, model-residency windows, and the restoration debt inherited by subsequent requests.
 
 \paragraph{Control surface.}
-The runtime controls admission, batch shaping, paging, prefill/decode separation, transfer, reclamation, restoration, and tenant-sensitive placement~\cite{kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise,chen2024punica,nian2026cacheflow}.
+The runtime controls admission, batch shaping, paging, prefill/decode separation, expose/transfer decisions, evict/reclaim decisions, and tenant-sensitive placement~\cite{kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise,chen2024punica,nian2026cacheflow}.
 
 \paragraph{Coupling path.}
-A locally beneficial admission may force reclamation that destroys future reuse, causing later restoration traffic and queue amplification. Once phase disaggregation is enabled, the next bottleneck may shift from raw memory capacity to state transfer and restoration ordering.
+A locally beneficial admission may force evict/reclaim decisions that destroy future reuse, causing later re-materialization traffic and queue amplification. Once phase disaggregation is enabled, the next bottleneck may shift from raw memory capacity to expose/transfer ordering and the downstream cost of restoring discarded state.
 
 \paragraph{Evaluation boundary.}
 The meaningful boundary is TTFT, TPOT, p99 latency, and goodput over a multi-phase window rather than isolated allocator efficiency.
 
 \paragraph{Remaining gap.}
-The unresolved problem is still a unified contract that ranks admission, transfer, offload, tenant isolation, and restoration against the same service boundary instead of letting each sub-policy optimize its own phase locally.
+The unresolved problem is still a unified contract that ranks admit, expose/transfer, evict/reclaim, offload, tenant isolation, and restoration debt against the same service boundary instead of letting each sub-policy optimize its own phase locally.
 
 \subsection{Stateful Stream Processing Under Reconfiguration}
 

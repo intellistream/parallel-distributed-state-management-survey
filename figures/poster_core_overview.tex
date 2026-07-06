@@ -4,6 +4,7 @@
     draw=black!38,
     rounded corners=2pt,
     align=center,
+    text centered,
     minimum height=10mm,
     inner sep=3pt,
     text width=28mm,
@@ -14,14 +15,17 @@
   group/.style={draw=black!25, rounded corners=2pt, inner sep=7pt},
   head/.style={font=\scriptsize\bfseries, align=center, text=black!70},
   arr/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, draw=black!58, shorten <=2pt, shorten >=2pt},
-  feed/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, densely dashed, draw=black!50, shorten <=2pt, shorten >=2pt}
+  link/.style={line width=0.65pt, draw=black!58},
+  conn/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, draw=black!58, shorten >=2pt},
+  feed/.style={line width=0.65pt, draw=black!50, dash pattern=on 4pt off 4pt, line cap=rect},
+  feedarr/.style={-{Stealth[length=1.8mm]}, line width=0.65pt, draw=black!50, dash pattern=on 4pt off 4pt, line cap=rect, shorten <=2pt, shorten >=2pt}
 ]
 
 \node[head] at (0,3.35) {System domains};
-\node[box, fill=blue!4] (d1) at (0,2.45) {Streaming and\\transactional};
-\node[box, fill=green!4] (d2) at (0,1.10) {Hardware-conscious\\execution};
-\node[box, fill=yellow!8] (d3) at (0,-0.25) {LLM serving and\\inference};
-\node[box, fill=purple!4] (d4) at (0,-1.60) {Retrieval and\\agentic memory};
+\node[box, fill=blue!4] (d1) at (0,2.20) {Streaming and\\transactional};
+\node[box, fill=green!4] (d2) at (0,0.85) {Hardware-conscious\\execution};
+\node[box, fill=yellow!8] (d3) at (0,-0.50) {LLM serving and\\inference};
+\node[box, fill=purple!4] (d4) at (0,-1.85) {Retrieval and\\agentic memory};
 \node[group, fit=(d1)(d2)(d3)(d4)] {};
 
 \node[head] at (5.0,3.35) {Core dimensions};
@@ -36,14 +40,31 @@
 \node[outbox] (o3) at (9.8,-1.35) {Research\\agenda};
 \node[group, fit=(o1)(o2)(o3)] {};
 
-\draw[arr] (d1.east) -- ++(0.55,0) |- (c1.west);
-\draw[arr] (d2.east) -- ++(0.35,0) |- (c1.west);
-\draw[arr] (d3.east) -- ++(0.55,0) |- (c2.west);
-\draw[arr] (d4.east) -- ++(0.35,0) |- (c3.west);
+\coordinate (elbowRef) at ($(d1.east)!0.5!(c1.west)$);
+\coordinate (j1) at ($(elbowRef |- c1.west)$);
+\coordinate (j2) at ($(elbowRef |- c2.west)$);
+\coordinate (j3) at ($(elbowRef |- c3.west)$);
+\coordinate (feedX) at ($(j1)!0.68!(c1.west)$);
+\coordinate (m1a) at ($(j1 |- d1.east)$);
+\coordinate (m1b) at ($(j1 |- d2.east)$);
+\coordinate (m2) at ($(j2 |- d3.east)$);
+\coordinate (m3) at ($(j3 |- d4.east)$);
+\coordinate (feedBottom) at ([yshift=-0.45cm]feedX |- j1);
+\coordinate (feedTurn) at (feedX |- j1);
+
+\draw[feed] (c3.south) -- ++(0,-0.45) -| (feedBottom);
+\draw[feed] (feedBottom) -- (feedTurn);
+\draw[feedarr] (feedTurn) -- (c1.west);
+
+\draw[conn] (d1.east) -- (m1a) -- (j1) -- (c1.west);
+\draw[link] (d2.east) -- (m1b) -- (j1);
+
+\draw[conn] (d3.east) -- (m2) -- (j2) -- (c2.west);
+
+\draw[conn] (d4.east) -- (m3) -- (j3) -- (c3.west);
 
 \draw[arr] (c1.south) -- (c2.north);
 \draw[arr] (c2.south) -- (c3.north);
-\draw[feed] (c3.south) -- ++(0,-0.45) -| (c1.west);
 
 \draw[arr] (c1.east) -- (o1.west);
 \draw[arr] (c2.east) -- (o2.west);

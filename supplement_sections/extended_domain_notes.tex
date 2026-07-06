@@ -8,7 +8,7 @@ The access-scheduling design-space visual matters because state access becomes a
 
 \begin{figure*}[t]
 \centering
-\resizebox{0.94\textwidth}{!}{\input{figures/access_scheduling_designspace}}
+\includegraphics[width=0.94\textwidth]{figures/pdf/access_scheduling_designspace.pdf}
 \caption{Access-scheduling design space for locality, legality, transfer, and recovery.}
 \label{fig:supp-access-designspace}
 \end{figure*}
@@ -33,28 +33,30 @@ Additional serving papers refine the same boundary rather than forming a separat
 
 Bridge references connect older and newer state-governance lines. PagedAttention, Orca, and AlpaServe explain why batching and scheduling were already state-sensitive before the latest disaggregation wave; SlimPipe, What-If Stragglers, and Pumped trace-based systems explain why scheduling debt becomes visible only after phase or hardware asymmetry is modeled; output-length prediction and cache-aware routing systems show why admission and future-memory forecasting belong in the same discussion as restoration and transfer~\cite{kwon2023pagedattention,yu2022orca,li2023alpaserve,liu2025slimpipe,lin2025whatifstragglers,gong2025pastfuture,jiang2025shadowviews}. That bridge keeps the survey's lineage coherent across older and newer serving lines.
 
+CacheSlide and SpecInfer-style speculative reuse make legality and verification a precondition for cross-position or tree-structured reuse; CachedAttention and HCache expose restoration cost across conversation turns; and MELL, Libra, fairness-aware serving, LayerKV, and Prefill-Only show that GPU residency, request partitioning, fairness, layer-wise allocation, and prefill admission determine which cached state remains reusable later~\cite{cacheslide2025,miao2024specinfer,gao2025cachedattention,gao2025hcache,liu2025mell,ruan2026libra,sheng2024fairnessserving,xiong2024layerkv,du2025prefillonly}. These systems make reuse, restoration, contention, and initialization part of the same serving control problem rather than separate local optimizations.
+
 Three more serving families sharpen the boundary. Application-centric serving such as Parrot shows that workflow-level state and prompt DAGs can dominate placement decisions even before the cache story starts~\cite{lin2024parrot}. Tree-shaped speculative and group-wise systems such as FastTree and InstAttention show that reuse and scheduling depend on structure in the request stream, not just on raw throughput targets~\cite{pan2025fasttree,pan2025instattention}. Decentralized and overlay-based systems such as PlanetServe and GLLM-adjacent coordination lines show that cache reuse, routing, and trust become intertwined once the scheduler is no longer centralized~\cite{fang2026planetserve}. The same cluster also includes systems such as Infinity-style eviction, Duplex-style cross-turn reuse, and world-load balancing variants, which are best understood as refinements of lifecycle control rather than new top-level subfields~\cite{infinigen2024,yun2024duplex,wang2025wlbllm}.
 
 Two final serving references are useful as compact examples of the same lifecycle logic. Prefill-optimized training-serving crossover systems such as MEPipe show that the serving boundary is often governed by how pipeline slack is distributed, not just by the cache itself~\cite{sun2025mepipe}. Copy-aware or clone-style state movement lines show the same thing from a different angle: once request state is shareable, the runtime has to decide whether cloning, relocating, or reusing is cheaper than recomputing~\cite{tian2025clone}.
 
 The remaining serving papers that have not yet been mentioned directly still fit the same lifecycle view. Multi-model and adapter-aware systems such as Aegaeon, DLoRA, Chameleon, and Toppings expose tenant-locality and residency pressure; cache and reuse systems such as PromptCache, CacheWild, and Droidspeak expose the boundary between prompt overlap and safe reuse; inference-control systems such as Alise, Atom, and Prism-like lineage expose the boundary between active scheduling and future debt; and cloud-disaggregation systems such as Mooncake and PRFaaS expose the difference between local phase control and cross-cluster ownership~\cite{xiang2025aegaeon,wu2024dlora,iliakopoulou2024chameleon,li2025toppings,gim2024promptcache,wang2025kvcachewild,liu2026droidspeak,zhao2024alise,zhao2024atom,yu2025prism,qin2026prfaas}. Those distinctions keep the lifecycle account tied to concrete control boundaries.
 
-Across these systems, the serving cluster forms one governed short-lived lifecycle: \emph{admit -> place -> share -> reclaim -> transfer -> restore}. The family-level differences matter because different systems attach to different stages of that loop.
+Across these systems, the serving cluster still fits the survey's canonical short-lived lifecycle: \emph{admit -> place -> mutate -> expose/transfer -> compact -> evict/reclaim}. The family-level differences matter because serving papers attach to different parts of that loop: structural reuse clarifies what may be exposed safely, disaggregation governs transfer, and restoration debt appears after evict/reclaim decisions have already been made.
 
 \begin{figure*}[t]
 \centering
-\resizebox{0.94\textwidth}{!}{\input{figures/kvcache_lifecycle}}
+\includegraphics[width=0.94\textwidth]{figures/pdf/kvcache_lifecycle.pdf}
 \caption{KV-cache lifecycle.}
 \label{fig:supp-kvcache-lifecycle}
 \end{figure*}
 
-The lifecycle figure makes the control seams concrete. Admission decides whether a request is allowed to create new short-lived state at all. Placement decides where that state lives and therefore which queues or buses it will burden next. Sharing decides whether prefix, adapter, or session-local state may be reused safely. Reclamation decides what can be shrunk or evicted without hiding future restoration debt. Transfer and restoration decide whether the lost reuse value can be recovered cheaply enough to remain compatible with the original SLO.
+The lifecycle figure makes the control seams concrete. Admit decides whether a request is allowed to create new short-lived state at all. Place decides where that state lives and therefore which queues or buses it will burden next. Mutate covers decode-time growth, prefix edits, and other in-place evolution of live serving state. Expose/transfer covers whether prefix, adapter, or session-local state may be reused safely and when it may move across workers or phases. Compact covers fragmentation control and structural cleanup. Evict/reclaim covers what can be released without hiding future restoration debt and how that debt is later charged back to the original SLO.
 
 The following evidence is especially useful in this subsection:
 \begin{itemize}[leftmargin=*]
 \item predictive-serving families grouped by the debt they forecast;
 \item legality conditions for prefix, branch, and multi-call reuse;
-\item temporal-lifecycle policies over restore, migrate, warm-start, and fairness debt;
+\item temporal-lifecycle policies over expose/transfer, evict/reclaim, warm-start, and fairness debt;
 \item clearer distinctions between allocator realism, transfer scheduling, and ownership semantics.
 \end{itemize}
 
@@ -74,7 +76,7 @@ Retention has a similar tail of boundary papers. Experience replay, memory budge
 
 \begin{figure*}[t]
 \centering
-\resizebox{0.94\textwidth}{!}{\input{figures/retention_strategy_taxonomy}}
+\includegraphics[width=0.94\textwidth]{figures/pdf/retention_strategy_taxonomy.pdf}
 \caption{Retention-governance taxonomy.}
 \label{fig:supp-retention-taxonomy}
 \end{figure*}
@@ -101,20 +103,18 @@ The inclusion rule is not venue prestige or application relevance. A paper is ce
 
 That definition also has a formal lineage. The state-machine tradition matters not because the survey is about formal methods, but because it shows that a system only becomes governable when the runtime can name, observe, and transform its state explicitly~\cite{schneider1990state}. That conceptual boundary is the reason the survey keeps the access, serving, retrieval, and retention lines together instead of splitting them into unrelated application silos.
 
+\inlinefigurewithcaption
+  {width=0.9\linewidth}
+  {figures/pdf/poster_core_overview.pdf}
+  {Poster-style survey overview. It serves as a compact map of the survey's scope and argumentative flow.}
+  {fig:supp-poster-overview}
+
 The core-versus-context distinction can also be stated operationally. Core material changes the survey's comparative result by sharpening the state object, control surface, coupling path, evaluation boundary, or remaining gap. Context material instead clarifies neighboring traditions, records boundary-setting decisions, or preserves mappings between triage labels and the five-field frame. Keeping that distinction explicit prevents the survey from drifting back into a broad but weakly comparative literature tour.
 
 Two overview visuals also belong conceptually with this foundations rationale. The first is the poster-style overview, which summarizes the survey spine and clarifies how the three axes and cross-domain synthesis fit together. The second is the running-example triptych, which explains why the paper reuses one access case, one serving case, and one retrieval case across sections instead of multiplying disconnected examples.
 
-\begin{figure}[tbp]
-\centering
-\resizebox{0.9\linewidth}{!}{\input{figures/poster_core_overview}}
-\caption{Poster-style survey overview. It serves as a compact map of the survey's scope and argumentative flow.}
-\label{fig:supp-poster-overview}
-\end{figure}
-
-\begin{figure}[tbp]
-\centering
-\resizebox{0.96\linewidth}{!}{\input{figures/running_examples_triptych}}
-\caption{Running examples that recur across access, execution, and evolution.}
-\label{fig:supp-running-examples}
-\end{figure}
+\inlinefigurewithcaption
+  {width=0.96\linewidth}
+  {figures/pdf/running_examples_triptych.pdf}
+  {Running examples that recur across access, execution, and evolution.}
+  {fig:supp-running-examples}
