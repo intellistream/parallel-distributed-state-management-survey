@@ -17,6 +17,7 @@ build/
 *.synctex.gz
 *.xdv
 *.pdf
+!figures/pdf/*.pdf
 comment.cut
 .vscode/
 *.code-workspace
