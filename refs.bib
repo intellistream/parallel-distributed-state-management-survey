@@ -1212,31 +1212,31 @@
   month = jul
 }
 
-@article{chen2024punica,
-  title={Punica: Multi-Tenant LoRA Serving},
-  author={Lequn Chen and Zihao Ye and Yongji Wu and Danyang Zhuo and Luis Ceze and Arvind Krishnamurthy},
-  year={2023},
-  eprint={2310.18547},
-  archivePrefix={arXiv},
-  primaryClass={cs.DC}
+@inproceedings{MLSYS2024_054de805,
+ author = {Chen, Lequn and Ye, Zihao and Wu, Yongji and Zhuo, Danyang and Ceze, Luis and Krishnamurthy, Arvind},
+ booktitle = {Proceedings of Machine Learning and Systems},
+ editor = {P. Gibbons and G. Pekhimenko and C. De Sa},
+ pages = {1--13},
+ title = {Punica: Multi-Tenant LoRA Serving},
+ url = {https://proceedings.mlsys.org/paper_files/paper/2024/file/054de805fcceb78a201f5e9d53c85908-Paper-Conference.pdf},
+ volume = {6},
+ year = {2024}
 }
 
-@inproceedings{zhong2024distserve,
-  author = {Zhong, Yinmin and Liu, Shengyu and Chen, Junda and Hu, Jianbo and Zhu, Yibo and Liu, Xuanzhe and Jin, Xin and Zhang, Hao},
-  title = {DistServe: disaggregating prefill and decoding for goodput-optimized large language model serving},
-  year = {2024},
-  isbn = {978-1-939133-40-3},
-  publisher = {USENIX Association},
-  address = {USA},
-  abstract = {DistServe improves the performance of large language models (LLMs) serving by disaggregating the prefill and decoding computation. Existing LLM serving systems colocate the two phases and batch the computation of prefill and decoding across all users and requests. We find that this strategy not only leads to strong prefill-decoding interferences but also couples the resource allocation and parallelism plans for both phases. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefill phase and time per output token (TPOT) of each request for the decoding phase. In the presence of stringent latency requirements, existing systems have to prioritize one latency over the other, or over-provision compute resources to meet both. DistServe assigns prefill and decoding computation to different GPUs, hence eliminating prefill-decoding interferences. Given the application's TTFT and TPOT requirements, Dist-Serve co-optimizes the resource allocation and parallelism strategy tailored for each phase. DistServe also places the two phases according to the serving cluster's bandwidth to minimize the communication caused by disaggregation. As a result, DistServe significantly improves LLM serving performance in terms of the maximum rate that can be served within both TTFT and TPOT constraints on each GPU. Our evaluations show that on various popular LLMs, applications, and latency requirements, DistServe can serve 7.4\texttimes{} more requests or 12.6\texttimes{} tighter SLO, compared to state-of-the-art systems, while staying within latency constraints for > 90\% of requests.},
-  booktitle = {Proceedings of the 18th USENIX Conference on Operating Systems Design and Implementation},
-  articleno = {11},
-  numpages = {18},
-  location = {Santa Clara, CA, USA},
-  series = {OSDI'24}
+@inproceedings {298687,
+ author = {Yinmin Zhong and Shengyu Liu and Junda Chen and Jianbo Hu and Yibo Zhu and Xuanzhe Liu and Xin Jin and Hao Zhang},
+ title = {{DistServe}: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving},
+ booktitle = {18th USENIX Symposium on Operating Systems Design and Implementation (OSDI 24)},
+ year = {2024},
+ isbn = {978-1-939133-40-3},
+ address = {Santa Clara, CA},
+ pages = {193--210},
+ url = {https://www.usenix.org/conference/osdi24/presentation/zhong-yinmin},
+ publisher = {USENIX Association},
+ month = jul
 }
 
-@inproceedings{patel2024splitwise,
+@INPROCEEDINGS{10609649,
   author={Patel, Pratyush and Choukse, Esha and Zhang, Chaojie and Shah, Aashaka and Goiri, Íñigo and Maleki, Saeed and Bianchini, Ricardo},
   booktitle={2024 ACM/IEEE 51st Annual International Symposium on Computer Architecture (ISCA)}, 
   title={Splitwise: Efficient Generative LLM Inference Using Phase Splitting}, 
@@ -1248,74 +1248,63 @@
   doi={10.1109/ISCA59077.2024.00019}
 }
 
-@article{holmes2024fastgen,
-  doi = {10.48550/ARXIV.2401.08671},
-  url = {https://arxiv.org/abs/2401.08671},
-  author = {Holmes,  Connor and Tanaka,  Masahiro and Wyatt,  Michael and Awan,  Ammar Ahmad and Rasley,  Jeff and Rajbhandari,  Samyam and Aminabadi,  Reza Yazdani and Qin,  Heyang and Bakhtiari,  Arash and Kurilenko,  Lev and He,  Yuxiong},
-  keywords = {Performance (cs.PF),  Machine Learning (cs.LG),  FOS: Computer and information sciences,  FOS: Computer and information sciences},
-  title = {DeepSpeed-FastGen: High-throughput Text Generation for LLMs via MII and DeepSpeed-Inference},
-  publisher = {arXiv},
-  year = {2024},
-  copyright = {Creative Commons Attribution 4.0 International}
+@article{holmes2024deepspeed,
+  title={Deepspeed-fastgen: High-throughput text generation for llms via mii and deepspeed-inference},
+  author={Holmes, Connor and Tanaka, Masahiro and Wyatt, Michael and Awan, Ammar Ahmad and Rasley, Jeff and Rajbhandari, Samyam and Aminabadi, Reza Yazdani and Qin, Heyang and Bakhtiari, Arash and Kurilenko, Lev and others},
+  journal={arXiv preprint arXiv:2401.08671},
+  year={2024}
 }
 
 @article{guo2026splitzip,
-  doi = {10.48550/ARXIV.2605.01708},
-  url = {https://arxiv.org/abs/2605.01708},
-  author = {Guo,  Yipin and Joshi,  Siddharth},
-  keywords = {Distributed,  Parallel,  and Cluster Computing (cs.DC),  Artificial Intelligence (cs.AI),  Machine Learning (cs.LG),  FOS: Computer and information sciences,  FOS: Computer and information sciences},
-  title = {SplitZip: Ultra Fast Lossless KV Compression for Disaggregated LLM Serving},
-  publisher = {arXiv},
-  year = {2026},
-  copyright = {arXiv.org perpetual,  non-exclusive license}
+  title={SplitZip: Ultra Fast Lossless KV Compression for Disaggregated LLM Serving},
+  author={Guo, Yipin and Joshi, Siddharth},
+  journal={arXiv preprint arXiv:2605.01708},
+  year={2026}
 }
-@article{qin2026prfaas,
-  doi = {10.48550/ARXIV.2604.15039},
-  url = {https://arxiv.org/abs/2604.15039},
-  author = {Qin,  Ruoyu and He,  Weiran and Wang,  Yaoyu and Li,  Zheming and Xu,  Xinran and Wu,  Yongwei and Zheng,  Weimin and Zhang,  Mingxing},
-  keywords = {Distributed,  Parallel,  and Cluster Computing (cs.DC),  FOS: Computer and information sciences,  FOS: Computer and information sciences},
-  title = {Prefill-as-a-Service: KVCache of Next-Generation Models Could Go Cross-Datacenter},
-  publisher = {arXiv},
-  year = {2026},
-  copyright = {arXiv.org perpetual,  non-exclusive license}
+
+@article{qin2026prefill,
+  title={Prefill-as-a-Service: KVCache of Next-Generation Models Could Go Cross-Datacenter},
+  author={Qin, Ruoyu and He, Weiran and Wang, Yaoyu and Li, Zheming and Xu, Xinran and Wu, Yongwei and Zheng, Weimin and Zhang, Mingxing},
+  journal={arXiv preprint arXiv:2604.15039},
+  year={2026}
 }
 
 @article{nian2026cacheflow,
-  doi = {10.48550/ARXIV.2604.25080},
-  url = {https://arxiv.org/abs/2604.25080},
-  author = {Nian,  Sean and Fang,  Jiahao and Feng,  Qilong and Wu,  Zhiyu and Lai,  Fan},
-  keywords = {Distributed,  Parallel,  and Cluster Computing (cs.DC),  FOS: Computer and information sciences,  FOS: Computer and information sciences},
-  title = {CacheFlow: Efficient LLM Serving with 3D-Parallel KV Cache Restoration},
-  publisher = {arXiv},
-  year = {2026},
-  copyright = {Creative Commons Attribution 4.0 International}
+  title={CacheFlow: Efficient LLM Serving with 3D-Parallel KV Cache Restoration},
+  author={Nian, Sean and Fang, Jiahao and Feng, Qilong and Wu, Zhiyu and Lai, Fan},
+  journal={arXiv preprint arXiv:2604.25080},
+  year={2026}
 }
 
-@inproceedings{guu2020realm,
-  author = {Guu, Kelvin and Lee, Kenton and Tung, Zora and Pasupat, Panupong and Chang, Ming-Wei},
-  title = {REALM: retrieval-augmented language model pre-training},
-  year = {2020},
-  publisher = {JMLR.org},
-  abstract = {Language model pre-training has been shown to capture a surprising amount of world knowledge, crucial for NLP tasks such as question answering. However, this knowledge is stored implicitly in the parameters of a neural network, requiring everlarger networks to cover more facts.To capture knowledge in a more modular and interpretable way, we augment language model pretraining with a latent knowledge retriever, which allows the model to retrieve and attend over documents from a large corpus such as Wikipedia, used during pre-training, fine-tuning and inference. For the first time, we show how to pre-train such a knowledge retriever in an unsupervised manner, using masked language modeling as the learning signal and backpropagating through a retrieval step that considers millions of documents.We demonstrate the effectiveness of Retrieval-Augmented Language Model pretraining (REALM) by fine-tuning on the challenging task of Open-domain Question Answering (Open-QA). We compare against state-of-the-art models for both explicit and implicit knowledge storage on three popular Open-QA benchmarks, and find that we outperform all previous methods by a significant margin (4-16\% absolute accuracy), while also providing qualitative benefits such as interpretability and modularity.},
-  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
-  articleno = {368},
-  numpages = {10},
-  series = {ICML'20}
+@InProceedings{pmlr-v119-guu20a,
+  title = 	 {Retrieval Augmented Language Model Pre-Training},
+  author =       {Guu, Kelvin and Lee, Kenton and Tung, Zora and Pasupat, Panupong and Chang, Mingwei},
+  booktitle = 	 {Proceedings of the 37th International Conference on Machine Learning},
+  pages = 	 {3929--3938},
+  year = 	 {2020},
+  editor = 	 {III, Hal Daumé and Singh, Aarti},
+  volume = 	 {119},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {13--18 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v119/guu20a/guu20a.pdf},
+  url = 	 {https://proceedings.mlr.press/v119/guu20a.html},
+  abstract = 	 {Language model pre-training has been shown to capture a surprising amount of world knowledge, crucial for NLP tasks such as question answering. However, this knowledge is stored implicitly in the parameters of a neural network, requiring ever-larger networks to cover more facts. To capture knowledge in a more modular and interpretable way, we augment language model pre-training with a latent knowledge retriever, which allows the model to retrieve and attend over documents from a large corpus such as Wikipedia, used during pre-training, fine-tuning and inference. For the first time, we show how to pre-train such a knowledge retriever in an unsupervised manner, using masked language modeling as the learning signal and backpropagating through a retrieval step that considers millions of documents. We demonstrate the effectiveness of Retrieval-Augmented Language Model pre-training (REALM) by fine-tuning on the challenging task of Open-domain Question Answering (Open-QA). We compare against state-of-the-art models for both explicit and implicit knowledge storage on three popular Open-QA benchmarks, and find that we outperform all previous methods by a significant margin (4-16% absolute accuracy), while also providing qualitative benefits such as interpretability and modularity.}
 }
 
-@inproceedings{lewis2020rag,
-  author = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and K\"{u}ttler, Heinrich and Lewis, Mike and Yih, Wen-tau and Rockt\"{a}schel, Tim and Riedel, Sebastian and Kiela, Douwe},
-  booktitle = {Advances in Neural Information Processing Systems},
-  editor = {H. Larochelle and M. Ranzato and R. Hadsell and M.F. Balcan and H. Lin},
-  pages = {9459--9474},
-  publisher = {Curran Associates, Inc.},
-  title = {Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks},
-  url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf},
-  volume = {33},
-  year = {2020}
+@inproceedings{NEURIPS2020_6b493230,
+ author = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and K\"{u}ttler, Heinrich and Lewis, Mike and Yih, Wen-tau and Rockt\"{a}schel, Tim and Riedel, Sebastian and Kiela, Douwe},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Larochelle and M. Ranzato and R. Hadsell and M.F. Balcan and H. Lin},
+ pages = {9459--9474},
+ publisher = {Curran Associates, Inc.},
+ title = {Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf},
+ volume = {33},
+ year = {2020}
 }
 
-@inproceedings{borgeaud2022retro,
+@InProceedings{pmlr-v162-borgeaud22a,
   title = 	 {Improving Language Models by Retrieving from Trillions of Tokens},
   author =       {Borgeaud, Sebastian and Mensch, Arthur and Hoffmann, Jordan and Cai, Trevor and Rutherford, Eliza and Millican, Katie and Van Den Driessche, George Bm and Lespiau, Jean-Baptiste and Damoc, Bogdan and Clark, Aidan and De Las Casas, Diego and Guy, Aurelia and Menick, Jacob and Ring, Roman and Hennigan, Tom and Huang, Saffron and Maggiore, Loren and Jones, Chris and Cassirer, Albin and Brock, Andy and Paganini, Michela and Irving, Geoffrey and Vinyals, Oriol and Osindero, Simon and Simonyan, Karen and Rae, Jack and Elsen, Erich and Sifre, Laurent},
   booktitle = 	 {Proceedings of the 39th International Conference on Machine Learning},
@@ -1331,177 +1320,171 @@
   abstract = 	 {We enhance auto-regressive language models by conditioning on document chunks retrieved from a large corpus, based on local similarity with preceding tokens. With a 2 trillion token database, our Retrieval-Enhanced Transformer (RETRO) obtains comparable performance to GPT-3 and Jurassic-1 on the Pile, despite using 25{\texttimes} fewer parameters. After fine-tuning, RETRO performance translates to downstream knowledge-intensive tasks such as question answering. RETRO combines a frozen Bert retriever, a differentiable encoder and a chunked cross-attention mechanism to predict tokens based on an order of magnitude more data than what is typically consumed during training. We typically train RETRO from scratch, yet can also rapidly RETROfit pre-trained transformers with retrieval and still achieve good performance. Our work opens up new avenues for improving language models through explicit memory at unprecedented scale.}
 }
 
-@article{izacard2022atlas,
-  author = {Izacard, Gautier and Lewis, Patrick and Lomeli, Maria and Hosseini, Lucas and Petroni, Fabio and Schick, Timo and Dwivedi-Yu, Jane and Joulin, Armand and Riedel, Sebastian and Grave, Edouard},
-  title = {Atlas: few-shot learning with retrieval augmented language models},
-  year = {2023},
-  issue_date = {January 2023},
-  publisher = {JMLR.org},
-  volume = {24},
-  number = {1},
-  issn = {1532-4435},
-  abstract = {Large language models have shown impressive few-shot results on a wide range of tasks. However, when knowledge is key for such results, as is the case for tasks such as question answering and fact checking, massive parameter counts to store knowledge seem to be needed. Retrieval-augmented models are known to excel at knowledge intensive tasks without the need for as many parameters, but it is unclear whether they work in few-shot settings. In this work we present Atlas, a carefully designed and pre-trained retrieval-augmented language model able to learn knowledge intensive tasks with very few training examples. We perform evaluations on a wide range of tasks, including MMLU, KILT and Natural Questions, and study the impact of the content of the document index, showing that it can easily be updated. Notably, Atlas reaches over 42\% accuracy on Natural Questions using only 64 examples, outperforming a 540B parameter model by 3\% despite having 50x fewer parameters.},
-  journal = {J. Mach. Learn. Res.},
-  month = jan,
-  articleno = {251},
-  numpages = {43},
-  keywords = {retrieval augmented language models, information retrieval, language models}
+@article{JMLR:v24:23-0037,
+  author  = {Gautier Izacard and Patrick Lewis and Maria Lomeli and Lucas Hosseini and Fabio Petroni and Timo Schick and Jane Dwivedi-Yu and Armand Joulin and Sebastian Riedel and Edouard Grave},
+  title   = {Atlas: Few-shot Learning with Retrieval Augmented Language Models},
+  journal = {Journal of Machine Learning Research},
+  year    = {2023},
+  volume  = {24},
+  number  = {251},
+  pages   = {1--43},
+  url     = {http://jmlr.org/papers/v24/23-0037.html}
 }
 
-@inproceedings{asai2024selfrag,
-  author = {Asai, Akari and Wu, Zeqiu and Wang, Yizhong and Sil, Avi and Hajishirzi, Hannaneh },
-  booktitle = {International Conference on Learning Representations},
-  editor = {B. Kim and Y. Yue and S. Chaudhuri and K. Fragkiadaki and M. Khan and Y. Sun},
-  pages = {9112--9141},
-  title = {Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection},
-  url = {https://proceedings.iclr.cc/paper_files/paper/2024/file/25f7be9694d7b32d5cc670927b8091e1-Paper-Conference.pdf},
-  volume = {2024},
-  year = {2024}
+@inproceedings{ICLR2024_25f7be96,
+ author = {Asai, Akari and Wu, Zeqiu and Wang, Yizhong and Sil, Avi and Hajishirzi, Hannaneh },
+ booktitle = {International Conference on Learning Representations},
+ editor = {B. Kim and Y. Yue and S. Chaudhuri and K. Fragkiadaki and M. Khan and Y. Sun},
+ pages = {9112--9141},
+ title = {Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection},
+ url = {https://proceedings.iclr.cc/paper_files/paper/2024/file/25f7be9694d7b32d5cc670927b8091e1-Paper-Conference.pdf},
+ volume = {2024},
+ year = {2024}
 }
 
-@inproceedings{wang2024hipporag,
-  author = {Guti\'{e}rrez, Bernal Jim\'{e}nez and Shu, Yiheng and Gu, Yu and Yasunaga, Michihiro and Su, Yu},
-  booktitle = {Advances in Neural Information Processing Systems},
-  doi = {10.52202/079017-1902},
-  editor = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
-  pages = {59532--59569},
-  publisher = {Curran Associates, Inc.},
-  title = {HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models},
-  url = {https://proceedings.neurips.cc/paper_files/paper/2024/file/6ddc001d07ca4f319af96a3024f6dbd1-Paper-Conference.pdf},
-  volume = {37},
-  year = {2024}
+@inproceedings{NEURIPS2024_6ddc001d,
+ author = {Guti\'{e}rrez, Bernal Jim\'{e}nez and Shu, Yiheng and Gu, Yu and Yasunaga, Michihiro and Su, Yu},
+ booktitle = {Advances in Neural Information Processing Systems},
+ doi = {10.52202/079017-1902},
+ editor = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
+ pages = {59532--59569},
+ publisher = {Curran Associates, Inc.},
+ title = {HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2024/file/6ddc001d07ca4f319af96a3024f6dbd1-Paper-Conference.pdf},
+ volume = {37},
+ year = {2024}
 }
 
-@inproceedings{sarthi2024raptor,
-  title={RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval},
-  author={Sarthi, Parth and Abdullah, Salman and Tuli, Aditi and Khanna, Shubh and Goldie, Anna and Manning, Christopher D.},
-  booktitle={International Conference on Learning Representations (ICLR)},
-  year={2024}
+@inproceedings{ICLR2024_8a2acd17,
+ author = {Sarthi, Parth and Abdullah, Salman and Tuli, Aditi and Khanna, Shubh and Goldie, Anna and Manning, Christopher},
+ booktitle = {International Conference on Learning Representations},
+ editor = {B. Kim and Y. Yue and S. Chaudhuri and K. Fragkiadaki and M. Khan and Y. Sun},
+ pages = {32628--32649},
+ title = {RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval},
+ url = {https://proceedings.iclr.cc/paper_files/paper/2024/file/8a2acd174940dbca361a6398a4f9df91-Paper-Conference.pdf},
+ volume = {2024},
+ year = {2024}
 }
 
-@article{kirkpatrick2017ewc,
-  doi = {10.1073/pnas.1611835114},
-  author = {James Kirkpatrick  and Razvan Pascanu  and Neil Rabinowitz  and Joel Veness  and Guillaume Desjardins  and Andrei A. Rusu  and Kieran Milan  and John Quan  and Tiago Ramalho  and Agnieszka Grabska-Barwinska  and Demis Hassabis  and Claudia Clopath  and Dharshan Kumaran  and Raia Hadsell },
-  title = {Overcoming catastrophic forgetting in neural networks},
-  journal = {Proceedings of the National Academy of Sciences},
-  volume = {114},
-  number = {13},
-  pages = {3521-3526},
-  year = {2017},
-  doi = {10.1073/pnas.1611835114},
-  URL = {https://www.pnas.org/doi/abs/10.1073/pnas.1611835114},
-  eprint = {https://www.pnas.org/doi/pdf/10.1073/pnas.1611835114},
-  abstract = {Deep neural networks are currently the most successful machine-learning technique for solving a variety of tasks, including language translation, image classification, and image generation. One weakness of such models is that, unlike humans, they are unable to learn multiple tasks sequentially. In this work we propose a practical solution to train such models sequentially by protecting the weights important for previous tasks. This approach, inspired by synaptic consolidation in neuroscience, enables state of the art results on multiple reinforcement learning problems experienced sequentially. The ability to learn tasks in a sequential fashion is crucial to the development of artificial intelligence. Until now neural networks have not been capable of this and it has been widely thought that catastrophic forgetting is an inevitable feature of connectionist models. We show that it is possible to overcome this limitation and train networks that can maintain expertise on tasks that they have not experienced for a long time. Our approach remembers old tasks by selectively slowing down learning on the weights important for those tasks. We demonstrate our approach is scalable and effective by solving a set of classification tasks based on a hand-written digit dataset and by learning several Atari 2600 games sequentially.}
+@article{
+doi:10.1073/pnas.1611835114,
+author = {James Kirkpatrick  and Razvan Pascanu  and Neil Rabinowitz  and Joel Veness  and Guillaume Desjardins  and Andrei A. Rusu  and Kieran Milan  and John Quan  and Tiago Ramalho  and Agnieszka Grabska-Barwinska  and Demis Hassabis  and Claudia Clopath  and Dharshan Kumaran  and Raia Hadsell },
+title = {Overcoming catastrophic forgetting in neural networks},
+journal = {Proceedings of the National Academy of Sciences},
+volume = {114},
+number = {13},
+pages = {3521-3526},
+year = {2017},
+doi = {10.1073/pnas.1611835114},
+URL = {https://www.pnas.org/doi/abs/10.1073/pnas.1611835114},
+eprint = {https://www.pnas.org/doi/pdf/10.1073/pnas.1611835114},
+abstract = {Deep neural networks are currently the most successful machine-learning technique for solving a variety of tasks, including language translation, image classification, and image generation. One weakness of such models is that, unlike humans, they are unable to learn multiple tasks sequentially. In this work we propose a practical solution to train such models sequentially by protecting the weights important for previous tasks. This approach, inspired by synaptic consolidation in neuroscience, enables state of the art results on multiple reinforcement learning problems experienced sequentially. The ability to learn tasks in a sequential fashion is crucial to the development of artificial intelligence. Until now neural networks have not been capable of this and it has been widely thought that catastrophic forgetting is an inevitable feature of connectionist models. We show that it is possible to overcome this limitation and train networks that can maintain expertise on tasks that they have not experienced for a long time. Our approach remembers old tasks by selectively slowing down learning on the weights important for those tasks. We demonstrate our approach is scalable and effective by solving a set of classification tasks based on a hand-written digit dataset and by learning several Atari 2600 games sequentially.}
 }
 
-@inproceedings{lopez2017gem,
-  author = {Lopez-Paz, David and Ranzato, Marc'Aurelio},
-  title = {Gradient episodic memory for continual learning},
-  year = {2017},
-  isbn = {9781510860964},
-  publisher = {Curran Associates Inc.},
-  address = {Red Hook, NY, USA},
-  abstract = {One major obstacle towards AI is the poor ability of models to solve new problems quicker, and without forgetting previously acquired knowledge. To better understand this issue, we study the problem of continual learning, where the model observes, once and one by one, examples concerning a sequence of tasks. First, we propose a set of metrics to evaluate models learning over a continuum of data. These metrics characterize models not only by their test accuracy, but also in terms of their ability to transfer knowledge across tasks. Second, we propose a model for continual learning, called Gradient Episodic Memory (GEM) that alleviates forgetting, while allowing beneficial transfer of knowledge to previous tasks. Our experiments on variants of the MNIST and CIFAR-100 datasets demonstrate the strong performance of GEM when compared to the state-of-the-art.},
-  booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
-  pages = {6470–6479},
-  numpages = {10},
-  location = {Long Beach, California, USA},
-  series = {NIPS'17}
+@inproceedings{NIPS2017_f8752278,
+ author = {Lopez-Paz, David and Ranzato, Marc\textquotesingle Aurelio},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Gradient Episodic Memory for Continual Learning},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2017/file/f87522788a2be2d171666752f97ddebb-Paper.pdf},
+ volume = {30},
+ year = {2017}
 }
 
-@inproceedings{rebuffi2017icarl,
-  title = {iCaRL: Incremental Classifier and Representation Learning},
-  url = {http://dx.doi.org/10.1109/CVPR.2017.587},
-  DOI = {10.1109/cvpr.2017.587},
-  booktitle = {2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  publisher = {IEEE},
-  author = {Rebuffi,  Sylvestre-Alvise and Kolesnikov,  Alexander and Sperl,  Georg and Lampert,  Christoph H.},
-  year = {2017},
-  month = July,
-  pages = {5533–5542}
+@InProceedings{Rebuffi_2017_CVPR,
+author = {Rebuffi, Sylvestre-Alvise and Kolesnikov, Alexander and Sperl, Georg and Lampert, Christoph H.},
+title = {iCaRL: Incremental Classifier and Representation Learning},
+booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = {July},
+year = {2017}
 }
 
-@inproceedings{chaudhry2019agem,
-  author    = {Arslan Chaudhry and Marc'Aurelio Ranzato and Marcus Rohrbach and Mohamed Elhoseiny},
-  title     = {Efficient Lifelong Learning with A-GEM},
-  booktitle = {International Conference on Learning Representations},
-  year      = {2019},
-  url       = {https://openreview.net/forum?id=Hkf2_sC5FX}
+@article{chaudhry2018efficient,
+  title={Efficient lifelong learning with a-gem},
+  author={Chaudhry, Arslan and Ranzato, Marc'Aurelio and Rohrbach, Marcus and Elhoseiny, Mohamed},
+  journal={arXiv preprint arXiv:1812.00420},
+  year={2018}
 }
 
-@inproceedings{rolnick2019experience,
-  author = {Rolnick, David and Ahuja, Arun and Schwarz, Jonathan and Lillicrap, Timothy and Wayne, Gregory},
-  booktitle = {Advances in Neural Information Processing Systems},
-  editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
-  pages = {},
-  publisher = {Curran Associates, Inc.},
-  title = {Experience Replay for Continual Learning},
-  url = {https://proceedings.neurips.cc/paper_files/paper/2019/file/fa7cdfad1a5aaf8370ebeda47a1ff1c3-Paper.pdf},
-  volume = {32},
-  year = {2019}
+@inproceedings{NEURIPS2019_fa7cdfad,
+ author = {Rolnick, David and Ahuja, Arun and Schwarz, Jonathan and Lillicrap, Timothy and Wayne, Gregory},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Experience Replay for Continual Learning},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2019/file/fa7cdfad1a5aaf8370ebeda47a1ff1c3-Paper.pdf},
+ volume = {32},
+ year = {2019}
 }
 
-@inproceedings{aljundi2019mir,
-  author = {Aljundi, Rahaf and Belilovsky, Eugene and Tuytelaars, Tinne and Charlin, Laurent and Caccia, Massimo and Lin, Min and Page-Caccia, Lucas},
-  booktitle = {Advances in Neural Information Processing Systems},
-  editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
-  pages = {},
-  publisher = {Curran Associates, Inc.},
-  title = {Online Continual Learning with Maximal Interfered Retrieval},
-  url = {https://proceedings.neurips.cc/paper_files/paper/2019/file/15825aee15eb335cc13f9b559f166ee8-Paper.pdf},
-  volume = {32},
-  year = {2019}
+@inproceedings{NEURIPS2019_15825aee,
+ author = {Aljundi, Rahaf and Belilovsky, Eugene and Tuytelaars, Tinne and Charlin, Laurent and Caccia, Massimo and Lin, Min and Page-Caccia, Lucas},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Wallach and H. Larochelle and A. Beygelzimer and F. d\textquotesingle Alch\'{e}-Buc and E. Fox and R. Garnett},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {Online Continual Learning with Maximal Interfered Retrieval},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2019/file/15825aee15eb335cc13f9b559f166ee8-Paper.pdf},
+ volume = {32},
+ year = {2019}
 }
 
-@inproceedings{buzzega2020der,
-  author = {Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Abati, Davide and Calderara, Simone},
-  title = {Dark experience for general continual learning: a strong, simple baseline},
-  year = {2020},
-  isbn = {9781713829546},
-  publisher = {Curran Associates Inc.},
-  address = {Red Hook, NY, USA},
-  abstract = {Continual Learning has inspired a plethora of approaches and evaluation settings; however, the majority of them overlooks the properties of a practical scenario, where the data stream cannot be shaped as a sequence of tasks and offline training is not viable. We work towards General Continual Learning (GCL), where task boundaries blur and the domain and class distributions shift either gradually or suddenly. We address it through mixing rehearsal with knowledge distillation and regularization; our simple baseline, Dark Experience Replay, matches the network's logits sampled throughout the optimization trajectory, thus promoting consistency with its past. By conducting an extensive analysis on both standard benchmarks and a novel GCL evaluation setting (MNIST-360), we show that such a seemingly simple baseline outperforms consolidated approaches and leverages limited resources. We further explore the generalization capabilities of our objective, showing its regularization being beneficial beyond mere performance.},
-  booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems},
-  articleno = {1335},
-  numpages = {11},
-  location = {Vancouver, BC, Canada},
-  series = {NIPS '20}
+@inproceedings{NEURIPS2020_b704ea2c,
+ author = {Buzzega, Pietro and Boschini, Matteo and Porrello, Angelo and Abati, Davide and CALDERARA, SIMONE},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Larochelle and M. Ranzato and R. Hadsell and M.F. Balcan and H. Lin},
+ pages = {15920--15930},
+ publisher = {Curran Associates, Inc.},
+ title = {Dark Experience for General Continual Learning: a Strong, Simple Baseline},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2020/file/b704ea2c39778f07c617f6b7ce480e9e-Paper.pdf},
+ volume = {33},
+ year = {2020}
 }
 
-@inproceedings{hayes2020remind,
-  author = {Hayes, Tyler L. and Kafle, Kushal and Shrestha, Robik and Acharya, Manoj and Kanan, Christopher},
-  title = {REMIND Your Neural Network to Prevent Catastrophic Forgetting},
-  year = {2020},
-  isbn = {978-3-030-58597-6},
-  publisher = {Springer-Verlag},
-  address = {Berlin, Heidelberg},
-  url = {https://doi.org/10.1007/978-3-030-58598-3_28},
-  doi = {10.1007/978-3-030-58598-3_28},
-  abstract = {People learn throughout life. However, incrementally updating conventional neural networks leads to catastrophic forgetting. A common remedy is replay, which is inspired by how the brain consolidates memory. Replay involves fine-tuning a network on a mixture of new and old instances. While there is neuroscientific evidence that the brain replays compressed memories, existing methods for convolutional networks replay raw images. Here, we propose REMIND, a brain-inspired approach that enables efficient replay with compressed representations. REMIND is trained in an online manner, meaning it learns one example at a time, which is closer to how humans learn. Under the same constraints, REMIND outperforms other methods for incremental class learning on the ImageNet ILSVRC-2012 dataset. We probe REMIND’s robustness to data ordering schemes known to induce catastrophic forgetting. We demonstrate REMIND’s generality by pioneering online learning for Visual Question Answering (VQA) ().},
-  booktitle = {Computer Vision – ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part VIII},
-  pages = {466–483},
-  numpages = {18},
-  keywords = {Online learning, Brain-inspired, Deep learning},
-  location = {Glasgow, United Kingdom}
+@InProceedings{10.1007/978-3-030-58598-3_28,
+  author="Hayes, Tyler L.
+  and Kafle, Kushal
+  and Shrestha, Robik
+  and Acharya, Manoj
+  and Kanan, Christopher",
+  editor="Vedaldi, Andrea
+  and Bischof, Horst
+  and Brox, Thomas
+  and Frahm, Jan-Michael",
+  title="REMIND Your Neural Network to Prevent Catastrophic Forgetting",
+  booktitle="Computer Vision -- ECCV 2020",
+  year="2020",
+  publisher="Springer International Publishing",
+  address="Cham",
+  pages="466--483",
+  abstract="People learn throughout life. However, incrementally updating conventional neural networks leads to catastrophic forgetting. A common remedy is replay, which is inspired by how the brain consolidates memory. Replay involves fine-tuning a network on a mixture of new and old instances. While there is neuroscientific evidence that the brain replays compressed memories, existing methods for convolutional networks replay raw images. Here, we propose REMIND, a brain-inspired approach that enables efficient replay with compressed representations. REMIND is trained in an online manner, meaning it learns one example at a time, which is closer to how humans learn. Under the same constraints, REMIND outperforms other methods for incremental class learning on the ImageNet ILSVRC-2012 dataset. We probe REMIND's robustness to data ordering schemes known to induce catastrophic forgetting. We demonstrate REMIND's generality by pioneering online learning for Visual Question Answering (VQA) (https://github.com/tyler-hayes/REMIND).",
+  isbn="978-3-030-58598-3"
 }
 
-@inproceedings{prabhu2020gdumb,
-  author = {Prabhu, Ameya and Torr, Philip H. S. and Dokania, Puneet K.},
-  title = {GDumb: A Simple Approach that Questions Our Progress in Continual Learning},
-  year = {2020},
-  isbn = {978-3-030-58535-8},
-  publisher = {Springer-Verlag},
-  address = {Berlin, Heidelberg},
-  url = {https://doi.org/10.1007/978-3-030-58536-5_31},
-  doi = {10.1007/978-3-030-58536-5_31},
-  abstract = {We discuss a general formulation for the Continual Learning (CL) problem for classification—a learning task where a stream provides samples to a learner and the goal of the learner, depending on the samples it receives, is to continually upgrade its knowledge about the old classes and learn new ones. Our formulation takes inspiration from the open-set recognition problem where test scenarios do not necessarily belong to the training distribution. We also discuss various quirks and assumptions encoded in recently proposed approaches for CL. We argue that some oversimplify the problem to an extent that leaves it with very little practical importance, and makes it extremely easy to perform well on. To validate this, we propose GDumb that (1) greedily stores samples in memory as they come and; (2) at test time, trains a model from scratch using samples only in the memory. We show that even though GDumb is not specifically designed for CL problems, it obtains state-of-the-art accuracies (often with large margins) in almost all the experiments when compared to a multitude of recently proposed algorithms. Surprisingly, it outperforms approaches in CL formulations for which they were specifically designed. This, we believe, raises concerns regarding our progress in CL for classification. Overall, we hope our formulation, characterizations and discussions will help in designing realistically useful CL algorithms, and GDumb will serve as a strong contender for the same.},
-  booktitle = {Computer Vision – ECCV 2020: 16th European Conference, Glasgow, UK, August 23–28, 2020, Proceedings, Part II},
-  pages = {524–540},
-  numpages = {17},
-  location = {Glasgow, United Kingdom}
+
+
+@InProceedings{10.1007/978-3-030-58536-5_31,
+author="Prabhu, Ameya
+and Torr, Philip H. S.
+and Dokania, Puneet K.",
+editor="Vedaldi, Andrea
+and Bischof, Horst
+and Brox, Thomas
+and Frahm, Jan-Michael",
+title="GDumb: A Simple Approach that Questions Our Progress in Continual Learning",
+booktitle="Computer Vision -- ECCV 2020",
+year="2020",
+publisher="Springer International Publishing",
+address="Cham",
+pages="524--540",
+abstract="We discuss a general formulation for the Continual Learning (CL) problem for classification---a learning task where a stream provides samples to a learner and the goal of the learner, depending on the samples it receives, is to continually upgrade its knowledge about the old classes and learn new ones. Our formulation takes inspiration from the open-set recognition problem where test scenarios do not necessarily belong to the training distribution. We also discuss various quirks and assumptions encoded in recently proposed approaches for CL. We argue that some oversimplify the problem to an extent that leaves it with very little practical importance, and makes it extremely easy to perform well on. To validate this, we propose GDumb that (1) greedily stores samples in memory as they come and; (2) at test time, trains a model from scratch using samples only in the memory. We show that even though GDumb is not specifically designed for CL problems, it obtains state-of-the-art accuracies (often with large margins) in almost all the experiments when compared to a multitude of recently proposed algorithms. Surprisingly, it outperforms approaches in CL formulations for which they were specifically designed. This, we believe, raises concerns regarding our progress in CL for classification. Overall, we hope our formulation, characterizations and discussions will help in designing realistically useful CL algorithms, and GDumb will serve as a strong contender for the same.",
+isbn="978-3-030-58536-5"
 }
 
-@article{delange2021survey,
+@ARTICLE{9349197,
   author={De Lange, Matthias and Aljundi, Rahaf and Masana, Marc and Parisot, Sarah and Jia, Xu and Leonardis, Aleš and Slabaugh, Gregory and Tuytelaars, Tinne},
   journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
   title={A Continual Learning Survey: Defying Forgetting in Classification Tasks}, 
@@ -1513,7 +1496,7 @@
   doi={10.1109/TPAMI.2021.3057446}
 }
 
-@inproceedings{agarwal2013blinkdb,
+@inproceedings{10.1145/2465351.2465355,
   author = {Agarwal, Sameer and Mozafari, Barzan and Panda, Aurojit and Milner, Henry and Madden, Samuel and Stoica, Ion},
   title = {BlinkDB: queries with bounded errors and bounded response times on very large data},
   year = {2013},
@@ -1530,25 +1513,25 @@
   series = {EuroSys '13}
 }
 
-@inproceedings{goiri2015approxhadoop,
-  author = {Goiri, Inigo and Bianchini, Ricardo and Nagarakatte, Santosh and Nguyen, Thu D.},
-  title = {ApproxHadoop: Bringing Approximations to MapReduce Frameworks},
-  year = {2015},
-  isbn = {9781450328357},
-  publisher = {Association for Computing Machinery},
-  address = {New York, NY, USA},
-  url = {https://doi.org/10.1145/2694344.2694351},
-  doi = {10.1145/2694344.2694351},
-  abstract = {We propose and evaluate a framework for creating and running approximation-enabled MapReduce programs. Specifically, we propose approximation mechanisms that fit naturally into the MapReduce paradigm, including input data sampling, task dropping, and accepting and running a precise and a user-defined approximate version of the MapReduce code. We then show how to leverage statistical theories to compute error bounds for popular classes of MapReduce programs when approximating with input data sampling and/or task dropping. We implement the proposed mechanisms and error bound estimations in a prototype system called ApproxHadoop. Our evaluation uses MapReduce applications from different domains, including data analytics, scientific computing, video encoding, and machine learning. Our results show that ApproxHadoop can significantly reduce application execution time and/or energy consumption when the user is willing to tolerate small errors. For example, ApproxHadoop can reduce runtimes by up to 32x when the user can tolerate an error of 1\% with 95\% confidence. We conclude that our framework and system can make approximation easily accessible to many application domains using the MapReduce model.},
-  booktitle = {Proceedings of the Twentieth International Conference on Architectural Support for Programming Languages and Operating Systems},
-  pages = {383–397},
-  numpages = {15},
-  keywords = {multi-stage sampling, extreme value theory, approximation, MapReduce},
-  location = {Istanbul, Turkey},
-  series = {ASPLOS '15}
+@inproceedings{10.1145/2694344.2694351,
+author = {Goiri, Inigo and Bianchini, Ricardo and Nagarakatte, Santosh and Nguyen, Thu D.},
+title = {ApproxHadoop: Bringing Approximations to MapReduce Frameworks},
+year = {2015},
+isbn = {9781450328357},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2694344.2694351},
+doi = {10.1145/2694344.2694351},
+abstract = {We propose and evaluate a framework for creating and running approximation-enabled MapReduce programs. Specifically, we propose approximation mechanisms that fit naturally into the MapReduce paradigm, including input data sampling, task dropping, and accepting and running a precise and a user-defined approximate version of the MapReduce code. We then show how to leverage statistical theories to compute error bounds for popular classes of MapReduce programs when approximating with input data sampling and/or task dropping. We implement the proposed mechanisms and error bound estimations in a prototype system called ApproxHadoop. Our evaluation uses MapReduce applications from different domains, including data analytics, scientific computing, video encoding, and machine learning. Our results show that ApproxHadoop can significantly reduce application execution time and/or energy consumption when the user is willing to tolerate small errors. For example, ApproxHadoop can reduce runtimes by up to 32x when the user can tolerate an error of 1\% with 95\% confidence. We conclude that our framework and system can make approximation easily accessible to many application domains using the MapReduce model.},
+booktitle = {Proceedings of the Twentieth International Conference on Architectural Support for Programming Languages and Operating Systems},
+pages = {383–397},
+numpages = {15},
+keywords = {MapReduce, approximation, extreme value theory, multi-stage sampling},
+location = {Istanbul, Turkey},
+series = {ASPLOS '15}
 }
 
-@inproceedings{wang2018approxjoin,
+@inproceedings{10.1145/3267809.3267834,
   author = {Quoc, Do Le and Akkus, Istemi Ekin and Bhatotia, Pramod and Blanas, Spyros and Chen, Ruichuan and Fetzer, Christof and Strufe, Thorsten},
   title = {ApproxJoin: Approximate Distributed Joins},
   year = {2018},
@@ -1561,12 +1544,12 @@
   booktitle = {Proceedings of the ACM Symposium on Cloud Computing},
   pages = {426–438},
   numpages = {13},
-  keywords = {Approximate join processing, approximate computing and distributed systems, multi-way joins, stratified sampling},
+  keywords = {stratified sampling, multi-way joins, approximate computing and distributed systems, Approximate join processing},
   location = {Carlsbad, CA, USA},
   series = {SoCC '18}
 }
 
-@inproceedings{hu2018streamapprox,
+@inproceedings{10.1145/3135974.3135989,
   author = {Quoc, Do Le and Chen, Ruichuan and Bhatotia, Pramod and Fetzer, Christof and Hilt, Volker and Strufe, Thorsten},
   title = {StreamApprox: approximate computing for stream analytics},
   year = {2017},
@@ -1584,7 +1567,7 @@
   series = {Middleware '17}
 }
 
-@inproceedings{chen2018incapprox,
+@inproceedings{10.1145/2872427.2883026,
   author = {Krishnan, Dhanya R. and Quoc, Do Le and Bhatotia, Pramod and Fetzer, Christof and Rodrigues, Rodrigo},
   title = {IncApprox: A Data Analytics System for Incremental Approximate Computing},
   year = {2016},
@@ -1597,32 +1580,30 @@
   booktitle = {Proceedings of the 25th International Conference on World Wide Web},
   pages = {1133–1144},
   numpages = {12},
-  keywords = {approximate computation, dependance graph, error estimation, incremental computation, memoization, real-time processing, self-adjusting computation, stratified sampling, stream processing},
+  keywords = {stream processing, stratified sampling, self-adjusting computation, real-time processing, memoization, incremental computation, error estimation, dependance graph, approximate computation},
   location = {Montr\'{e}al, Qu\'{e}bec, Canada},
   series = {WWW '16}
 }
 
-@article{isard2007dryad,
-  author = {Isard, Michael and Budiu, Mihai and Yu, Yuan and Birrell, Andrew and Fetterly, Dennis},
-  title = {Dryad: distributed data-parallel programs from sequential building blocks},
-  year = {2007},
-  issue_date = {June 2007},
-  publisher = {Association for Computing Machinery},
-  address = {New York, NY, USA},
-  volume = {41},
-  number = {3},
-  issn = {0163-5980},
-  url = {https://doi.org/10.1145/1272998.1273005},
-  doi = {10.1145/1272998.1273005},
-  abstract = {Dryad is a general-purpose distributed execution engine for coarse-grain data-parallel applications. A Dryad application combines computational "vertices" with communication "channels" to form a dataflow graph. Dryad runs the application by executing the vertices of this graph on a set of available computers, communicating as appropriate through flies, TCP pipes, and shared-memory FIFOs.The vertices provided by the application developer are quite simple and are usually written as sequential programs with no thread creation or locking. Concurrency arises from Dryad scheduling vertices to run simultaneously on multiple computers, or on multiple CPU cores within a computer. The application can discover the size and placement of data at run time, and modify the graph as the computation progresses to make efficient use of the available resources.Dryad is designed to scale from powerful multi-core single computers, through small clusters of computers, to data centers with thousands of computers. The Dryad execution engine handles all the difficult problems of creating a large distributed, concurrent application: scheduling the use of computers and their CPUs, recovering from communication or computer failures, and transporting data between vertices.},
-  journal = {SIGOPS Oper. Syst. Rev.},
-  month = mar,
-  pages = {59–72},
-  numpages = {14},
-  keywords = {cluster computing, concurrency, dataflow, distributed programming}
+@inproceedings{10.1145/1272996.1273005,
+author = {Isard, Michael and Budiu, Mihai and Yu, Yuan and Birrell, Andrew and Fetterly, Dennis},
+title = {Dryad: distributed data-parallel programs from sequential building blocks},
+year = {2007},
+isbn = {9781595936363},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1272996.1273005},
+doi = {10.1145/1272996.1273005},
+abstract = {Dryad is a general-purpose distributed execution engine for coarse-grain data-parallel applications. A Dryad application combines computational "vertices" with communication "channels" to form a dataflow graph. Dryad runs the application by executing the vertices of this graph on a set of available computers, communicating as appropriate through flies, TCP pipes, and shared-memory FIFOs.The vertices provided by the application developer are quite simple and are usually written as sequential programs with no thread creation or locking. Concurrency arises from Dryad scheduling vertices to run simultaneously on multiple computers, or on multiple CPU cores within a computer. The application can discover the size and placement of data at run time, and modify the graph as the computation progresses to make efficient use of the available resources.Dryad is designed to scale from powerful multi-core single computers, through small clusters of computers, to data centers with thousands of computers. The Dryad execution engine handles all the difficult problems of creating a large distributed, concurrent application: scheduling the use of computers and their CPUs, recovering from communication or computer failures, and transporting data between vertices.},
+booktitle = {Proceedings of the 2nd ACM SIGOPS/EuroSys European Conference on Computer Systems 2007},
+pages = {59–72},
+numpages = {14},
+keywords = {distributed programming, dataflow, concurrency, cluster computing},
+location = {Lisbon, Portugal},
+series = {EuroSys '07}
 }
 
-@inproceedings{chambers2010flumejava,
+@inproceedings{10.1145/1806596.1806638,
   author = {Chambers, Craig and Raniwala, Ashish and Perry, Frances and Adams, Stephen and Henry, Robert R. and Bradshaw, Robert and Weizenbaum, Nathan},
   title = {FlumeJava: easy, efficient data-parallel pipelines},
   year = {2010},
@@ -1654,7 +1635,7 @@
   series = {NSDI'11}
 }
 
-@inproceedings{fernandez2010seep,
+@inproceedings{10.1145/1930028.1930032,
   author = {Migliavacca, Matteo and Eyers, David and Bacon, Jean and Papagiannis, Yiannis and Shand, Brian and Pietzuch, Peter},
   title = {SEEP: scalable and elastic event processing},
   year = {2010},
@@ -1671,7 +1652,7 @@
   series = {Middleware Posters '10}
 }
 
-@inproceedings{fernandez2013osm,
+@inproceedings{10.1145/2463676.2465282,
   author = {Castro Fernandez, Raul and Migliavacca, Matteo and Kalyvianaki, Evangelia and Pietzuch, Peter},
   title = {Integrating scale out and fault tolerance in stream processing using operator state management},
   year = {2013},
@@ -1684,12 +1665,12 @@
   booktitle = {Proceedings of the 2013 ACM SIGMOD International Conference on Management of Data},
   pages = {725–736},
   numpages = {12},
-  keywords = {stateful stream processing, scalability, fault tolerance},
+  keywords = {fault tolerance, scalability, stateful stream processing},
   location = {New York, New York, USA},
   series = {SIGMOD '13}
 }
 
-@article{chang2008bigtable,
+@article{10.1145/1365815.1365816,
   author = {Chang, Fay and Dean, Jeffrey and Ghemawat, Sanjay and Hsieh, Wilson C. and Wallach, Deborah A. and Burrows, Mike and Chandra, Tushar and Fikes, Andrew and Gruber, Robert E.},
   title = {Bigtable: A Distributed Storage System for Structured Data},
   year = {2008},
@@ -1709,7 +1690,7 @@
   keywords = {Large-Scale Distributed Storage}
 }
 
-@inproceedings{decandia2007dynamo,
+@inproceedings{10.1145/1294261.1294281,
   author = {DeCandia, Giuseppe and Hastorun, Deniz and Jampani, Madan and Kakulapati, Gunavardhan and Lakshman, Avinash and Pilchin, Alex and Sivasubramanian, Swaminathan and Vosshall, Peter and Vogels, Werner},
   title = {Dynamo: amazon's highly available key-value store},
   year = {2007},
@@ -1727,7 +1708,7 @@
   series = {SOSP '07}
 }
 
-@article{lakshman2010cassandra,
+@article{10.1145/1773912.1773922,
   author = {Lakshman, Avinash and Malik, Prashant},
   title = {Cassandra: a decentralized structured storage system},
   year = {2010},
