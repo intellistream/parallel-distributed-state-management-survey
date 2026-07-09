@@ -1,28 +1,33 @@
-\documentclass[manuscript,screen,review]{acmart}
+\documentclass[manuscript]{acmart}
 
 \setcopyright{none}
-\settopmatter{printacmref=false}
+\settopmatter{printacmref=true}
 \raggedbottom
 
 \usepackage{booktabs}
-\usepackage{tabularx}
 \usepackage{multirow}
-\usepackage{array}
-\usepackage{longtable}
 \usepackage{enumitem}
 \usepackage{xspace}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{microtype}
-\usepackage{placeins}
-\usepackage{tikz}
 \usepackage{xcolor}
-\usepackage{fontawesome}
 
-\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
-
-\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcommand{\sysproblem}{state management in parallel and distributed systems\xspace}
+\newcommand{\inlinefigurewithcaption}[4]{%
+  \begin{center}
+    \refstepcounter{figure}%
+    \includegraphics[#1]{#2}\par
+    \smallskip
+    {\small Fig.~\thefigure.~#3\par}%
+    \label{#4}%
+  \end{center}
+}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{12pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
 \makeatletter
 \gdef\shorttitle{Appendix}
 \gdef\shortauthors{}
@@ -39,8 +44,6 @@ This appendix provides supporting material for the main paper, including literat
 \input{supplement_sections/extended_design_notes}
 \input{supplement_sections/extended_case_studies}
 \input{supplement_sections/extended_domain_notes}
-
-\FloatBarrier
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{refs}
