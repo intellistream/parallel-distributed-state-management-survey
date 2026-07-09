@@ -668,20 +668,14 @@
 
 @article{zhao2025morphstream,
   author={Zhao, Jianjun and Mao, Yancan and Yang, Zhonghao and Liu, Haikun and Zhang, Shuhao},
-  journal={ IEEE Transactions on Knowledge \& Data Engineering },
-  title={{ Scalable Transactional Stream Processing on Multicore Processors }},
+  journal={IEEE Transactions on Knowledge and Data Engineering}, 
+  title={Scalable Transactional Stream Processing on Multicore Processors}, 
   year={2025},
   volume={37},
-  number={07},
-  ISSN={1558-2191},
+  number={7},
   pages={4254-4269},
-  abstract={ Transactional stream processing engines (TSPEs) are central to modern stream applications handling shared mutable states. However, their full potential, particularly in adaptive scheduling, remains largely unexplored. We present MorphStream, a TSPE designed to optimize parallelism and performance for transactional stream processing on multicores. Through a unique three-stage execution paradigm (i.e., planning, scheduling, and execution), MorphStream enables adaptive scheduling under varying workload characteristics. Building on this foundation, MorphStream is further enhanced with support for non-deterministic state access, employing a stateful task precedence graph to handle undefined read/write sets at runtime while guaranteeing transaction semantics. Additionally, MorphStream incorporates a generalized framework for managing window-based operations, enabling efficient tracking and maintenance of overlapping windows using multi-versioned state management. These extensions enhance the system’s ability to process dynamic and irregular workloads. Experimental results demonstrate up to 3.4 times higher throughput and 69.1% lower latency compared to state-of-the-art TSPEs, validating its scalability and adaptability in real-world streaming scenarios. },
-  keywords={Stock markets;Multicore processing;Event detection;Adaptive scheduling;Parallel processing;Engines;Windows;Throughput;Semantics;Real-time systems},
-  doi={10.1109/TKDE.2025.3556741},
-  url = {https://doi.ieeecomputersociety.org/10.1109/TKDE.2025.3556741},
-  publisher={IEEE Computer Society},
-  address={Los Alamitos, CA, USA},
-  month=jul
+  keywords={Stock markets;Multicore processing;Event detection;Adaptive scheduling;Parallel processing;Engines;Windows;Throughput;Semantics;Real-time systems;Stream processing;transaction;multicore},
+  doi={10.1109/TKDE.2025.3556741}
 }
 
 @inproceedings{zhang2021intrawindowjoin,
@@ -697,46 +691,50 @@
   booktitle = {Proceedings of the 2021 International Conference on Management of Data},
   pages = {2089–2101},
   numpages = {13},
-  keywords = {window join, stream processing, multicores},
+  keywords = {multicores, stream processing, window join},
   location = {Virtual Event, China},
   series = {SIGMOD '21}
 }
 
 @inproceedings{gao2026grace,
-  author    = {Gao, Hongru and Zhang, Shuhao and Liao, Xiaofei and Jin, Hai},
-  title     = {GRACE: Alleviating Reconstruction Cost in Dynamic Graph Processing Systems},
-  booktitle = {Proceedings of the IEEE 42nd International Conference on Data Engineering},
-  series    = {ICDE '26},
-  year      = {2026}
+  title={GRACE: Alleviating Reconstruction Cost in Dynamic Graph Processing Systems},
+  author={Gao, Hongru and Zhang, Shuhao and Liao, Xiaofei and Jin, Hai},
+  booktitle={Proceedings of the IEEE International Conference on Data Engineering},
+  year={2026}
 }
 
 @article{yue2025marco,
+  author = {Yue, Ziyang and Zheng, Bolong and Xu, Ling and Xu, Kanru and Zhang, Shuhao and Du, Yajuan and Gao, Yunjun and Zhou, Xiaofang and Jensen, Christian S.},
   title = {Select Edges Wisely: Monotonic Path Aware Graph Layout Optimization for Disk-Based ANN Search},
-  volume = {18},
-  ISSN = {2150-8097},
-  url = {http://dx.doi.org/10.14778/3749646.3749697},
-  DOI = {10.14778/3749646.3749697},
-  number = {11},
-  journal = {Proceedings of the VLDB Endowment},
-  publisher = {Association for Computing Machinery (ACM)},
-  author = {Yue,  Ziyang and Zheng,  Bolong and Xu,  Ling and Xu,  Kanru and Zhang,  Shuhao and Du,  Yajuan and Gao,  Yunjun and Zhou,  Xiaofang and Jensen,  Christian S.},
   year = {2025},
-  month = July,
-  pages = {4337–4349}
+  issue_date = {July 2025},
+  publisher = {VLDB Endowment},
+  volume = {18},
+  number = {11},
+  issn = {2150-8097},
+  url = {https://doi.org/10.14778/3749646.3749697},
+  doi = {10.14778/3749646.3749697},
+  abstract = {Approximate nearest neighbor (ANN) search is a critical problem in various real-world applications. However, as one of the most promising solutions to ANN search, graph-based indexes often suffer from high memory consumption. Although a few studies attempt to alleviate this issue by storing the index on inexpensive disk storage, they still face challenges such as insufficient data locality and low efficiency when optimizing the graph layout on disk. Therefore, we propose MARGO, a monotonic path-aware graph layout optimization method for disk-based ANN search. First, we present the essence of graph layout optimization in disk-based ANN search, and design a monotonic path-aware objective function that weighs the edges based on their importance in monotonic paths, supported by rigorous theoretical analysis. Second, we propose a greedy algorithm that prioritizes high-weight edges to accommodate more monotonic paths. To enhance efficiency, MARGO introduces a two stage decoupling method that processes intra-cluster edges in parallel first, followed by inter-cluster edges. Third, we develop a weight computation strategy that computes edge weights on-the-fly during index construction with almost no additional overhead. A comprehensive experimental study demonstrates that MARGO improves search efficiency by up to 26.6\% while maintaining the same recall, and accelerates the graph layout optimization by up to 5.5\texttimes{}.},
+  journal = {Proc. VLDB Endow.},
+  month = jul,
+  pages = {4337–4349},
+  numpages = {13}
 }
 
 @inproceedings{zhang2026neuromem,
-  author    = {Zhang, Ruicheng and Li, Xinyi and Xu, Tianyi and Zhang, Shuhao and Liao, Xiaofei and Jin, Hai},
-  title     = {Neuromem: A Granular Decomposition of the Streaming Lifecycle in External Memory for LLMs},
-  booktitle = {Proceedings of the International Conference on Machine Learning},
-  year      = {2026}
+  title={Neuromem: A Granular Decomposition of the Streaming Lifecycle in External Memory for {LLM}s},
+  author={Ruicheng Zhang and Xinyi Li and Tianyi Xu and Shuhao Zhang and Xiaofei Liao and Hai Jin},
+  booktitle={Forty-third International Conference on Machine Learning},
+  year={2026},
+  url={https://openreview.net/forum?id=mO7DgwFFVe}
 }
 
 @inproceedings{liu2026sage,
-  author    = {Liu, Jun and Liu, Peilin and Zhang, Ruicheng and Zhang, Senlei and Chen, Yanbo and Wang, Ziao and Yang, Jinyun and Wang, Mingqi and Zhang, Shuhao and Liao, Xiaofei and Jin, Hai},
-  title     = {SAGE: A Dataflow-Native Framework for Modular, Controllable, and Transparent LLM-Augmented Reasoning},
-  booktitle = {Proceedings of the International Conference on Machine Learning},
-  year      = {2026}
+  title={{SAGE}: A Dataflow-Native Framework for Modular, Controllable, and Transparent {LLM}-Augmented Reasoning},
+  author={Jun Liu and Peilin Liu and Ruicheng Zhang and Zhang Senlei and Yanbo Chen and Ziao Wang and Jinyun Yang and mingqi wang and Shuhao Zhang and Xiaofei Liao and Hai Jin},
+  booktitle={Forty-third International Conference on Machine Learning},
+  year={2026},
+  url={https://openreview.net/forum?id=TXcFJdT7at}
 }
 
 @article{abadi2003aurora,
@@ -760,13 +758,13 @@
 }
 
 @inproceedings{abadi2005borealis,
-  author = {Abadi, Daniel and Ahmad, Yanif and Balazinska, Magdalena and Cetintemel, Ugur and Cherniack, Mitch and Hwang, Jeong and Lindner, Wolfgang and Maskey, Anurag and Rasin, Alex and Ryvkina, Esther and Tatbul, Nesime and Xing, Ying and Zdonik, Stan},
-  year = {2005},
-  month = {01},
-  pages = {277-289},
-  title = {The Design of the Borealis Stream Processing Engine},
-  volume = {5},
-  journal = {2nd Biennial Conference on Innovative Data Systems Research, CIDR 2005}
+  title={The design of the borealis stream processing engine.},
+  author={Abadi, Daniel J and Ahmad, Yanif and Balazinska, Magdalena and Cetintemel, Ugur and Cherniack, Mitch and Hwang, Jeong-Hyon and Lindner, Wolfgang and Maskey, Anurag and Rasin, Alex and Ryvkina, Esther and others},
+  booktitle={Cidr},
+  volume={5},
+  number={2005},
+  pages={277--289},
+  year={2005}
 }
 
 @article{carbone2015flink,
@@ -780,11 +778,10 @@
 }
 
 @inproceedings{carbone2015asynchronous,
-  author = {Carbone, Paris and Fóra, Gyula and Ewen, Stephan and Haridi, Seif and Tzoumas, Kostas},
-  year = {2015},
-  month = {06},
-  pages = {},
-  title = {Lightweight Asynchronous Snapshots for Distributed Dataflows}
+  title={Lightweight asynchronous snapshots for distributed dataflows},
+  author={Carbone, Paris and F{\'o}ra, Gyula and Ewen, Stephan and Haridi, Seif and Tzoumas, Kostas},
+  journal={arXiv preprint arXiv:1506.08603},
+  year={2015}
 }
 
 @article{chandramouli2014trill,
@@ -824,11 +821,10 @@
 }
 
 @inproceedings{murray2013differential,
-  author = {Frank McSherry and Derek Gordon Murray and Rebecca Isaacs and Michael Isard},
-  title = {Differential Dataflow},
-  booktitle = {Proceedings of the 6th Biennial Conference on Innovative Data Systems Research (CIDR)},
-  year = {2013},
-  url = {https://www.cidrdb.org/cidr2013/Papers/CIDR13_Paper111.pdf}
+  title={Differential dataflow.},
+  author={McSherry, Frank and Murray, Derek Gordon and Isaacs, Rebecca and Isard, Michael},
+  booktitle={CIDR},
+  year={2013}
 }
 
 @article{nasir2019megaphone,
@@ -878,7 +874,7 @@
   month = mar,
   articleno = {46},
   numpages = {34},
-  keywords = {Stream processing, optimizations}
+  keywords = {optimizations, Stream processing}
 }
 
 @article{cugola2012processing,
