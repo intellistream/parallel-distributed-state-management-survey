@@ -27,6 +27,27 @@ Or build both PDFs together with:
 make pdf
 ```
 
+### Authorless Version
+
+`authorless-version/main_authorless.tex` is the authorless, combined manuscript
+used for similarity checking. It retains the appendix inputs and uses one
+bibliography. Build it from its own directory so that its relative references
+to the shared repository assets resolve correctly:
+
+```bash
+cd authorless-version
+tectonic -X compile -Z search-path="../third_party/acmart-src" main_authorless.tex
+```
+
+In Windows PowerShell, the equivalent command is:
+
+```powershell
+Set-Location authorless-version
+tectonic -X compile -Z search-path=../third_party/acmart-src main_authorless.tex
+```
+
+The generated PDF is `authorless-version/main_authorless.pdf`.
+
 To verify that the actual compile path is using the vendored ACM template rather than Tectonic's cached copy, run:
 
 ```bash
