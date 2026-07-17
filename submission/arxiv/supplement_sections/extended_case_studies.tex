@@ -1,0 +1,54 @@
+\section{Cross-Domain Case Walkthroughs}
+
+These walkthroughs preserve the same five-field structure while making the deployment-shaped reasoning more concrete.
+
+\subsection{Multi-Tenant LLM Serving Under Burst Arrival}
+
+\paragraph{State object.}
+The governed objects are paged KV state, prefix-sharing metadata, tenant-specific adapters, model-residency windows, and the restoration debt inherited by subsequent requests.
+
+\paragraph{Control surface.}
+The runtime controls admission, batch shaping, paging, prefill/decode separation, expose/transfer decisions, evict/reclaim decisions, and tenant-sensitive placement~\cite{kwon2023pagedattention,agrawal2024sarathi,zhong2024distserve,patel2024splitwise,chen2024punica,nian2026cacheflow}.
+
+\paragraph{Coupling path.}
+A locally beneficial admission may force evict/reclaim decisions that destroy future reuse, causing later re-materialization traffic and queue amplification. Once phase disaggregation is enabled, the next bottleneck may shift from raw memory capacity to expose/transfer ordering and the downstream cost of restoring discarded state.
+
+\paragraph{Evaluation boundary.}
+The meaningful boundary is TTFT, TPOT, p99 latency, and goodput over a multi-phase window rather than isolated allocator efficiency.
+
+\paragraph{Remaining gap.}
+The unresolved problem is still a unified contract that ranks admit, expose/transfer, evict/reclaim, offload, tenant isolation, and restoration debt against the same service boundary instead of letting each sub-policy optimize its own phase locally.
+
+\subsection{Stateful Stream Processing Under Reconfiguration}
+
+\paragraph{State object.}
+The runtime governs keyed windows, operator shards, progress metadata, checkpoint boundaries, replay buffers, and migration ownership metadata.
+
+\paragraph{Control surface.}
+The active controls are migration grain, trigger policy, checkpoint cadence, replay scheduling, and ownership-transfer timing~\cite{akidau2013millwheel,carbone2015flink,nasir2019megaphone,zhao2024recovery,mao2025spacker}.
+
+\paragraph{Coupling path.}
+Reconfiguration changes locality and dual-ownership windows; recovery policy changes replay pressure and convergence cost. These effects feed back into future contention and scheduling stability rather than remaining isolated maintenance events.
+
+\paragraph{Evaluation boundary.}
+The right boundary combines pause time, throughput stability, correctness, and post-failure recovery behavior. Measuring migration and recovery separately hides the control loop that actually governs the state object.
+
+\paragraph{Remaining gap.}
+The missing piece is a disturbance-invariant ownership protocol that unifies visibility, transfer legality, and replay semantics across scale-out and recovery rather than re-deriving them per subsystem.
+
+\subsection{Retrieval Memory Under Continuous Corpus Drift}
+
+\paragraph{State object.}
+The relevant objects are mutable ANN shards, segment-sealing metadata, shard-exposure state, planner-visible freshness signals, and long-horizon graph or hierarchy memory.
+
+\paragraph{Control surface.}
+The runtime controls incremental indexing, local repair, compaction, rebuild trigger, publication, stale-memory eviction, and planner-mediated retrieval invocation~\cite{singh2021freshdiskann,wang2021milvus,guo2022manu,asai2024selfrag,zhang2026flowrag,wang2026candor}.
+
+\paragraph{Coupling path.}
+Aggressive refresh improves freshness in the short term but can increase maintenance debt, publication lag, and answer instability if exposure, rebuild, and planner behavior are not coordinated.
+
+\paragraph{Evaluation boundary.}
+The relevant boundary is answer quality under drift plus freshness lag, query latency, maintenance cost, and exposure safety.
+
+\paragraph{Remaining gap.}
+The missing abstraction is an exposure-aware accounting layer that can combine recall drift, rebuild debt, planner confidence, and publication legality into one explicit trigger policy.

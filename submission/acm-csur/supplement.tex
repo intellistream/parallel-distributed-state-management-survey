@@ -1,0 +1,51 @@
+\documentclass[manuscript]{acmart}
+
+\setcopyright{none}
+\settopmatter{printacmref=true}
+\raggedbottom
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\newcommand{\sysproblem}{state management in parallel and distributed systems\xspace}
+\newcommand{\inlinefigurewithcaption}[4]{%
+  \begin{center}
+    \refstepcounter{figure}%
+    \includegraphics[#1]{#2}\par
+    \smallskip
+    {\small Fig.~\thefigure.~#3\par}%
+    \label{#4}%
+  \end{center}
+}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{12pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\makeatletter
+\gdef\shorttitle{Appendix}
+\gdef\shortauthors{}
+\makeatother
+
+\begin{document}
+
+\appendix
+\section*{Appendix}
+
+This appendix provides supporting material for the main paper, including literature-boundary context, design checklists, case walkthroughs, and additional domain figures. Its bibliography includes the works cited directly in the appendix.
+
+\input{supplement_sections/extended_landscape}
+\input{supplement_sections/extended_design_notes}
+\input{supplement_sections/extended_case_studies}
+\input{supplement_sections/extended_domain_notes}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\end{document}

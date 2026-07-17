@@ -1,0 +1,83 @@
+\section{Design Checklist and Contract Skeleton}
+
+This appendix material keeps the design-space, anti-pattern, blueprint, and boundary evidence behind the design conclusions. The organization follows recurring principles, architecture axes, contract repairs, and concrete examples.
+
+\subsection{Design Checklist}
+
+The checklist turns the comparative synthesis into concrete design questions. The table names recurring questions, and the following subsections unpack them into principles, axes, and repair patterns.
+
+\begin{table}[H]
+\small
+\centering
+\caption{Appendix guide for translating synthesis into runtime design choices.}
+\label{tab:supp-design-guide}
+\begin{tabular}{@{}p{0.25\textwidth}p{0.43\textwidth}p{0.22\textwidth}@{}}
+\toprule
+Recurring synthesis result & Design question & Concrete artifact to look for \\
+\midrule
+Observability gaps dominate failure analysis & Which signal names the state object, lifecycle stage, delay semantics, and legal action? & typed telemetry and disturbance indicators \\
+Local speedups disappear under composition & Which boundary is hard, which objective is soft, and who wins on conflict? & precedence-aware decision kernel \\
+Lifecycle debt accumulates across updates and movement & Where are admit, place, mutate, expose/transfer, compact, and evict/reclaim made explicit? & lifecycle pipeline with bounded actuation interfaces \\
+Recovery reuses the same state objects as steady state & Which invariants survive migration, replay, rebuild, or restore? & safety envelope and ownership-transfer rules \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Contract Principles}
+
+Observation before optimization means the relevant state boundary must already be named in telemetry. State as a first-class scheduling object means runtimes should schedule around mutable state rather than passive tasks. Closed-loop rather than open-loop policies means action must feed back into accounting. Stable gains require boundary modeling means every gain must declare what is held fixed, what debt is deferred, and what disturbance invalidates the claim.
+
+\subsection{Architecture Axes}
+
+The architecture axes are state granularity, control-plane coupling, lifecycle management, and service-boundary alignment. Granularity ranges from record to session. Control logic may be embedded, sidecar-based, or shared. Lifecycle management should make admit, place, mutate, expose or transfer, compact, and evict or reclaim explicit. Boundary alignment asks whether local wins survive end-to-end service constraints.
+
+\subsection{Anti-Pattern Repairs}
+
+Telemetry-action mismatch is repaired by naming a legal control action for each signal. Policy Layering Without Conflict Semantics is repaired by ordering hard constraints, soft objectives, and tie-breakers. One-shot benchmarking is repaired by adding warmup, disturbance, adaptation, and re-stabilization. Ignoring Write Amplification in Read-Optimized Designs is repaired by charging mutation and repair debt to the same service boundary as read gains. Treating State Ownership as Static is repaired by transferable ownership and lease semantics.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.96\textwidth]{figures/pdf/antipattern_contract_map.pdf}
+\caption{Anti-pattern to contract repair map.}
+\label{fig:supp-antipattern-map}
+\end{figure*}
+
+\subsection{Blueprint Contract Skeleton}
+
+The blueprint is a conceptual reference model, not a monolithic runtime. Its five layers are typed state catalog, observation and disturbance detection, boundary model and decision kernel, actuation interfaces, and safety and recovery envelope.
+
+The main paper includes the compact anti-pattern repair table. The appendix keeps the abstract policy skeleton and additional evidence anchors for readers who want the contract view in a more operational form.
+
+\begin{table*}[t]
+\small
+\caption{Abstract policy skeleton for unified state governance.}
+\label{tab:supp-policy-skeleton}
+\begin{tabular}{@{}p{0.09\textwidth}p{0.83\textwidth}@{}}
+\toprule
+Step & Policy skeleton \\
+\midrule
+1 & \texttt{observe\_signals()} and update telemetry confidence for contention, queueing, local freshness, exposure freshness, and retention pressure. \\
+2 & \texttt{identify\_state\_objects()} whose boundary is currently active: hot operator shards, KV pages, retrieval indexes, replay buffers, or demotion candidates. \\
+3 & \texttt{check\_hard\_constraints()} for SLA, memory limit, recovery envelope, shard-exposure safety, and quality floor before any optimization action. \\
+4 & \texttt{rank\_actions()} over admit, place, mutate, expose/transfer, compact, and evict/reclaim; domain-specific actions such as migrate, refresh, or demote are evaluated as specialized instances of those lifecycle stages using expected utility and maintenance debt. \\
+5 & \texttt{apply\_bounded\_action()} with explicit rollback or retry semantics when telemetry is delayed or conflicting. \\
+6 & \texttt{account\_outcome()} by charging the decision against tail latency, quality drift, effective budget loss, and long-horizon reuse value. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Boundary Case Bridges}
+
+These case bridges highlight three recurring boundary failures. Multi-tenant LLM serving under burst arrival shows how admit, expose/transfer, evict/reclaim, and restoration debt share one p99-facing boundary. Stateful stream reconfiguration shows that migration, progress, and replay need one transfer protocol. Retrieval under corpus drift shows that freshness, rebuild debt, and exposure legality must be co-governed.
+
+\subsection{Hardware-Conscious Evidence Anchors}
+
+The hardware-conscious cluster is most useful when read through three debts that the main paper could only summarize briefly. The first is \emph{representation debt}: approximate execution and compressed-state systems such as Anda, TurboAttention, QServe, ATOM, VAttention, FlashInfer, SampleAttention, QuantLLM, and related low-bit cache work all show that encoding decisions reshape memory traffic, kernel regularity, and quality loss simultaneously~\cite{fang2025anda,kang2025turboattention,lin2025qserve,zhao2024atom,prabhu2025vattention,ye2025flashinfer,zhu2024sampleattention,xia2024quantllm,dong2024qhitter}. Even systems that make representation look cheaper, such as FuseMax-style lines, do so by shifting complexity into calibration, selection, or error accounting rather than eliminating it~\cite{nayak2024fusemax,kwon2020fvm,jha2025hycache}.
+
+The second is \emph{movement debt}. Systems such as Chimera, HeterInfer, LIA, HETIS, Mercury, WaferLLM, DRAMCache, Tiertune, MoE-lightweight offloading, PhoenixOS, JIT-Serve, MLP offload, Colloid, BeyondHotness, Optimus, Tigon, and MemStrata all show that placement helps only when the runtime can jointly price compute skew, cache residency, interconnect bandwidth, and cross-device movement~\cite{huang2025chimera,chen2025heteroinfer,kim2025lia,mo2025hetis,mercury2025rms,he2025waferllm,hong2024dramcache,lee2025tiertune,cao2025moelightning,wei2025phoenixos,zhang2026jitserve,maurya2025mlpoffload,vuppalapati2024colloid,liu2025beyondhotness,feng2025optimus,huang2025tigon,zhong2024memstrata}. Storage- and I/O-adjacent systems such as AutoScratch, PFSCK, PolarDB, CXL-based designs, Toleo, and VM-control make the same point from another boundary: once state crosses devices or tiers, metadata handling, legality, and transport cost become first-order control variables rather than implementation details~\cite{fu2024autoscratch,domingo2021pfsck,cao2020polardb,ji2025cxl,dong2024toleo,zheng2024vmcu,tabatabai2024fbmm}.
+
+The third is \emph{resilience and repair debt}. Save, ChecknRun, CXL memory-protection work, Concealing, TurboAttention-style repair-aware approximation, SampleAttention, and PFSCK show that movement and representation cannot be priced independently from failure handling, degradation tolerance, or hidden repair cost~\cite{zheng2025save,eisenman2022checknrun,zhao2025equilibria,jin2024concealing,kang2025turboattention,zhu2024sampleattention,domingo2021pfsck}. Heterogeneity-aware execution and server-placement lines such as GMLake, Flex-MoE, Kamath-style overlap, Clap, DecDec, Coruscant, Zico, MEPipe, Clone, PowerInfer, PIMBA, QFactory, and MoC reinforce the same lesson from scheduling: overlap, offload, or recomputation only help if the control overhead and recovery debt stay below the service debt they are meant to avoid~\cite{guo2024gmlake,cao2025moelightning,kamath2025podattention,park2025clap,park2025decdec,joo2025coruscant,zico21,sun2025mepipe,tian2025clone,song2024powerinfer,kim2025pimba,zhang2025qfactory,cai2025moc}.
+
+Dynamic input pruning with cache-aware masking, near-core decompression, and CXL-centered inference expose different actuators, yet each still ties placement and movement to an explicit runtime choice over state: what may be skipped, decompressed, kept near compute, or shifted into the memory hierarchy~\cite{federici2025dip,gerogiannis2025deca,gu2025cent}. Placement, movement, and state transformation therefore remain one coupled control problem even when the local actuator changes.
+
+Grouped this way, the hardware cluster reads less like a long annex and more like a precise extension of the main claim. The exact mechanisms differ, but the comparative result is stable: once state crosses a hardware boundary, representation, movement, and resilience have to be priced together or the local optimization stops being trustworthy.
